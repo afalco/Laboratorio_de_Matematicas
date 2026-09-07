@@ -1,0 +1,1200 @@
+\documentclass[11pt,a4paper,oneside]{book}
+
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage[a4paper,margin=2.7cm]{geometry}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb,mathtools}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{multicol}
+
+\definecolor{azuluc}{HTML}{1F4E79}
+\definecolor{grisclaro}{HTML}{F4F6F8}
+\definecolor{gris}{HTML}{586069}
+\definecolor{verde}{HTML}{2E7D32}
+\definecolor{rojo}{HTML}{A94442}
+
+\hypersetup{
+  colorlinks=true,
+  linkcolor=azuluc,
+  citecolor=azuluc,
+  urlcolor=azuluc,
+  pdftitle={Manual de Laboratorio de Matemáticas},
+  pdfauthor={Asignatura Laboratorio de Matemáticas}
+}
+
+\lstdefinestyle{rstyle}{
+  language=R,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{azuluc}\bfseries,
+  commentstyle=\color{gris},
+  stringstyle=\color{verde!70!black},
+  showstringspaces=false,
+  columns=fullflexible,
+  frame=single,
+  rulecolor=\color{gris!30},
+  backgroundcolor=\color{grisclaro},
+  breaklines=true,
+  tabsize=2
+}
+
+\lstdefinestyle{texstyle}{
+  language=[LaTeX]TeX,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{azuluc}\bfseries,
+  commentstyle=\color{gris},
+  stringstyle=\color{verde!70!black},
+  showstringspaces=false,
+  columns=fullflexible,
+  frame=single,
+  rulecolor=\color{gris!30},
+  backgroundcolor=\color{grisclaro},
+  breaklines=true,
+  tabsize=2
+}
+
+\lstdefinestyle{plainstyle}{
+  basicstyle=\ttfamily\small,
+  showstringspaces=false,
+  columns=fullflexible,
+  frame=single,
+  rulecolor=\color{gris!30},
+  backgroundcolor=\color{grisclaro},
+  breaklines=true,
+  tabsize=2
+}
+
+\lstset{
+  literate=
+    {á}{{\'a}}1 {é}{{\'e}}1 {í}{{\'i}}1 {ó}{{\'o}}1 {ú}{{\'u}}1
+    {Á}{{\'A}}1 {É}{{\'E}}1 {Í}{{\'I}}1 {Ó}{{\'O}}1 {Ú}{{\'U}}1
+    {ñ}{{\~n}}1 {Ñ}{{\~N}}1 {ü}{{\"u}}1 {Ü}{{\"U}}1
+    {¿}{{?`}}1 {¡}{{!`}}1
+}
+
+\tcbset{
+  colback=grisclaro,
+  colframe=azuluc,
+  boxrule=0.6pt,
+  arc=2pt,
+  left=8pt,
+  right=8pt,
+  top=6pt,
+  bottom=6pt
+}
+
+\newtcolorbox{objetivos}{title=Objetivos de aprendizaje}
+\newtcolorbox{entrega}{title=Entrega de la práctica,colframe=verde!60!black}
+\newtcolorbox{aviso}{title=Observación,colframe=rojo!70!black}
+
+\pagestyle{fancy}
+\setlength{\headheight}{14pt}
+\fancyhf{}
+\fancyhead[L]{Laboratorio de Matemáticas}
+\fancyhead[R]{\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+
+\setlist[itemize]{topsep=4pt,itemsep=2pt}
+\setlist[enumerate]{topsep=4pt,itemsep=3pt}
+
+\title{\Huge Manual de Laboratorio de Matemáticas\\[0.5em]
+\Large Grado en Ingeniería Matemática}
+\author{Borrador docente}
+\date{Curso 2026/27}
+
+\begin{document}
+
+\frontmatter
+\maketitle
+
+\chapter*{Propósito del manual}
+Este manual acompaña la asignatura \emph{Laboratorio de Matemáticas}, de primer curso del Grado en Ingeniería Matemática. La asignatura tiene 6 ECTS, 15 horas de clase magistral y 45 horas de prácticas presenciales. Su finalidad es introducir el uso de herramientas computacionales para resolver, documentar y comunicar problemas matemáticos.
+
+El enfoque principal del manual es el ecosistema R: programación básica, cálculo numérico elemental, tratamiento de datos, representación gráfica y modelización estadística inicial. La edición científica se trabaja con LaTeX, y los cuadernos reproducibles se presentan mediante Markdown, R Markdown o Quarto.
+
+\section*{Cómo usar este documento}
+Cada bloque combina una parte conceptual breve con ejemplos reproducibles y una práctica de laboratorio. Las prácticas están pensadas para sesiones de 3 horas. El manual puede adaptarse a grupos con distinto nivel inicial ampliando o reduciendo los apartados marcados como extensión.
+
+\section*{Convenciones}
+\begin{itemize}
+  \item El símbolo \texttt{>} identifica comandos ejecutados en la consola de R.
+  \item Los fragmentos de código se pueden copiar en un script \texttt{.R}, salvo que se indique otra cosa.
+  \item Las entregas prácticas deben incluir código, resultados y una explicación breve de las decisiones tomadas.
+  \item Las soluciones no se valoran solo por dar un número correcto: importan la organización del proyecto, la claridad del código y la interpretación matemática.
+\end{itemize}
+
+\tableofcontents
+
+\mainmatter
+
+\chapter{Organización de la asignatura}
+
+\section{Resultados de aprendizaje}
+Al completar la asignatura, el estudiante debe ser capaz de:
+\begin{itemize}
+  \item utilizar R como entorno de trabajo para resolver problemas matemáticos sencillos;
+  \item escribir programas con variables, funciones, condicionales, bucles y estructuras de datos;
+  \item aplicar herramientas computacionales a cálculo, simulación, datos y estadística inicial;
+  \item generar gráficos y comunicar resultados cuantitativos de forma clara;
+  \item elaborar documentos científicos básicos en LaTeX;
+  \item crear cuadernos reproducibles con Markdown, R Markdown o Quarto;
+  \item organizar proyectos, scripts, datos y resultados de forma trazable.
+\end{itemize}
+
+\section{Distribución temporal}
+La siguiente planificación distribuye las 15 horas magistrales y las 45 horas prácticas en 15 semanas. Cada semana contiene 1 hora magistral y 3 horas de laboratorio.
+
+\begin{longtable}{p{0.08\textwidth}p{0.40\textwidth}p{0.40\textwidth}}
+\toprule
+Semana & Clase magistral & Práctica de laboratorio \\
+\midrule
+1 & Entorno de trabajo y proyectos & Instalación, RStudio/Posit y primer proyecto \\
+2 & Objetos, tipos y expresiones & Cálculo elemental y scripts reproducibles \\
+3 & Funciones y ayuda integrada & Funciones propias y documentación mínima \\
+4 & Condicionales e iteraciones & Algoritmos elementales y comprobaciones \\
+5 & Vectores y matrices & Operaciones vectorizadas y álgebra computacional \\
+6 & Listas y tablas de datos & Importación, limpieza y exploración de datos \\
+7 & Gráficos base y \texttt{ggplot2} & Visualización de funciones y datos \\
+8 & Cálculo numérico elemental & Raíces, derivadas e integrales aproximadas \\
+9 & Simulación & Experimentos aleatorios y estimación por Monte Carlo \\
+10 & Estadística descriptiva & Resúmenes, distribuciones y comparación de grupos \\
+11 & Modelización estadística inicial & Regresión lineal e interpretación de modelos \\
+12 & LaTeX científico & Fórmulas, tablas, figuras y bibliografía \\
+13 & Markdown y cuadernos reproducibles & Informe reproducible con R Markdown o Quarto \\
+14 & Proyecto integrador & Desarrollo guiado de un informe computacional \\
+15 & Presentación y revisión & Entrega, defensa breve y mejora final \\
+\bottomrule
+\end{longtable}
+
+\section{Criterios de evaluación recomendados}
+La guía docente permite combinar evaluación continua y examen final, cada uno con peso entre el 40\% y el 60\%. Una concreción coherente para esta asignatura es:
+
+\begin{itemize}
+  \item Evaluación continua, 50\%: prácticas semanales, informes reproducibles, ejercicios de programación y participación técnica en laboratorio.
+  \item Examen final, 50\%: resolución individual de problemas de programación, cálculo, análisis de datos y edición científica.
+\end{itemize}
+
+En las prácticas se recomienda valorar:
+\begin{itemize}
+  \item corrección matemática y computacional;
+  \item claridad y simplicidad del código;
+  \item uso adecuado de funciones y estructuras de datos;
+  \item reproducibilidad del trabajo;
+  \item interpretación escrita de resultados;
+  \item presentación formal del informe.
+\end{itemize}
+
+\chapter{Entorno de trabajo}
+
+\section{R, RStudio y proyectos}
+R es un lenguaje de programación orientado al cálculo estadístico, el análisis de datos y la representación gráfica. RStudio o Posit Desktop proporciona un entorno integrado para escribir scripts, ejecutar código, consultar ayuda, visualizar gráficos y organizar proyectos.
+
+Un proyecto bien organizado evita pérdidas de información y facilita que otra persona pueda reproducir los resultados. Una estructura básica es:
+
+\begin{lstlisting}[style=plainstyle]
+laboratorio-matematicas/
+  datos/
+  scripts/
+  informes/
+  figuras/
+  README.md
+\end{lstlisting}
+
+\section{Primeros comandos}
+\begin{lstlisting}[style=rstyle]
+2 + 3
+sqrt(2)
+sin(pi / 4)
+log(exp(1))
+
+x <- 5
+y <- 2 * x + 1
+y
+\end{lstlisting}
+
+\section{Ayuda integrada}
+La ayuda de R es una herramienta de trabajo, no un recurso secundario. Algunas formas útiles de consultarla son:
+
+\begin{lstlisting}[style=rstyle]
+?sqrt
+help(mean)
+example(plot)
+apropos("linear")
+\end{lstlisting}
+
+\begin{aviso}
+Aprender a leer documentación técnica forma parte de la asignatura. En las prácticas se debe consultar la ayuda de R antes de buscar soluciones externas.
+\end{aviso}
+
+\chapter{Objetos, tipos de datos y expresiones}
+
+\section{Objetos y asignación}
+Un objeto es un nombre asociado a un valor. En R se recomienda usar \texttt{<-} para asignar.
+
+\begin{lstlisting}[style=rstyle]
+radio <- 3
+area <- pi * radio^2
+area
+\end{lstlisting}
+
+Los nombres deben ser descriptivos. \texttt{area\_circulo} es preferible a \texttt{a} cuando el contexto no es inmediato.
+
+\section{Tipos básicos}
+\begin{lstlisting}[style=rstyle]
+entero <- 4L
+real <- 4.5
+texto <- "Laboratorio"
+logico <- TRUE
+
+class(entero)
+class(real)
+class(texto)
+class(logico)
+\end{lstlisting}
+
+\section{Errores de redondeo}
+Los números reales se representan de forma aproximada en el ordenador. Por ello, comparaciones aparentemente obvias pueden fallar.
+
+\begin{lstlisting}[style=rstyle]
+0.1 + 0.2 == 0.3
+all.equal(0.1 + 0.2, 0.3)
+\end{lstlisting}
+
+En cálculo computacional conviene distinguir igualdad matemática exacta e igualdad numérica aproximada.
+
+\chapter{Funciones}
+
+\section{Funciones predefinidas}
+Una función recibe argumentos y devuelve un resultado. Algunas funciones importantes en las primeras semanas son:
+
+\begin{multicols}{2}
+\begin{itemize}
+  \item \texttt{sqrt}, \texttt{abs}, \texttt{round}
+  \item \texttt{sin}, \texttt{cos}, \texttt{tan}
+  \item \texttt{exp}, \texttt{log}
+  \item \texttt{sum}, \texttt{prod}
+  \item \texttt{mean}, \texttt{sd}, \texttt{var}
+  \item \texttt{length}, \texttt{seq}, \texttt{rep}
+\end{itemize}
+\end{multicols}
+
+\section{Funciones propias}
+\begin{lstlisting}[style=rstyle]
+area_circulo <- function(r) {
+  pi * r^2
+}
+
+area_circulo(1)
+area_circulo(3)
+\end{lstlisting}
+
+Una función debe resolver una tarea concreta. Si una función hace demasiadas cosas, suele ser más difícil de probar y reutilizar.
+
+\section{Ejemplo: distancia euclídea}
+\begin{lstlisting}[style=rstyle]
+distancia <- function(x1, y1, x2, y2) {
+  sqrt((x2 - x1)^2 + (y2 - y1)^2)
+}
+
+distancia(0, 0, 3, 4)
+\end{lstlisting}
+
+\chapter{Control de flujo}
+
+\section{Condicionales}
+Los condicionales permiten que un programa tome decisiones.
+
+\begin{lstlisting}[style=rstyle]
+clasificar_numero <- function(x) {
+  if (x > 0) {
+    "positivo"
+  } else if (x < 0) {
+    "negativo"
+  } else {
+    "cero"
+  }
+}
+
+clasificar_numero(-2)
+\end{lstlisting}
+
+\section{Bucles}
+Un bucle repite una operación. En R se usan bucles \texttt{for} y \texttt{while}; también existen alternativas vectorizadas.
+
+\begin{lstlisting}[style=rstyle]
+suma_cuadrados <- 0
+
+for (k in 1:10) {
+  suma_cuadrados <- suma_cuadrados + k^2
+}
+
+suma_cuadrados
+\end{lstlisting}
+
+\section{Ejemplo: algoritmo de Euclides}
+\begin{lstlisting}[style=rstyle]
+mcd <- function(a, b) {
+  a <- abs(a)
+  b <- abs(b)
+  while (b != 0) {
+    resto <- a %% b
+    a <- b
+    b <- resto
+  }
+  a
+}
+
+mcd(84, 30)
+\end{lstlisting}
+
+\chapter{Vectores, matrices y estructuras de datos}
+
+\section{Vectores}
+El vector es una estructura central en R. Muchas operaciones se aplican elemento a elemento.
+
+\begin{lstlisting}[style=rstyle]
+x <- c(1, 2, 3, 4, 5)
+x^2
+sum(x)
+mean(x)
+x[x > 3]
+\end{lstlisting}
+
+\section{Secuencias}
+\begin{lstlisting}[style=rstyle]
+seq(0, 1, by = 0.1)
+seq(0, 2*pi, length.out = 100)
+rep(1, times = 5)
+\end{lstlisting}
+
+\section{Matrices}
+\begin{lstlisting}[style=rstyle]
+A <- matrix(c(1, 2, 3, 4), nrow = 2, byrow = TRUE)
+b <- c(1, 1)
+
+A
+t(A)
+det(A)
+solve(A, b)
+\end{lstlisting}
+
+\section{Tablas de datos}
+Un \texttt{data.frame} organiza variables en columnas y observaciones en filas.
+
+\begin{lstlisting}[style=rstyle]
+datos <- data.frame(
+  estudiante = c("A", "B", "C", "D"),
+  practica = c(7.5, 8.0, 6.5, 9.0),
+  examen = c(6.0, 7.0, 6.0, 8.5)
+)
+
+datos$media <- 0.5 * datos$practica + 0.5 * datos$examen
+datos
+\end{lstlisting}
+
+\chapter{Representación gráfica}
+
+\section{Gráficos base}
+\begin{lstlisting}[style=rstyle]
+x <- seq(-2*pi, 2*pi, length.out = 400)
+y <- sin(x)
+
+plot(x, y, type = "l",
+     main = "Función seno",
+     xlab = "x", ylab = "sin(x)")
+abline(h = 0, col = "gray")
+\end{lstlisting}
+
+\section{\texttt{ggplot2}}
+El paquete \texttt{ggplot2} permite construir gráficos por capas. La idea principal es separar datos, estética y geometría.
+
+\begin{lstlisting}[style=rstyle]
+# install.packages("ggplot2")
+library(ggplot2)
+
+datos <- data.frame(
+  x = seq(-3, 3, length.out = 200)
+)
+datos$y <- dnorm(datos$x)
+
+ggplot(datos, aes(x = x, y = y)) +
+  geom_line(color = "steelblue", linewidth = 1) +
+  labs(title = "Densidad normal estándar",
+       x = "x", y = "f(x)") +
+  theme_minimal()
+\end{lstlisting}
+
+\section{Criterios para un buen gráfico}
+\begin{itemize}
+  \item Debe responder a una pregunta concreta.
+  \item Los ejes deben estar rotulados.
+  \item Las unidades deben indicarse cuando existan.
+  \item El título debe describir el contenido, no decorar.
+  \item El gráfico debe poder interpretarse sin leer el código.
+\end{itemize}
+
+\chapter{Cálculo numérico elemental}
+
+\section{Evaluación de funciones}
+El ordenador permite evaluar funciones en mallas de puntos y aproximar propiedades globales.
+
+\begin{lstlisting}[style=rstyle]
+f <- function(x) x^3 - x - 1
+x <- seq(0, 2, length.out = 200)
+y <- f(x)
+plot(x, y, type = "l")
+abline(h = 0, col = "gray")
+\end{lstlisting}
+
+\section{Búsqueda de raíces}
+R incluye \texttt{uniroot} para encontrar una raíz en un intervalo donde la función cambia de signo.
+
+\begin{lstlisting}[style=rstyle]
+f <- function(x) x^3 - x - 1
+uniroot(f, interval = c(1, 2))
+\end{lstlisting}
+
+\section{Derivación numérica}
+Una aproximación simple de la derivada es el cociente incremental centrado:
+
+\[
+f'(x) \approx \frac{f(x+h)-f(x-h)}{2h}.
+\]
+
+\begin{lstlisting}[style=rstyle]
+derivada_centrada <- function(f, x, h = 1e-5) {
+  (f(x + h) - f(x - h)) / (2 * h)
+}
+
+derivada_centrada(sin, pi / 4)
+cos(pi / 4)
+\end{lstlisting}
+
+\section{Integración numérica}
+La regla del trapecio aproxima el área bajo una curva.
+
+\begin{lstlisting}[style=rstyle]
+trapecio <- function(f, a, b, n = 1000) {
+  x <- seq(a, b, length.out = n + 1)
+  y <- f(x)
+  h <- (b - a) / n
+  h * (sum(y) - (y[1] + y[n + 1]) / 2)
+}
+
+trapecio(sin, 0, pi)
+\end{lstlisting}
+
+\chapter{Simulación}
+
+\section{Números pseudoaleatorios}
+La simulación usa números pseudoaleatorios. Para que un resultado sea reproducible se fija una semilla.
+
+\begin{lstlisting}[style=rstyle]
+set.seed(123)
+runif(5)
+rnorm(5)
+\end{lstlisting}
+
+\section{Monte Carlo para estimar \texorpdfstring{$\pi$}{pi}}
+Una forma clásica de estimar \(\pi\) consiste en lanzar puntos al cuadrado \([-1,1]\times[-1,1]\) y contar cuántos caen dentro del círculo unidad.
+
+\begin{lstlisting}[style=rstyle]
+set.seed(1)
+n <- 10000
+x <- runif(n, -1, 1)
+y <- runif(n, -1, 1)
+dentro <- x^2 + y^2 <= 1
+pi_estimado <- 4 * mean(dentro)
+pi_estimado
+\end{lstlisting}
+
+\section{Error de simulación}
+La precisión de una estimación de Monte Carlo mejora lentamente. Duplicar la precisión suele requerir multiplicar el número de simulaciones por cuatro.
+
+\chapter{Tratamiento de datos y estadística inicial}
+
+\section{Importación de datos}
+El trabajo con datos requiere distinguir el archivo original, el código de limpieza y la tabla final. Los datos originales no deben modificarse manualmente.
+
+\begin{lstlisting}[style=rstyle]
+# datos <- read.csv("datos/observaciones.csv")
+\end{lstlisting}
+
+\section{Resumen descriptivo}
+\begin{lstlisting}[style=rstyle]
+set.seed(42)
+notas <- data.frame(
+  grupo = rep(c("A", "B"), each = 20),
+  calificacion = c(rnorm(20, 6.5, 1), rnorm(20, 7.2, 1.2))
+)
+
+aggregate(calificacion ~ grupo, data = notas, mean)
+aggregate(calificacion ~ grupo, data = notas, sd)
+\end{lstlisting}
+
+\section{Regresión lineal}
+\begin{lstlisting}[style=rstyle]
+set.seed(10)
+x <- 1:30
+y <- 2 + 0.7 * x + rnorm(30, sd = 2)
+
+modelo <- lm(y ~ x)
+summary(modelo)
+plot(x, y)
+abline(modelo, col = "red")
+\end{lstlisting}
+
+La salida de un modelo no debe copiarse sin interpretación. En un informe conviene explicar qué representa cada coeficiente, qué variabilidad queda sin explicar y qué limitaciones tiene el modelo.
+
+\chapter{Edición científica con LaTeX}
+
+\section{Estructura mínima}
+\begin{lstlisting}[style=texstyle]
+\documentclass{article}
+\usepackage[spanish]{babel}
+\usepackage{amsmath,amssymb}
+
+\title{Mi primer documento}
+\author{Nombre del estudiante}
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\section{Introducción}
+Este documento contiene texto y fórmulas.
+
+\[
+  \int_0^1 x^2\,dx = \frac{1}{3}.
+\]
+
+\end{document}
+\end{lstlisting}
+
+\section{Fórmulas}
+LaTeX separa las fórmulas en línea, como \(a^2+b^2=c^2\), de las fórmulas destacadas:
+
+\[
+\sum_{k=1}^{n} k = \frac{n(n+1)}{2}.
+\]
+
+\section{Tablas}
+\begin{lstlisting}[style=texstyle]
+\begin{tabular}{lrr}
+\toprule
+Método & Error & Tiempo \\
+\midrule
+A & 0.013 & 0.42 \\
+B & 0.008 & 0.71 \\
+\bottomrule
+\end{tabular}
+\end{lstlisting}
+
+\section{Buenas prácticas}
+\begin{itemize}
+  \item Separar contenido, estructura y formato.
+  \item Usar etiquetas y referencias cruzadas para ecuaciones, figuras y tablas.
+  \item Evitar capturas de pantalla de código o resultados cuando pueden incluirse como texto.
+  \item Compilar con frecuencia para detectar errores pronto.
+\end{itemize}
+
+\chapter{Markdown, R Markdown y Quarto}
+
+\section{Markdown}
+Markdown permite escribir texto estructurado con una sintaxis ligera.
+
+\begin{lstlisting}[style=plainstyle]
+# Título
+
+Un párrafo con **negrita** y una fórmula en línea: $x^2$.
+
+- Primer elemento
+- Segundo elemento
+\end{lstlisting}
+
+\section{Cuadernos reproducibles}
+Un cuaderno reproducible combina texto, código y resultados. La idea central es que el informe se genere desde el código, no que el estudiante copie manualmente salidas de consola.
+
+\begin{lstlisting}[style=plainstyle]
+---
+title: "Informe de práctica"
+format: pdf
+---
+
+## Cálculo
+
+```{r}
+x <- seq(0, 1, length.out = 100)
+mean(x^2)
+```
+\end{lstlisting}
+
+\section{Estructura recomendada de un informe}
+\begin{enumerate}
+  \item Pregunta o problema.
+  \item Método computacional.
+  \item Código esencial.
+  \item Resultados.
+  \item Interpretación.
+  \item Limitaciones o comprobaciones.
+\end{enumerate}
+
+\part{Prácticas de laboratorio}
+
+\chapter{Guía general de prácticas}
+
+\section{Formato común de entrega}
+Cada práctica debe entregarse como carpeta comprimida o repositorio con:
+\begin{itemize}
+  \item un script principal \texttt{practicaXX.R};
+  \item los datos usados, si procede;
+  \item un informe breve en PDF, HTML o Quarto;
+  \item las figuras generadas por el código, si no están incrustadas en el informe.
+\end{itemize}
+
+\section{Rúbrica común}
+\begin{longtable}{p{0.30\textwidth}p{0.12\textwidth}p{0.48\textwidth}}
+\toprule
+Criterio & Peso & Evidencia esperada \\
+\midrule
+Corrección matemática & 30\% & Resultados coherentes, comprobaciones y uso adecuado de conceptos. \\
+Código & 30\% & Claridad, nombres descriptivos, funciones cuando proceda, ausencia de duplicación innecesaria. \\
+Reproducibilidad & 20\% & Proyecto organizado, rutas relativas, semilla aleatoria cuando proceda, informe generado desde código. \\
+Comunicación & 20\% & Explicación breve, gráficos legibles, interpretación de resultados. \\
+\bottomrule
+\end{longtable}
+
+\chapter{Práctica 1. Entorno de trabajo y primer proyecto}
+
+\begin{objetivos}
+\begin{itemize}
+  \item Crear un proyecto de RStudio/Posit.
+  \item Organizar carpetas de trabajo.
+  \item Ejecutar comandos básicos en consola y script.
+  \item Guardar un primer informe de resultados.
+\end{itemize}
+\end{objetivos}
+
+\section{Actividad}
+\begin{enumerate}
+  \item Crear una carpeta de proyecto con subcarpetas \texttt{datos}, \texttt{scripts}, \texttt{figuras} e \texttt{informes}.
+  \item Escribir un script que calcule áreas y volúmenes de figuras elementales.
+  \item Incluir al menos una función propia.
+  \item Guardar los resultados principales en un archivo de texto o informe breve.
+\end{enumerate}
+
+\begin{lstlisting}[style=rstyle]
+area_rectangulo <- function(base, altura) {
+  base * altura
+}
+
+volumen_esfera <- function(radio) {
+  4 / 3 * pi * radio^3
+}
+
+area_rectangulo(3, 5)
+volumen_esfera(2)
+\end{lstlisting}
+
+\begin{entrega}
+Entregar el proyecto organizado y un informe de una página con los comandos usados, resultados y una reflexión sobre la estructura de carpetas.
+\end{entrega}
+
+\chapter{Práctica 2. Cálculo elemental y precisión numérica}
+
+\begin{objetivos}
+\begin{itemize}
+  \item Trabajar con expresiones numéricas.
+  \item Reconocer errores de redondeo.
+  \item Comparar resultados exactos y aproximados.
+\end{itemize}
+\end{objetivos}
+
+\section{Actividad}
+\begin{enumerate}
+  \item Evaluar expresiones con potencias, raíces, logaritmos y trigonometría.
+  \item Comprobar identidades matemáticas con valores numéricos.
+  \item Investigar casos donde la comparación exacta falla por precisión finita.
+  \item Escribir una función \texttt{casi\_igual(x, y, tol)}.
+\end{enumerate}
+
+\begin{lstlisting}[style=rstyle]
+casi_igual <- function(x, y, tol = 1e-8) {
+  abs(x - y) < tol
+}
+
+casi_igual(0.1 + 0.2, 0.3)
+\end{lstlisting}
+
+\begin{entrega}
+Entregar un script y un informe con tres ejemplos de identidades verificadas numéricamente y una explicación de las discrepancias observadas.
+\end{entrega}
+
+\chapter{Práctica 3. Funciones propias}
+
+\begin{objetivos}
+\begin{itemize}
+  \item Diseñar funciones con argumentos claros.
+  \item Probar funciones con casos simples.
+  \item Documentar el comportamiento esperado.
+\end{itemize}
+\end{objetivos}
+
+\section{Actividad}
+Programar funciones para:
+\begin{enumerate}
+  \item convertir grados a radianes y radianes a grados;
+  \item calcular la distancia entre dos puntos del plano;
+  \item calcular el valor de un polinomio en un punto;
+  \item normalizar un vector dividiendo por su norma euclídea.
+\end{enumerate}
+
+\begin{lstlisting}[style=rstyle]
+evaluar_polinomio <- function(coeficientes, x) {
+  potencias <- 0:(length(coeficientes) - 1)
+  sum(coeficientes * x^potencias)
+}
+
+evaluar_polinomio(c(1, 0, 3), 2)
+\end{lstlisting}
+
+\begin{entrega}
+Entregar código con pruebas de cada función y un breve comentario sobre posibles entradas no válidas.
+\end{entrega}
+
+\chapter{Práctica 4. Condicionales, bucles y algoritmos elementales}
+
+\begin{objetivos}
+\begin{itemize}
+  \item Implementar algoritmos con control de flujo.
+  \item Distinguir bucles \texttt{for} y \texttt{while}.
+  \item Incorporar comprobaciones de entrada.
+\end{itemize}
+\end{objetivos}
+
+\section{Actividad}
+\begin{enumerate}
+  \item Implementar el algoritmo de Euclides para el máximo común divisor.
+  \item Programar una función que determine si un entero es primo.
+  \item Calcular los primeros \(n\) términos de la sucesión de Fibonacci.
+  \item Comparar el tiempo de ejecución para distintos tamaños de entrada.
+\end{enumerate}
+
+\begin{lstlisting}[style=rstyle]
+es_primo <- function(n) {
+  if (n < 2) return(FALSE)
+  if (n == 2) return(TRUE)
+  for (k in 2:floor(sqrt(n))) {
+    if (n %% k == 0) return(FALSE)
+  }
+  TRUE
+}
+\end{lstlisting}
+
+\begin{entrega}
+Entregar funciones, pruebas y una tabla con resultados para varios valores de \(n\).
+\end{entrega}
+
+\chapter{Práctica 5. Vectores y matrices}
+
+\begin{objetivos}
+\begin{itemize}
+  \item Usar operaciones vectorizadas.
+  \item Resolver sistemas lineales pequeños.
+  \item Interpretar resultados matriciales.
+\end{itemize}
+\end{objetivos}
+
+\section{Actividad}
+\begin{enumerate}
+  \item Crear vectores mediante \texttt{c}, \texttt{seq} y \texttt{rep}.
+  \item Calcular normas, productos escalares y distancias.
+  \item Construir matrices y operar con transpuestas, determinantes e inversas.
+  \item Resolver sistemas \(Ax=b\) con \texttt{solve}.
+\end{enumerate}
+
+\begin{lstlisting}[style=rstyle]
+A <- matrix(c(2, 1, 1, 3), nrow = 2)
+b <- c(1, 4)
+x <- solve(A, b)
+A %*% x
+\end{lstlisting}
+
+\begin{entrega}
+Entregar un informe con al menos tres sistemas lineales y una verificación \(Ax=b\) para cada uno.
+\end{entrega}
+
+\chapter{Práctica 6. Datos en tablas}
+
+\begin{objetivos}
+\begin{itemize}
+  \item Crear y manipular \texttt{data.frame}.
+  \item Calcular nuevas columnas.
+  \item Filtrar observaciones.
+\end{itemize}
+\end{objetivos}
+
+\section{Actividad}
+\begin{enumerate}
+  \item Crear una tabla con datos simulados de estudiantes y calificaciones.
+  \item Calcular nota final ponderada.
+  \item Clasificar a los estudiantes como apto/no apto.
+  \item Obtener medias por grupo.
+\end{enumerate}
+
+\begin{lstlisting}[style=rstyle]
+set.seed(5)
+datos <- data.frame(
+  grupo = rep(c("A", "B", "C"), each = 10),
+  practica = runif(30, 4, 10),
+  examen = runif(30, 3, 10)
+)
+
+datos$final <- 0.5 * datos$practica + 0.5 * datos$examen
+datos$apto <- datos$final >= 5
+aggregate(final ~ grupo, data = datos, mean)
+\end{lstlisting}
+
+\begin{entrega}
+Entregar tabla final, código y comentario sobre la distribución de calificaciones por grupo.
+\end{entrega}
+
+\chapter{Práctica 7. Visualización de funciones y datos}
+
+\begin{objetivos}
+\begin{itemize}
+  \item Representar funciones matemáticas.
+  \item Construir gráficos de dispersión e histogramas.
+  \item Mejorar títulos, ejes y leyendas.
+\end{itemize}
+\end{objetivos}
+
+\section{Actividad}
+\begin{enumerate}
+  \item Representar \(f(x)=\sin(x)\), \(g(x)=\cos(x)\) y \(h(x)=e^{-x^2}\).
+  \item Crear un histograma de una muestra normal.
+  \item Crear un diagrama de dispersión con recta de ajuste.
+  \item Exportar al menos una figura a la carpeta \texttt{figuras}.
+\end{enumerate}
+
+\begin{lstlisting}[style=rstyle]
+png("figuras/seno_coseno.png", width = 900, height = 600)
+x <- seq(-2*pi, 2*pi, length.out = 400)
+plot(x, sin(x), type = "l", col = "blue", ylab = "valor")
+lines(x, cos(x), col = "red")
+legend("topright", legend = c("sen(x)", "cos(x)"),
+       col = c("blue", "red"), lty = 1)
+dev.off()
+\end{lstlisting}
+
+\begin{entrega}
+Entregar script, figuras generadas y comentario sobre qué gráfico comunica mejor cada tipo de información.
+\end{entrega}
+
+\chapter{Práctica 8. Raíces y aproximación numérica}
+
+\begin{objetivos}
+\begin{itemize}
+  \item Resolver ecuaciones no lineales sencillas.
+  \item Usar \texttt{uniroot}.
+  \item Comparar aproximaciones con soluciones conocidas.
+\end{itemize}
+\end{objetivos}
+
+\section{Actividad}
+\begin{enumerate}
+  \item Representar \(f(x)=x^3-x-1\) en varios intervalos.
+  \item Localizar un intervalo con cambio de signo.
+  \item Calcular una raíz con \texttt{uniroot}.
+  \item Implementar el método de bisección como función propia.
+\end{enumerate}
+
+\begin{lstlisting}[style=rstyle]
+biseccion <- function(f, a, b, tol = 1e-8, max_iter = 100) {
+  if (f(a) * f(b) > 0) stop("No hay cambio de signo")
+  for (i in 1:max_iter) {
+    c <- (a + b) / 2
+    if (abs(f(c)) < tol || (b - a) / 2 < tol) return(c)
+    if (f(a) * f(c) < 0) {
+      b <- c
+    } else {
+      a <- c
+    }
+  }
+  (a + b) / 2
+}
+\end{lstlisting}
+
+\begin{entrega}
+Comparar \texttt{biseccion} y \texttt{uniroot} en tres funciones distintas.
+\end{entrega}
+
+\chapter{Práctica 9. Derivación e integración numérica}
+
+\begin{objetivos}
+\begin{itemize}
+  \item Aproximar derivadas mediante diferencias finitas.
+  \item Aproximar integrales mediante reglas de cuadratura.
+  \item Analizar el efecto del tamaño de paso.
+\end{itemize}
+\end{objetivos}
+
+\section{Actividad}
+\begin{enumerate}
+  \item Implementar diferencias hacia delante y centradas.
+  \item Aproximar derivadas de \(\sin(x)\), \(e^x\) y \(x^3\).
+  \item Implementar la regla del trapecio.
+  \item Estudiar cómo cambia el error al variar \(h\) o \(n\).
+\end{enumerate}
+
+\begin{entrega}
+Entregar una tabla de errores y un gráfico que muestre la relación entre precisión y tamaño de paso.
+\end{entrega}
+
+\chapter{Práctica 10. Simulación y Monte Carlo}
+
+\begin{objetivos}
+\begin{itemize}
+  \item Fijar semillas aleatorias.
+  \item Simular experimentos.
+  \item Estimar probabilidades y magnitudes geométricas.
+\end{itemize}
+\end{objetivos}
+
+\section{Actividad}
+\begin{enumerate}
+  \item Simular lanzamientos de una moneda equilibrada.
+  \item Simular tiradas de dos dados y estimar la probabilidad de suma 7.
+  \item Estimar \(\pi\) mediante Monte Carlo.
+  \item Repetir el experimento con distintos tamaños muestrales.
+\end{enumerate}
+
+\begin{entrega}
+Entregar resultados para al menos cuatro tamaños muestrales y explicar la variabilidad observada.
+\end{entrega}
+
+\chapter{Práctica 11. Estadística descriptiva}
+
+\begin{objetivos}
+\begin{itemize}
+  \item Calcular medidas de posición y dispersión.
+  \item Visualizar distribuciones.
+  \item Comparar grupos.
+\end{itemize}
+\end{objetivos}
+
+\section{Actividad}
+\begin{enumerate}
+  \item Generar o importar una tabla de datos con una variable cuantitativa y una variable de grupo.
+  \item Calcular media, mediana, desviación típica y rango intercuartílico.
+  \item Construir histogramas y diagramas de caja.
+  \item Redactar una comparación de grupos.
+\end{enumerate}
+
+\begin{entrega}
+Entregar un informe con tablas, gráficos y una interpretación de máximo dos páginas.
+\end{entrega}
+
+\chapter{Práctica 12. Regresión lineal}
+
+\begin{objetivos}
+\begin{itemize}
+  \item Ajustar un modelo lineal simple.
+  \item Interpretar pendiente e intercepto.
+  \item Diagnosticar visualmente el ajuste.
+\end{itemize}
+\end{objetivos}
+
+\section{Actividad}
+\begin{enumerate}
+  \item Simular datos con relación lineal y ruido.
+  \item Ajustar \texttt{lm(y \textasciitilde{} x)}.
+  \item Dibujar la nube de puntos y la recta ajustada.
+  \item Analizar residuos mediante gráficos.
+\end{enumerate}
+
+\begin{lstlisting}[style=rstyle]
+set.seed(20)
+x <- runif(50, 0, 10)
+y <- 1.5 + 2.2 * x + rnorm(50, sd = 2)
+modelo <- lm(y ~ x)
+summary(modelo)
+plot(modelo)
+\end{lstlisting}
+
+\begin{entrega}
+Entregar informe reproducible con interpretación de los coeficientes y comentario sobre la calidad del ajuste.
+\end{entrega}
+
+\chapter{Práctica 13. Documento científico en LaTeX}
+
+\begin{objetivos}
+\begin{itemize}
+  \item Crear un documento LaTeX desde cero.
+  \item Escribir fórmulas, tablas y referencias cruzadas.
+  \item Compilar un PDF correctamente.
+\end{itemize}
+\end{objetivos}
+
+\section{Actividad}
+\begin{enumerate}
+  \item Crear un documento con título, autor, resumen y dos secciones.
+  \item Incluir al menos tres fórmulas matemáticas.
+  \item Incluir una tabla con resultados numéricos.
+  \item Usar etiquetas y referencias cruzadas.
+  \item Añadir una bibliografía mínima.
+\end{enumerate}
+
+\begin{entrega}
+Entregar el archivo \texttt{.tex}, el PDF compilado y cualquier archivo auxiliar necesario para la bibliografía.
+\end{entrega}
+
+\chapter{Práctica 14. Informe reproducible con R Markdown o Quarto}
+
+\begin{objetivos}
+\begin{itemize}
+  \item Combinar texto, código y resultados.
+  \item Generar un informe reproducible.
+  \item Evitar copiar manualmente resultados.
+\end{itemize}
+\end{objetivos}
+
+\section{Actividad}
+\begin{enumerate}
+  \item Crear un archivo \texttt{.qmd} o \texttt{.Rmd}.
+  \item Incluir una introducción al problema.
+  \item Ejecutar código R dentro del documento.
+  \item Mostrar al menos un gráfico generado desde el propio informe.
+  \item Renderizar a HTML o PDF.
+\end{enumerate}
+
+\begin{entrega}
+Entregar el archivo fuente y el informe renderizado. El informe debe poder regenerarse sin cambios manuales.
+\end{entrega}
+
+\chapter{Práctica 15. Proyecto integrador}
+
+\begin{objetivos}
+\begin{itemize}
+  \item Integrar programación, datos, gráficos, cálculo y comunicación científica.
+  \item Trabajar con una estructura de proyecto completa.
+  \item Presentar resultados de forma defendible.
+\end{itemize}
+\end{objetivos}
+
+\section{Propuesta}
+El estudiante elegirá uno de los siguientes proyectos:
+\begin{enumerate}
+  \item Estudio numérico de una familia de funciones y sus raíces.
+  \item Simulación de un experimento aleatorio y estimación de probabilidades.
+  \item Análisis descriptivo y gráfico de un conjunto de datos.
+  \item Ajuste e interpretación de un modelo lineal simple.
+\end{enumerate}
+
+\section{Requisitos mínimos}
+\begin{itemize}
+  \item Código R organizado en al menos un script principal.
+  \item Al menos una función propia.
+  \item Al menos dos gráficos interpretados.
+  \item Informe final en LaTeX, R Markdown o Quarto.
+  \item Conclusiones que conecten los resultados con el problema planteado.
+\end{itemize}
+
+\begin{entrega}
+Entregar proyecto completo y realizar una defensa breve de 5 minutos. La defensa debe explicar el problema, el método, los resultados y una limitación del trabajo.
+\end{entrega}
+
+\appendix
+
+\chapter{Referencia rápida de R}
+
+\section{Objetos y operaciones}
+\begin{lstlisting}[style=rstyle]
+x <- 3
+y <- c(1, 2, 3)
+z <- seq(0, 1, length.out = 5)
+sum(y)
+mean(y)
+length(y)
+\end{lstlisting}
+
+\section{Funciones}
+\begin{lstlisting}[style=rstyle]
+nombre_funcion <- function(argumento1, argumento2) {
+  resultado <- argumento1 + argumento2
+  resultado
+}
+\end{lstlisting}
+
+\section{Control de flujo}
+\begin{lstlisting}[style=rstyle]
+if (condicion) {
+  # instrucciones
+} else {
+  # instrucciones alternativas
+}
+
+for (k in 1:10) {
+  print(k)
+}
+\end{lstlisting}
+
+\chapter{Plantilla de informe de práctica}
+
+\begin{lstlisting}[style=plainstyle]
+Título de la práctica
+Nombre:
+Fecha:
+
+1. Problema
+Descripción breve del problema que se quiere resolver.
+
+2. Método
+Explicación de las funciones, algoritmos o datos usados.
+
+3. Código esencial
+Fragmentos principales o referencia al script.
+
+4. Resultados
+Tablas, valores numéricos y gráficos.
+
+5. Interpretación
+Qué significan los resultados y qué limitaciones tienen.
+\end{lstlisting}
+
+\chapter{Bibliografía inicial}
+\begin{itemize}
+  \item Matloff, N. \emph{The Art of R Programming}. No Starch Press.
+  \item Wickham, H. \emph{Advanced R}. Chapman and Hall/CRC.
+  \item Wickham, H. y Grolemund, G. \emph{R for Data Science}. O'Reilly Media.
+  \item Grätzer, G. \emph{More Math Into LaTeX}. Springer.
+  \item Xie, Y., Dervieux, C. y Riederer, E. \emph{R Markdown Cookbook}. Chapman and Hall/CRC.
+  \item Venables, W. N., Smith, D. M. y R Core Team. \emph{An Introduction to R}.
+  \item Lamport, L. \emph{LaTeX: A Document Preparation System}. Addison-Wesley.
+  \item Xie, Y., Allaire, J. J. y Grolemund, G. \emph{R Markdown: The Definitive Guide}. Chapman and Hall/CRC.
+\end{itemize}
+
+\backmatter
+
+\chapter*{Notas para revisión docente}
+Este borrador se ha preparado a partir de la guía docente disponible. Antes de usarlo como manual definitivo conviene revisar:
+\begin{itemize}
+  \item calendario académico real y festivos;
+  \item criterios exactos de evaluación aprobados por la coordinación;
+  \item software disponible en aulas;
+  \item conjuntos de datos oficiales de la asignatura;
+  \item formato institucional exigido para guiones de prácticas;
+  \item nivel inicial real del grupo.
+\end{itemize}
+
+\end{document}
