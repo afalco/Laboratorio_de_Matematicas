@@ -196,8 +196,27 @@ En las prácticas se recomienda valorar:
 
 \chapter{Entorno de trabajo}
 
+\begin{objetivos}
+Al finalizar este capítulo, el estudiante debe ser capaz de:
+\begin{itemize}
+  \item distinguir entre la consola, un script y un proyecto de R;
+  \item organizar los archivos de una práctica de forma reproducible;
+  \item instalar y cargar paquetes sin confundir ambas operaciones;
+  \item consultar la ayuda integrada y obtener información sobre la sesión de trabajo.
+\end{itemize}
+\end{objetivos}
+
 \section{R, RStudio y proyectos}
 R es un lenguaje de programación orientado al cálculo estadístico, el análisis de datos y la representación gráfica. RStudio o Posit Desktop proporciona un entorno integrado para escribir scripts, ejecutar código, consultar ayuda, visualizar gráficos y organizar proyectos.
+
+Conviene distinguir tres elementos que a menudo se mezclan al comenzar:
+\begin{itemize}
+  \item La \textbf{consola} ejecuta instrucciones inmediatamente. Es útil para explorar, pero no conserva por sí sola una explicación completa del trabajo.
+  \item Un \textbf{script} es un archivo de texto, normalmente con extensión \texttt{.R}, que contiene instrucciones en un orden explícito. Es el lugar habitual para guardar el código de una práctica.
+  \item Un \textbf{proyecto} asocia una carpeta con el trabajo de R. Al abrirlo, RStudio puede recuperar la carpeta del proyecto y facilita que las rutas relativas sean estables.
+\end{itemize}
+
+La consola sirve para probar una expresión; cuando una prueba es útil, se debe pasar al script con un comentario que explique su propósito. No es recomendable basar una entrega en objetos creados accidentalmente en el espacio de trabajo.
 
 Un proyecto bien organizado evita pérdidas de información y facilita que otra persona pueda reproducir los resultados. Una estructura básica es:
 
@@ -207,8 +226,29 @@ laboratorio-matematicas/
   scripts/
   informes/
   figuras/
+  resultados/
   README.md
 \end{lstlisting}
+
+La carpeta \texttt{datos/} contiene los datos originales y no debe mezclarse con resultados transformados. Los scripts deben poder ejecutarse desde el principio y generar los resultados a partir de los archivos que el proyecto incluye. Si un dato se descarga de una fuente externa, se debe registrar su procedencia, fecha de descarga y transformación aplicada.
+
+\section{La carpeta de trabajo}
+Las rutas de archivos dependen de la carpeta de trabajo actual. En un proyecto de RStudio, la solución preferida es utilizar rutas relativas al directorio del proyecto, no rutas absolutas ligadas a un ordenador concreto.
+
+\begin{lstlisting}[style=rstyle]
+getwd()
+list.files()
+list.files("datos")
+
+archivo <- file.path("datos", "mediciones.csv")
+archivo
+\end{lstlisting}
+
+La función \texttt{file.path()} construye rutas respetando el sistema operativo. Esta práctica es más robusta que escribir manualmente separadores como \texttt{/} o \texttt{\\}.
+
+\begin{aviso}
+Evita comandos como \texttt{setwd("C:/Users/...")} en los scripts que se entregan. Funcionan solo en el ordenador donde se escribieron y dificultan la reproducción del análisis.
+\end{aviso}
 
 \section{Primeros comandos}
 \begin{lstlisting}[style=rstyle]
@@ -222,6 +262,41 @@ y <- 2 * x + 1
 y
 \end{lstlisting}
 
+R distingue entre una expresión que se evalúa y una asignación que guarda el resultado. Escribir el nombre de un objeto en una línea independiente permite inspeccionarlo; añadir un punto y coma no hace que un script sea más claro.
+
+Los comentarios comienzan con \texttt{\#}. Deben explicar una decisión o separar partes lógicas del programa, no repetir literalmente lo que ya dice el código.
+
+\begin{lstlisting}[style=rstyle]
+# Pendiente de una recta que pasa por dos puntos
+x1 <- 1
+y1 <- 3
+x2 <- 4
+y2 <- 9
+pendiente <- (y2 - y1) / (x2 - x1)
+pendiente
+\end{lstlisting}
+
+\section{Paquetes y bibliotecas}
+La instalación de un paquete se hace normalmente una sola vez por versión de R. Cargarlo con \texttt{library()} es una operación distinta y suele hacerse al comienzo de cada sesión o script.
+
+\begin{lstlisting}[style=rstyle]
+# Solo si el paquete todavía no está instalado
+install.packages("ggplot2")
+
+# Al comenzar un script que utiliza el paquete
+library(ggplot2)
+\end{lstlisting}
+
+Para comprobar si un paquete está disponible sin detener inmediatamente el script se puede utilizar \texttt{requireNamespace()}.
+
+\begin{lstlisting}[style=rstyle]
+if (!requireNamespace("ggplot2", quietly = TRUE)) {
+  stop("Instala el paquete ggplot2 antes de continuar")
+}
+\end{lstlisting}
+
+En las entregas se debe indicar qué paquetes se utilizan y, cuando sea relevante, sus versiones. No es necesario instalar un paquete cada vez que se ejecuta un script.
+
 \section{Ayuda integrada}
 La ayuda de R es una herramienta de trabajo, no un recurso secundario. Algunas formas útiles de consultarla son:
 
@@ -232,14 +307,58 @@ example(plot)
 apropos("linear")
 \end{lstlisting}
 
+También es útil consultar la firma de una función y explorar ejemplos antes de modificar un código encontrado:
+
+\begin{lstlisting}[style=rstyle]
+args(seq)
+methods("plot")
+example(seq)
+\end{lstlisting}
+
+Cuando aparece un error, conviene leer el mensaje completo, localizar la línea que lo produce y construir un ejemplo mínimo que lo reproduzca. Copiar muchas líneas de código antes de entender el problema suele ocultar la causa.
+
+\section{Información de la sesión}
+La versión de R, el sistema operativo y los paquetes cargados pueden afectar a un resultado. Para documentar el entorno se puede guardar la información de la sesión al final de un informe o adjuntarla a una entrega.
+
+\begin{lstlisting}[style=rstyle]
+R.version.string
+sessionInfo()
+\end{lstlisting}
+
+\section{Flujo de trabajo recomendado}
+Un flujo de trabajo sencillo para cada práctica es:
+\begin{enumerate}
+  \item crear o abrir un proyecto para la asignatura;
+  \item leer el enunciado y escribir una breve descripción del objetivo;
+  \item guardar el código en un script, ejecutándolo por bloques pequeños;
+  \item comprobar los resultados con ejemplos sencillos y casos límite;
+  \item separar datos originales, figuras, resultados y código;
+  \item redactar la interpretación junto al resultado que la justifica;
+  \item ejecutar el script desde una sesión limpia antes de entregar.
+\end{enumerate}
+
+\begin{entrega}
+La entrega mínima de una práctica debe contener un script ejecutable, los datos necesarios o una referencia precisa a ellos, las figuras generadas y un informe breve que explique el procedimiento, los resultados y las limitaciones. El informe no debe depender de objetos que solo existan en el espacio de trabajo del estudiante.
+\end{entrega}
+
 \begin{aviso}
 Aprender a leer documentación técnica forma parte de la asignatura. En las prácticas se debe consultar la ayuda de R antes de buscar soluciones externas.
 \end{aviso}
 
 \chapter{Objetos, tipos de datos y expresiones}
 
+\begin{objetivos}
+Al finalizar este capítulo, el estudiante debe ser capaz de:
+\begin{itemize}
+  \item identificar el tipo y la estructura básica de un objeto de R;
+  \item utilizar operadores aritméticos, relacionales y lógicos;
+  \item detectar conversiones automáticas y valores especiales;
+  \item inspeccionar objetos antes de operar con ellos y documentar supuestos.
+\end{itemize}
+\end{objetivos}
+
 \section{Objetos y asignación}
-Un objeto es un nombre asociado a un valor. En R se recomienda usar \texttt{<-} para asignar.
+Un objeto es un nombre asociado a un valor. En R se recomienda usar \texttt{<-} para asignar. La asignación crea o actualiza un nombre; la expresión situada a la derecha se evalúa antes de guardar el resultado.
 
 \begin{lstlisting}[style=rstyle]
 radio <- 3
@@ -247,7 +366,17 @@ area <- pi * radio^2
 area
 \end{lstlisting}
 
-Los nombres deben ser descriptivos. \texttt{area\_circulo} es preferible a \texttt{a} cuando el contexto no es inmediato.
+Los nombres deben ser descriptivos. \texttt{area\_circulo} es preferible a \texttt{a} cuando el contexto no es inmediato. En un mismo proyecto conviene elegir una convención y mantenerla: por ejemplo, minúsculas y guiones bajos.
+
+\begin{lstlisting}[style=rstyle]
+radio_m <- 0.25
+area_circulo <- pi * radio_m^2
+
+ls()
+rm(area_circulo)
+\end{lstlisting}
+
+\texttt{ls()} muestra los nombres disponibles y \texttt{rm()} elimina objetos. No se recomienda usar \texttt{rm(list = ls())} dentro de un script docente: borra el contexto completo y puede ocultar dependencias no declaradas.
 
 \section{Tipos básicos}
 \begin{lstlisting}[style=rstyle]
@@ -262,6 +391,92 @@ class(texto)
 class(logico)
 \end{lstlisting}
 
+Los tipos atómicos más habituales son \texttt{integer}, \texttt{double} o numérico, \texttt{character}, \texttt{logical} y \texttt{complex}. La clase que devuelve \texttt{class()} es una descripción orientada al uso; \texttt{typeof()} informa del tipo interno.
+
+\begin{lstlisting}[style=rstyle]
+typeof(entero)
+typeof(real)
+typeof(texto)
+typeof(logico)
+
+is.numeric(real)
+is.character(texto)
+is.logical(logico)
+\end{lstlisting}
+
+Para explorar un objeto antes de utilizarlo son especialmente útiles \texttt{str()}, \texttt{length()} y \texttt{names()}.
+
+\begin{lstlisting}[style=rstyle]
+z <- c(2, 4, 6)
+str(z)
+length(z)
+names(z) <- c("a", "b", "c")
+names(z)
+z
+\end{lstlisting}
+
+\section{Operadores y precedencia}
+Las expresiones combinan valores y operadores. Los operadores aritméticos principales son \texttt{+}, \texttt{-}, \texttt{*}, \texttt{/}, \texttt{\^} y \texttt{\%\%}. La división entera se obtiene con \texttt{\%/\%}.
+
+\begin{lstlisting}[style=rstyle]
+17 / 5
+17 %/% 5
+17 %% 5
+2 + 3 * 4
+(2 + 3) * 4
+\end{lstlisting}
+
+Las comparaciones producen valores lógicos: \texttt{==}, \texttt{!=}, \texttt{<}, \texttt{<=}, \texttt{>} y \texttt{>=}. Los operadores \texttt{\&} y \texttt{|} combinan condiciones elemento a elemento; \texttt{\&\&} y \texttt{||} se reservan para decisiones escalares, especialmente en condicionales.
+
+\begin{lstlisting}[style=rstyle]
+x <- 3
+x >= 0 && x <= 10
+x == 3 || x == 5
+\end{lstlisting}
+
+Usar paréntesis explícitos hace visible la intención matemática y reduce errores de precedencia.
+
+\section{Conversión y reciclaje}
+R puede convertir valores cuando una operación exige un tipo común. En general, los lógicos pueden convertirse en números y los números en texto, pero una conversión implícita puede no coincidir con la intención del programa.
+
+\begin{lstlisting}[style=rstyle]
+as.numeric(TRUE)
+as.character(3.5)
+as.logical(0)
+as.numeric("3.5")
+\end{lstlisting}
+
+La función \texttt{as.numeric()} aplicada a texto no numérico produce \texttt{NA} y un aviso. Conviene comprobar siempre el resultado de una conversión.
+
+R también recicla vectores cortos en algunas operaciones. El reciclaje es útil cuando las longitudes son compatibles, pero puede ocultar errores si una longitud no divide a la otra.
+
+\begin{lstlisting}[style=rstyle]
+c(1, 2, 3, 4) + c(10, 100)
+c(1, 2, 3) + c(10, 100)
+\end{lstlisting}
+
+En el segundo caso R muestra un aviso. La longitud de los operandos debe formar parte de las comprobaciones de un programa que dependa de posiciones emparejadas.
+
+\section{Valores especiales y datos ausentes}
+Los valores \texttt{NA}, \texttt{NaN}, \texttt{Inf} y \texttt{-Inf} no significan lo mismo:
+\begin{itemize}
+  \item \texttt{NA} representa un dato ausente o desconocido.
+  \item \texttt{NaN} representa un resultado numéricamente indefinido, como \texttt{0/0}.
+  \item \texttt{Inf} y \texttt{-Inf} representan infinitos con signo.
+\end{itemize}
+
+\begin{lstlisting}[style=rstyle]
+valores <- c(2, NA, 4, NaN, Inf)
+is.na(valores)
+is.nan(valores)
+is.finite(valores)
+
+mean(valores)
+mean(valores, na.rm = TRUE)
+\end{lstlisting}
+
+La opción \texttt{na.rm = TRUE} elimina los valores ausentes para esa operación, pero no explica por qué faltan. En un análisis serio hay que distinguir entre eliminar datos, imputarlos o conservar explícitamente la ausencia.
+
 \section{Errores de redondeo}
 Los números reales se representan de forma aproximada en el ordenador. Por ello, comparaciones aparentemente obvias pueden fallar.
 
@@ -270,7 +485,37 @@ Los números reales se representan de forma aproximada en el ordenador. Por ello
 all.equal(0.1 + 0.2, 0.3)
 \end{lstlisting}
 
-En cálculo computacional conviene distinguir igualdad matemática exacta e igualdad numérica aproximada.
+En cálculo computacional conviene distinguir igualdad matemática exacta e igualdad numérica aproximada. Para comparar resultados con tolerancia se puede usar \texttt{all.equal()} o una desigualdad explícita.
+
+\begin{lstlisting}[style=rstyle]
+aproximadamente_iguales <- function(x, y, tolerancia = 1e-10) {
+  abs(x - y) <= tolerancia
+}
+
+aproximadamente_iguales(0.1 + 0.2, 0.3)
+\end{lstlisting}
+
+\section{Atributos e inspección}
+Un objeto puede contener atributos adicionales, como nombres, dimensiones o una clase. Estos atributos modifican la forma en que algunas funciones interpretan el valor.
+
+\begin{lstlisting}[style=rstyle]
+temperaturas <- c(18.2, 20.1, 19.7)
+names(temperaturas) <- c("lunes", "martes", "miercoles")
+attributes(temperaturas)
+str(temperaturas)
+\end{lstlisting}
+
+Antes de aplicar una operación a un objeto recibido de otra persona, comprueba al menos su estructura, longitud, nombres y presencia de valores ausentes. Muchas dificultades en R proceden de trabajar con un objeto distinto del que se suponía.
+
+\section{Lista de comprobación}
+Para depurar una expresión o preparar una entrega, pregunta:
+\begin{enumerate}
+  \item ¿Qué tipo y longitud tiene cada objeto?
+  \item ¿Las unidades y magnitudes son compatibles?
+  \item ¿Hay valores ausentes, infinitos o no numéricos?
+  \item ¿Las comparaciones requieren una tolerancia?
+  \item ¿La operación está reciclando un vector de forma intencionada?
+\end{enumerate}
 
 \chapter{Funciones}
 
