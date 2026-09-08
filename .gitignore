@@ -1,1 +1,9 @@
+# Compiled files
+*.aux
+*.log
+*.out
+*.toc
+
 .DS_Store
+
+*.synctex.gz
