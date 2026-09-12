@@ -1,74 +1,455 @@
 \documentclass[11pt,a4paper]{article}
-\usepackage[margin={2.75cm,2.75cm}]{geometry}
-
+\usepackage[margin=2.6cm]{geometry}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
 \usepackage[spanish,es-tabla]{babel}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
-
+\usepackage{amsmath, amsthm}
 \usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{fontawesome5}
+\usepackage{dirtree}
+\definecolor{azuluc}{HTML}{1F4E79}
+\definecolor{grisclaro}{HTML}{F4F6F8}
+\definecolor{gris}{HTML}{586069}
+\definecolor{verde}{HTML}{2E7D32}
+\definecolor{rojo}{HTML}{A94442}
 
+\lstdefinestyle{rstyle}{
+  language=R,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{azuluc}\bfseries,
+  commentstyle=\color{gris},
+  stringstyle=\color{verde!70!black},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris!30},
+  backgroundcolor=\color{grisclaro},
+  breaklines=true,
+  showspaces=false,
+  tabsize=2
+}
+\lstdefinestyle{rconsole}{
+  language=R,
+  basicstyle=\color{rojo}\ttfamily\small,
+  showstringspaces=false,
+  columns=fullflexible,
+  frame=single,
+  rulecolor=\color{gris!30},
+  breaklines=true,
+  tabsize=2
+}
+\lstdefinestyle{routput}{
+  language=R,
+  basicstyle=\color{azuluc}\ttfamily\small,
+  showstringspaces=false,
+  columns=fullflexible,
+  frame=single,
+  rulecolor=\color{gris!30},
+  breaklines=true,
+  tabsize=2
+}
 
-\title{\LARGE \textbf{Práctica 1: Introducción a R y RStudio} \\[0.5em]
+\newcommand{\R}{\textcolor{azuluc}{\faIcon{r-project}}}
+\newtheoremstyle{exercise}
+  {0.8em}{0.8em}{\normalfont}{}{\bfseries\color{azuluc}}{.}{0.5em}{}
+\theoremstyle{exercise}
+\newtheorem{exercise}{Ejercicio}
+\title{\LARGE \textbf{Práctica 1: Introducción a \R\ y RStudio} \\[0.5em]
 \Large Laboratorio de Matemáticas \\
 \small \ \\
-Doble Grado en Física y Matemáticas - Grado en Ingeniería Matemática}
-\author{Miguel Beltrá Vidal}
+Grado en Ingeniería Matemática - Doble Grado en Física e Ingeniería Matemática}
+\author{Miguel Beltra Vidal}
 \date{Curso 2026/27}
-
 
 \begin{document}
 
 \maketitle
 
 \section{Objetivos}
+El objetivo de esta práctica es introducir \R\ y el entorno de desarrollo RStudio. Al finalizarla, el estudiante será capaz de ejecutar instrucciones en la consola, realizar cálculos elementales, utilizar variables y organizar sus primeros programas en ficheros \texttt{.R}.
 
-El objetivo de esta práctica es el de introducir el software R al estudiante, así como el entorno de desarrollo RStudio. Después de esta práctica, el estudiante estará familiarizado con el software de forma que podrá ejecutar sus primeros comandos y escribir sus primeros programas en R.
+\section[Primeros pasos con R]{Primeros pasos con \R}\label{sec:primeros_pasos_R}
+
+\subsection{Valores numéricos}
+
+Entre otras cosas, utilizaremos \R\ para realizar cálculos numéricos. Tenemos que entender que los ordenadores tienen una capacidad de representación de números que está limitada al número de bits que emplean para representar estos números. Los ordenadores representan los números con precisión finita. En particular, los enteros pueden representarse de forma exacta dentro del rango permitido por el tipo de datos. Declaramos los números enteros en \R\ con la sintaxis \texttt{nL}, siendo \texttt{n} el número que queremos representar y \texttt{L} el sufijo que indica que se trata explícitamente de un entero. Así pues, los números enteros 2, 8, -5, 15294 se escriben en el lenguaje \R\ como:
+\begin{align*}
+    \texttt{2L} && \texttt{8L} && \texttt{-5L} && \texttt{15294L}
+\end{align*}
+Los números con parte decimal se representan mediante números de punto flotante. Su representación tiene precisión finita, por lo que no todos los números reales pueden representarse exactamente; por ejemplo, $\pi$ solo puede almacenarse mediante una aproximación. Los números 2.0, 8.0, -5.4, 15294.123 se escriben en el lenguaje \R\ como:
+\begin{align*}
+    \texttt{2.0} && \texttt{8} && \texttt{-5.4} && \texttt{15294.123}
+\end{align*}
+Observa que \texttt{8} y \texttt{8L} representan el mismo valor numérico, pero pertenecen a clases diferentes: \texttt{8} es \texttt{numeric} y \texttt{8L} es \texttt{integer}.
+
+\medskip
+
+En \R\ los enteros se conocen como \texttt{integer}, mientras que los números con decimales se llaman \texttt{numeric}. Podemos consultar la clase de un objeto \texttt{x} mediante la función \texttt{class(x)}. Por ejemplo:
+
+\medskip
+
+\begin{lstlisting}[style=rconsole]
+> class(5)
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] "numeric"
+\end{lstlisting}
+\begin{lstlisting}[style=rconsole]
+> class(3.5)
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] "numeric"
+\end{lstlisting}
+\begin{lstlisting}[style=rconsole]
+> class(3L)
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] "integer"
+\end{lstlisting}
+
+\medskip
+
+\noindent La constante $\pi$ viene implementada en \R. La forma de escribir en \R\ dicha constante es \texttt{pi}:
+\begin{lstlisting}[style=rconsole]
+> pi
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] 3.141593
+\end{lstlisting}
+
+\paragraph{Idea clave.}
+
+En esta práctica no necesitamos memorizar los detalles internos de la representación
+numérica. Lo importante por ahora es distinguir entre valores \texttt{numeric} e
+\texttt{integer} y saber consultar su clase con \texttt{class()}.
 
 
-\section{Desarrollo de la práctica}
+\subsection{Operaciones aritméticas básicas}
 
-\subsection{Un poco de historia...}
-
-\subsubsection{¿Qué es R?}
-
-De acuerdo con la página oficial (\url{https://www.r-project.org/}):
-
+El siguiente paso es el de realizar operaciones aritméticas. Las operaciones aritméticas básicas de \R\ son las siguientes:
 \begin{center}
-\emph{R is a free software environment for statistical computing and graphics.}
+\begin{tabular}{|l|l|} \hline
+    \textbf{Operación} & \textbf{Símbolo en \R} \\ \hline
+    Suma & \texttt{+} \\ \hline
+    Resta & \texttt{-} \\ \hline
+    Multiplicación & \texttt{*} \\ \hline
+    División & \texttt{/} \\ \hline
+    Potencia & \texttt{\^} \\ \hline
+    Módulo (resto de la división entera) & \texttt{\%\%} \\ \hline
+    División entera & \texttt{\%/\%} \\ \hline
+\end{tabular}
+\end{center}
+
+\medskip
+
+\noindent Además de estos operadores, podemos usar los paréntesis \texttt{(} y \texttt{)} para alterar el orden de resolución de las operaciones matemáticas. \R\ sigue la jerarquía estándar de operaciones, que ordenadas de mayor prioridad a menor prioridad, es la siguiente:
+\begin{enumerate}
+    \item Paréntesis: \texttt{(} \texttt{)}
+    \item Potencia: \texttt{\^} o \texttt{**}
+    \item Multiplicación y división: \texttt{*} y \texttt{/}
+    \item Suma y resta: \texttt{+} y \texttt{-}
+\end{enumerate}
+
+Podemos hacer los cálculos directamente en la consola de \R. Por ejemplo, si queremos hacer el cálculo $1+1$, es suficiente con escribir en la consola lo siguiente:
+\begin{lstlisting}[style=rconsole]
+> 1+1
+\end{lstlisting}
+Obtendremos la salida siguiente, que nos informa de que el resultado obtenido es $2$.
+\begin{lstlisting}[style=routput]
+[1] 2
+\end{lstlisting}
+Podemos hacer otras operaciones:
+\begin{lstlisting}[style=rconsole]
+> 2*(3+1)
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] 8
+\end{lstlisting}
+\begin{lstlisting}[style=rconsole]
+> 7^5
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] 16807
+\end{lstlisting}
+
+
+\begin{exercise} Realiza los siguiente cálculos en la consola de \R:
+\begin{enumerate}[label=\alph*)]
+  \item \(17+8\), \(25-37\) y \(6\cdot 9\).
+  \item \(\dfrac{45}{8}\), \(2^8\) y \(7^3-4^2\).
+  \item Calcula \texttt{37\%\%5} y \texttt{37 \%/\% 5}. ¿Qué diferencia observas?
+  \item \(2(3+5)^2\) y \(2\cdot3+5^2\). ¿Por qué los resultados son diferentes?
+\end{enumerate}
+\end{exercise}
+
+
+\subsection{Valores booleanos}
+
+En lógica proposicional, las proposiciones pueden tomar uno de dos valores: verdadero o falso. Estos valores se conocen como \emph{valores booleanos}. En \R\ estos valores se representan como \texttt{TRUE} y \texttt{FALSE}.
+
+\subsection{Operaciones relacionales}
+
+Es habitual que necesitemos comparar valores para determinar si son iguales, distintos, o si uno es mayor o menor que otro. Estos operadores, llamados \emph{operadores relacionales}, son esenciales a la hora de escribir nuestro código. En \R\ tenemos los siguientes operadores relacionales:
+\begin{center}
+\begin{tabular}{|l|l|l|l|} \hline
+    \textbf{Operador} & \textbf{Descripción} & \textbf{Ejemplo} & \textbf{Resultado} \\ \hline
+    \texttt{==} & Igual a ($=$) & \texttt{5 == 3} & \texttt{FALSE} \\ \hline
+    \texttt{!=} & Diferente de ($\neq$) & \texttt{5 != 3} & \texttt{TRUE} \\ \hline
+    \texttt{<}  & Menor que ($<$) & \texttt{3 <\ 5} & \texttt{TRUE} \\ \hline
+    \texttt{<=} & Menor o igual que ($\leq$) & \texttt{5 <= 3} & \texttt{FALSE} \\ \hline
+    \texttt{>}  & Mayor que ($>$) & \texttt{5 >\ 3} & \texttt{TRUE} \\ \hline
+    \texttt{>=} & Mayor o igual que ($\geq$) & \texttt{5 >= 3} & \texttt{TRUE} \\ \hline
+\end{tabular}
 \end{center}
 
 
-\noindent Si buscamos el apartado \texttt{About R}, se nos dice lo siguiente:
+\begin{exercise} Realiza los siguiente cálculos en la consola de \R:
+\begin{enumerate}[label=\alph*)]
+  \item Comprueba si \(7=7\), si \(7=8\) y si \(7\neq 8\).
+  \item Determina si \(3<5\), \(10\geq 10\) y \(4>9\).
+  \item Compara las expresiones \(2+3\) y \(5\), y también \(2^3\) y \(3^2\).
+  \item Prueba \texttt{5 == 5L} y \texttt{5 != 5L}. ¿Qué observas?
+\end{enumerate}
+\end{exercise}
+
+
+\subsection{Operaciones lógicas}
+
+En numerosas ocasiones necesitaremos combinar valores booleanos mediante operaciones lógicas. En \R\ tenemos las siguientes operaciones lógicas:
+
+\begin{center}
+\begin{tabular}{|l|l|l|l|} \hline
+    \textbf{Operador de \R} & \textbf{Descripción} & \textbf{Ejemplo} & \textbf{Resultado} \\ \hline
+    \texttt{\&\&}  & AND lógico ($\wedge$) & \texttt{TRUE \&\& FALSE} & \texttt{FALSE} \\ \hline
+    \texttt{||}    & OR lógico ($\vee$) & \texttt{TRUE || FALSE} & \texttt{TRUE} \\ \hline
+    \texttt{!}     & NOT lógico ($\neg$) & \texttt{!TRUE} & \texttt{FALSE} \\ \hline
+    \texttt{xor()} & OR exclusivo (XOR) & \texttt{xor(TRUE, TRUE)} & \texttt{FALSE} \\ \hline
+\end{tabular}
+\end{center}
+
+\begin{exercise} Realiza los siguiente cálculos en la consola de \R:
+\begin{enumerate}[label=\alph*)]
+  \item Evalúa \texttt{TRUE \&\& TRUE}, \texttt{TRUE \&\& FALSE},
+        \texttt{TRUE || FALSE} y \texttt{FALSE || FALSE}.
+
+  \item Evalúa \texttt{!TRUE} y \texttt{!FALSE}.
+
+  \item Calcula \texttt{xor(TRUE, FALSE)} y \texttt{xor(TRUE, TRUE)}.
+  
+  \item Escribe una expresión que compruebe si \(12\) está entre \(5\) y \(20\), incluyendo ambos extremos. Puedes combinar varios operadores lógicos.
+  
+  \item Escribe una expresión que compruebe si $5$ es o bien menor que $3$ o bien menor que $7$.
+\end{enumerate}
+\end{exercise}
+
+
+\subsection{Funciones básicas}
+
+Una de las ventajas de \R\ para realizar cálculos matemáticos es que incorpora numerosas funciones matemáticas de uso habitual.
+
+\begin{center}
+\begin{tabular}{|l|l|l|} \hline
+    \textbf{Función de \R} &  \textbf{Ejemplo}        & \textbf{Resultado}    \\ \hline
+    \texttt{sqrt(x)}    & \texttt{sqrt(16)}        & \texttt{4}         \\ \hline
+    \texttt{log(x)}    & \texttt{log(10)}        & \texttt{2.302585}     \\ \hline
+    \texttt{log10(x)} & \texttt{log10(100)}     & \texttt{2}            \\ \hline
+    \texttt{exp(x)}    & \texttt{exp(1)}        & \texttt{2.718282}     \\ \hline
+    \texttt{sin(x)}    & \texttt{sin(pi/2)}        & \texttt{1}         \\ \hline
+    \texttt{cos(x)}    & \texttt{cos(pi)}        & \texttt{-1}        \\ \hline
+    \texttt{abs(x)}    & \texttt{abs(-5)}        & \texttt{5}            \\ \hline
+    \texttt{round(x, n)} & \texttt{round(3.14159, 2)} & \texttt{3.14} \\ \hline
+\end{tabular}
+\end{center}
+
+
+\noindent Por ejemplo, podemos hacer otras operaciones:
+\begin{lstlisting}[style=rconsole]
+> sqrt(2)
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] 1.414214
+\end{lstlisting}
+\begin{lstlisting}[style=rconsole]
+> abs(-3.5)
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] 3.5
+\end{lstlisting}
+
+
+\begin{exercise} Realiza los siguientes cálculos en la consola de \R\ y anota el resultado obtenido:
+\begin{enumerate}
+\item Calcula $\sqrt{3}$, $\sqrt{144}$ y $\sqrt{3.6}$. ¿Qué pasa si intentas calcular $\sqrt{-1}$? Investiga por tu cuenta el significado de \texttt{NaN}.
+\item Calcula $\log(1)$, $\log(0.001)$ y $\log(47)$. ¿Qué pasa si intentas calcular $\log(-14.3)$? ¿Y $\log(0)$? Investiga por tu cuenta el significado de \texttt{Inf}.
+\item Calcula $\log_{10}(1)$, $\log_{10}(0.001)$ y $\log_{10}(10000)$. ¿Qué pasa si intentas calcular $\log_{10}(0)$? ¿Y $\log_{10}(-10)$?
+\item Calcula $e^0$, $e^1$, $e^{10.5}$ y $e^{-2}$. ¿Qué pasa si intentas calcular $\log(e^5)$? ¿Y $e^{\log(3)}$?
+\end{enumerate}
+\end{exercise}
+
+En otros lenguajes es habitual que muchas de estas funciones estén implementadas en paquetes externos. Por ejemplo, en \texttt{C} la mayoría de estas funciones se encuentran en la librería \texttt{math.h}, en \texttt{C++} se encuentran en \texttt{cmath} o en el espacio de nombres \texttt{std}, en \texttt{Java} se encuentran en la clase \texttt{java.lang.Math}, y en \texttt{Python} se encuentran en el módulo \texttt{math}. No es necesario que controles (por el momento) todos los términos que hemos introducido en este párrafo.
+
+
+\section{Uso de variables}
+
+
+Una variable es un nombre asociado a un valor que podemos reutilizar en otros cálculos y, si es necesario, actualizar mediante una nueva asignación. Para crear una variable, escogemos un nombre descriptivo y le asignamos un valor. Para asignarle un valor, utilizaremos la sintaxis
+\begin{center}
+    \texttt{mi\_variable <- 4096L}
+\end{center}
+
+\noindent \texttt{<-} indica que estamos realizando una asignación. Por ejemplo:
+\begin{lstlisting}[style=rconsole]
+> base <- 4
+> altura <- 3
+> base*altura/2
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] 6
+\end{lstlisting}
+Resulta evidente que podemos asignar un nuevo valor a una variable que ya tenía un valor:
+\begin{lstlisting}[style=rconsole]
+> base <- 6
+> base*altura/2
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] 9
+\end{lstlisting}
+
+
+\begin{exercise} Realiza los siguientes cálculos declarando las variables necesarias:
+\begin{enumerate}[label=\alph*)]
+  \item Calcula el área de un círculo de radio \(r=2\).
+  
+  \item Calcula el volumen de un cilindro de altura \(h=8\) y radio de la base \(r=3\).
+  
+  \item Calcula la longitud de la hipotenusa de un triángulo rectángulo de catetos \(b=4\) y \(c=3\).
+  
+  \item Un triangulo como el que se muestra en la imagen tiene lados $a = 5$, $b = 6$ y un ángulo $\gamma = \frac{\pi}{3}$. Cálcula el lado $c$ y los ángulos $\alpha$ y $\beta$. Para ello, recuerda los Teoremas del Seno y del Coseno. 
+ 
+  \begin{center}
+  \includegraphics[scale=.3]{triangulo.png}
+  \end{center}
+ 
+  \item Define \texttt{a <- 7} y \texttt{b <- 3}. Calcula y almacena en una variable \texttt{c} el valor de \(a^2+b^2\). Comprueba después si \texttt{c} es igual a \(58\).
+  
+  \item Un producto tiene un precio de $24.50$ €. Por la compra de 3 unidades se nos realiza un descuento del \(10\%\). Calcula el importe total de aprovechar esta oferta.
+\end{enumerate}
+\end{exercise}
+
+
+\section{Primeros pasos con RStudio}
+
+Una vez familiarizados con \R, podemos trabajar con RStudio, un entorno de desarrollo que facilita la escritura, ejecución y organización de código en \R.
+
+
+\subsection{Consola, editor y entorno de trabajo}
+
+RStudio separa varias tareas que al principio conviene distinguir:
+\begin{itemize}[leftmargin=*]
+  \item \textbf{Consola:} permite ejecutar instrucciones de \R\ inmediatamente.
+  \item \textbf{Editor de scripts:} permite escribir, guardar y modificar programas
+        completos en ficheros \texttt{.R}.
+  \item \textbf{Entorno de trabajo:} muestra, entre otras cosas, los objetos que
+        hemos creado durante una sesión.
+\end{itemize}
+Una forma recomendable de trabajar es \textbf{probar una instrucción en la consola,
+pasarla al script cuando funcione y guardar el script}. Así, el trabajo queda
+registrado y puede repetirse posteriormente.
+
+
+\subsection{Estructura de directorios}
+
+Es recomendable mantener desde el principio una estructura de carpetas sencilla y ordenada. Esto facilitará la localización de los ejercicios y evitará mezclar ficheros de prácticas diferentes. Un ejemplo de cómo podemos estructurar nuestro directorio es el siguiente:
 
 
 \begin{center}
-\begin{minipage}{0.9\linewidth}
-	\emph{R is a language and environment for statistical computing and graphics. It is a GNU project which is similar to the S language and environment which was developed at Bell Laboratories (formerly AT\&T, now Lucent Technologies) by John Chambers and colleagues. R can be considered as a different implementation of S. There are some important differences, but much code written for S runs unaltered under R.}
-	
-	\medskip
-
-	\emph{R provides a wide variety of statistical (linear and nonlinear modelling, classical statistical tests, time-series analysis, classification, clustering, …) and graphical techniques, and is highly extensible. The S language is often the vehicle of choice for research in statistical methodology, and R provides an Open Source route to participation in that activity.}
-	
-	\medskip
-
-	\emph{One of R’s strengths is the ease with which well-designed publication-quality plots can be produced, including mathematical symbols and formulae where needed. Great care has been taken over the defaults for the minor design choices in graphics, but the user retains full control.}
-
-	\medskip
-
-	\emph{R is available as Free Software under the terms of the Free Software Foundation’s GNU General Public License in source code form. It compiles and runs on a wide variety of UNIX platforms and similar systems (including FreeBSD and Linux), Windows and MacOS.}
+\begin{minipage}{0.75\linewidth}
+\dirtree{%
+    .1 \faIcon[regular]{folder-open}\ practicas/.
+        .2 \faIcon[regular]{folder-open}\ R/.
+            .3 \faIcon[regular]{folder-open}\ practica\_1/.
+                .4 \faIcon[regular]{file-alt}\ ej1.R.
+                .4 \faIcon[regular]{file-alt}\ ej2.R.
+                .4 \faIcon[regular]{file-alt}\ ej3.R.
+            .3 \faIcon[regular]{folder-open}\ practica\_2/.
+                .4 \faIcon[regular]{file-alt}\ ej1.R.
+                .4 \faIcon[regular]{file-alt}\ ej2.R.
+            .3 \faIcon[regular]{folder-open}\ practica\_3/.
+                .4 \faIcon[regular]{file-alt}\ ej1.R.
+                .4 \faIcon[regular]{file-alt}\ ej2.R.
+                .4 \faIcon[regular]{file-alt}\ ej3.R.
+}
 \end{minipage}
 \end{center}
 
-Así pues, podemos entender R como un lenguaje de programación, es decir una serie de reglas que nos permiten escribir un programa, y también como un entorno para realizar cálculos y gráficos estadísticos. Fue inicialmente desarrollado por Ross Ihaka and Robert Gentleman, en 1993. Por su larga trayectoria, se considera uno de los softwares más importantes para el tratamiento estadístico de los datos.
+
+\begin{exercise} Crea esta estructura de directorios, sin los ficheros \texttt{.R}, que los iremos añadiendo sobre la marcha (o una estructura similar que te ayude a organizarte). Observa que este ejercicio se alargará a lo largo de todo el curso.
+\end{exercise}
+
+\noindent Iremos ampliando esta estructura conforme vayan pasando las prácticas.
 
 
-\subsection{Instalación de R y RStudio}
+
+\section{Comentarios}
+
+Comentar el código es una buena práctica de programación: los comentarios permiten explicar qué hace una parte del programa y señalar aspectos que puedan resultar relevantes. Los comentarios en \R\ vienen precedidos por el carácter \texttt{\#}.
+
+\begin{lstlisting}[style=rstyle]
+# Un codigo de R con una linea al comienzo
+1+1
+sqrt(3.6)
+# Las lineas de arriba son instrucciones de R
+3L + 2L^5L # Tambien podemos poner los comentarios a continuacion de la instruccion
+\end{lstlisting}
 
 
-\subsection{Primeros pasos}
+\section{Ejercicios de RStudio}
 
-\subsection{Ejercicios}
+Para los ejercicios realizados en la sección~\ref{sec:primeros_pasos_R}, crea uno o varios ficheros \texttt{.R} desde RStudio y guárdalos en el directorio correspondiente. Reescribe en el editor el código que has utilizado y ejecútalo desde RStudio. Añade comentarios con las salidas esperadas y una cabecera breve con la información de la práctica. Puedes usar el siguiente ejemplo como inspiración, o buscar un estilo propio.
 
-\section{Entrega}
+\medskip
+
+\begin{lstlisting}[style=rstyle]
+###############################################################
+# Autor: Miguel Beltra Vidal                                  #
+# Laboratorio de Matematicas - Grado en Ingenieria Matematica #
+# Curso 2026/27                                               #
+#                                                             #
+# Practica 1 - Ejercicio 1                                    #
+#                                                             #
+###############################################################
+
+2^5            #El resultado es 32
+(1+1)^(3-1)*6  #El resultado es 24
+\end{lstlisting}
+
+\medskip
+
+Prueba a ejecutarlo y comprueba que los resultados coinciden con aquellos obtenidos cuando los escribías directamente en la terminal.
+
+
+\section{Entrega y consejos}
+
+En la próxima práctica explicaremos cómo entregar los ejercicios resueltos. Por el momento:
+\begin{enumerate}[leftmargin=*]
+  \item guarda tus scripts en la carpeta de la práctica correspondiente;
+  \item utiliza nombres de fichero claros y consistentes;
+  \item comenta únicamente aquello que ayude a entender el código;
+  \item comprueba que puedes ejecutar de nuevo el script desde el principio sin
+        depender de instrucciones que hayan quedado solamente en la consola.
+\end{enumerate}
+
+
+\begin{center}
+\textbf{\color{azuluc}Idea clave:} un buen script debe ser reproducible, legible y ordenado.
+\end{center}
+
 
 \end{document}

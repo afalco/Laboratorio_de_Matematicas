@@ -3,6 +3,7 @@
 *.log
 *.out
 *.toc
+*.dvi
 
 .DS_Store
 
