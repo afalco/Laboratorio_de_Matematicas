@@ -1,0 +1,1036 @@
+\documentclass[11pt,a4paper]{article}
+
+% ---------------------------------------------------------
+% PAQUETES
+% ---------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{pmboxdraw}
+\usepackage{menukeys}
+
+
+% ---------------------------------------------------------
+% CONFIGURACIÓN DE HYPERREF
+% ---------------------------------------------------------
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!60!black,
+    urlcolor=blue!60!black
+}
+
+% ---------------------------------------------------------
+% CONFIGURACIÓN DE LISTINGS
+% ---------------------------------------------------------
+\definecolor{codebg}{RGB}{245,245,245}
+\definecolor{codecomment}{RGB}{90,90,90}
+
+\lstdefinestyle{terminal}{
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\small,
+    frame=single,
+    framerule=0.4pt,
+    rulecolor=\color{gray!40},
+    columns=fullflexible,
+    keepspaces=true,
+    showstringspaces=false,
+    breaklines=true,
+    commentstyle=\color{codecomment},
+    language=,
+    % Replace box-drawing characters with their text equivalents
+    extendedchars=true,
+    literate=
+	    {├}{{\pmboxdrawuni{251C}}}1
+	    {└}{{\pmboxdrawuni{2514}}}1
+	    {─}{{\pmboxdrawuni{2500}}}1
+	    {│}{{\pmboxdrawuni{2502}}}1
+	    {┬}{{\pmboxdrawuni{252C}}}1
+	    {┤}{{\pmboxdrawuni{2524}}}1
+	    {┼}{{\pmboxdrawuni{253C}}}1
+	    {á}{{\'a}}1
+	    {é}{{\'e}}1
+	    {í}{{\'i}}1
+	    {ó}{{\'o}}1
+	    {ú}{{\'u}}1
+	    {Á}{{\'A}}1
+	    {É}{{\'E}}1
+	    {Í}{{\'I}}1
+	    {Ó}{{\'O}}1
+	    {Ú}{{\'U}}1
+	    {ñ}{{\~n}}1
+	    {Ñ}{{\~N}}1
+	    {ü}{{\"u}}1
+	    {Ü}{{\"U}}1
+        {¿}{{\textquestiondown}}1
+	    % Ensure LaTeX doesn't misinterpret special characters
+}
+
+\lstset{style=terminal}
+
+% ---------------------------------------------------------
+% CAJAS
+% ---------------------------------------------------------
+\newtcolorbox{importante}{
+    colback=yellow!10,
+    colframe=orange!70!black,
+    title=\textbf{Importante},
+    fonttitle=\bfseries
+}
+
+\newtcolorbox{peligro}{
+    colback=red!5,
+    colframe=red!70!black,
+    title=\textbf{¡Cuidado!},
+    fonttitle=\bfseries
+}
+
+\newtcolorbox{ejercicio}{
+    colback=blue!5,
+    colframe=blue!60!black,
+    title=\textbf{Ejercicio},
+    fonttitle=\bfseries
+}
+
+% ---------------------------------------------------------
+% ENCABEZADO Y PIE
+% ---------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Terminal de Windows}
+\rhead{Guía básica}
+\cfoot{\thepage}
+
+% ---------------------------------------------------------
+% DOCUMENTO
+% ---------------------------------------------------------
+\begin{document}
+
+% ---------------------------------------------------------
+% PORTADA
+% ---------------------------------------------------------
+\begin{titlepage}
+    \centering
+
+    \vspace*{2cm}
+
+    {\Huge\bfseries Guía básica de la terminal de Windows\par}
+
+    \vspace{1cm}
+
+    {\Large Gestión de directorios y ficheros\par}
+
+    \vspace{1cm}
+    
+    {\Large Laboratorio de Matemáticas\par}
+
+    \vspace{1cm}
+
+	{Grado en Ingeniería Matemática - Doble Grado en Física e Ingeniería Matemática\par}
+
+    \vspace{1cm}
+
+    {\Large Miguel Beltrá Vidal\par}
+
+    \vfill
+    
+    \begin{tcolorbox}[width=0.8\textwidth]
+    En esta guía aprenderemos a utilizar los principales comandos
+    del Símbolo del sistema de Windows para movernos por el sistema
+    de archivos y gestionar directorios y ficheros.
+    \end{tcolorbox}
+
+    \vfill
+
+    {\large Material práctico para estudiantes\par}
+
+    \vspace{0.5cm}
+
+    {\large \today\par}
+
+\end{titlepage}
+
+\tableofcontents
+\newpage
+
+% =========================================================
+\section{Introducción}
+% =========================================================
+
+La \textbf{terminal} es una herramienta que permite comunicarnos con el sistema operativo mediante comandos de texto. En Windows disponemos principalmente de dos terminales:
+
+\begin{itemize}
+    \item El \textbf{Símbolo del sistema} (\texttt{cmd.exe}), que es el
+          que utilizaremos en esta guía.
+    \item \textbf{PowerShell}, más moderna y potente, que veremos
+          brevemente en el apéndice.
+\end{itemize}
+
+\noindent Para abrir el Símbolo del sistema podemos pulsar la tecla
+\texttt{Windows}, escribir \texttt{cmd} y pulsar \texttt{Intro}.
+
+\noindent En esta guía aprenderemos a:
+
+\begin{itemize}
+    \item Saber en qué directorio estamos.
+    \item Listar el contenido de un directorio.
+    \item Cambiar de directorio y de unidad.
+    \item Crear directorios (carpetas).
+    \item Crear ficheros.
+    \item Copiar ficheros y directorios.
+    \item Mover y renombrar ficheros y directorios.
+    \item Borrar ficheros y directorios.
+    \item Visualizar la estructura de directorios mediante
+          \texttt{tree}.
+\end{itemize}
+
+\begin{importante}
+En Windows los directorios se separan con la barra invertida
+(\texttt{\textbackslash}), no con la barra normal, y las rutas comienzan
+por la letra de la unidad. Por ejemplo:
+\texttt{C:\textbackslash Users\textbackslash alumno}.
+\end{importante}
+
+\begin{peligro}
+Algunos comandos, especialmente \texttt{del} y \texttt{rmdir /s},
+pueden borrar información de forma permanente. Antes de ejecutar un
+comando de borrado, comprueba siempre dónde estás y qué vas a borrar.
+\end{peligro}
+
+% =========================================================
+\section{¿Dónde estoy?}
+% =========================================================
+
+Para saber en qué directorio nos encontramos escribimos \texttt{cd}
+sin ningún argumento:
+
+\begin{lstlisting}
+cd
+\end{lstlisting}
+
+\noindent \texttt{cd} significa \textit{change directory}, pero cuando
+se utiliza sin argumentos muestra el directorio actual. Por ejemplo:
+
+\begin{lstlisting}
+C:\Users\alumno> cd
+C:\Users\alumno
+\end{lstlisting}
+
+\noindent Esto indica que estamos dentro del directorio
+\texttt{C:\textbackslash Users\textbackslash alumno}.
+
+\noindent También podemos utilizar:
+
+\begin{lstlisting}
+echo %cd%
+\end{lstlisting}
+
+\begin{importante}
+Observa que el propio \textit{prompt} del Símbolo del sistema ya nos
+muestra el directorio en el que estamos, antes del símbolo
+\texttt{>}.
+\end{importante}
+
+% =========================================================
+\section{Listar el contenido de un directorio}
+% =========================================================
+
+Para ver qué hay dentro del directorio actual utilizamos:
+
+\begin{lstlisting}
+dir
+\end{lstlisting}
+
+\noindent Por ejemplo:
+
+\begin{lstlisting}
+C:\Users\alumno> dir
+ El volumen de la unidad C no tiene etiqueta.
+
+ Directorio de C:\Users\alumno
+
+17/09/2026  10:12    <DIR>          .
+17/09/2026  10:12    <DIR>          ..
+17/09/2026  10:12    <DIR>          Descargas
+17/09/2026  10:12    <DIR>          Documentos
+17/09/2026  10:12    <DIR>          Imagenes
+17/09/2026  10:12    <DIR>          Musica
+               0 archivos              0 bytes
+               6 dirs   35.000.000.000 bytes libres
+\end{lstlisting}
+
+\noindent Las carpetas aparecen marcadas con \texttt{<DIR>}.
+
+\subsection{Algunas opciones interesantes}
+
+Para obtener un listado en una sola columna, más compacto:
+
+\begin{lstlisting}
+dir /b
+\end{lstlisting}
+
+\noindent Para mostrar también los archivos ocultos y del sistema:
+
+\begin{lstlisting}
+dir /a
+\end{lstlisting}
+
+\noindent Para mostrar solamente los directorios:
+
+\begin{lstlisting}
+dir /ad
+\end{lstlisting}
+
+\noindent Podemos combinar opciones:
+
+\begin{lstlisting}
+dir /a /b
+\end{lstlisting}
+
+\begin{ejercicio}
+\begin{enumerate}
+    \item Abre el Símbolo del sistema.
+    \item Comprueba en qué directorio estás con \texttt{cd}.
+    \item Lista su contenido con \texttt{dir}.
+    \item Utiliza \texttt{dir /b}.
+    \item Utiliza \texttt{dir /a}.
+\end{enumerate}
+\end{ejercicio}
+
+% =========================================================
+\section{Cambiar de directorio}
+% =========================================================
+
+Para desplazarnos entre directorios utilizamos:
+
+\begin{lstlisting}
+cd nombre_carpeta
+\end{lstlisting}
+
+\noindent Por ejemplo, si tenemos un directorio llamado
+\texttt{Documentos}:
+
+\begin{lstlisting}
+cd Documentos
+\end{lstlisting}
+
+\noindent Podemos comprobar que hemos cambiado de directorio:
+
+\begin{lstlisting}
+cd
+\end{lstlisting}
+
+\subsection{Volver al directorio anterior}
+
+Para subir un nivel en la estructura de directorios:
+
+\begin{lstlisting}
+cd ..
+\end{lstlisting}
+
+\noindent Por ejemplo, si estamos en \verb|C:\Users\alumno\Documentos|, después de ejecutar:
+
+\begin{lstlisting}
+cd ..
+\end{lstlisting}
+
+\noindent estaremos en: \verb|C:\Users\alumno|.
+
+
+\subsection{Ir al directorio personal}
+
+El directorio personal del usuario está guardado en la variable
+\texttt{\%USERPROFILE\%}:
+
+\begin{lstlisting}
+cd %USERPROFILE%
+\end{lstlisting}
+
+\noindent Por ejemplo, esto nos llevaría a
+\texttt{C:\textbackslash Users\textbackslash alumno}.
+
+\subsection{Ir al directorio raíz}
+
+El directorio raíz de la unidad actual se representa mediante
+\texttt{\textbackslash}:
+
+\begin{lstlisting}
+cd \
+\end{lstlisting}
+
+\noindent Por ejemplo, si estamos en \verb|C:\Users\alumno|, y ejecutamos
+\begin{lstlisting}
+cd \
+\end{lstlisting}
+cambiaremos a \verb|C:\|.
+
+\subsection{Cambiar de unidad}
+
+En Windows cada unidad (disco duro, pendrive, etc.) tiene su propia
+letra. Para cambiar de unidad escribimos la letra seguida de dos
+puntos:
+
+\begin{lstlisting}
+D:
+\end{lstlisting}
+
+\noindent Si queremos cambiar de unidad y de directorio a la vez,
+necesitamos la opción \texttt{/d}:
+
+\begin{lstlisting}
+cd /d D:\practicas
+\end{lstlisting}
+
+\begin{peligro}
+Sin la opción \texttt{/d}, el comando \texttt{cd} no cambia de unidad:
+cambiará el directorio actual de esa otra unidad, pero seguiremos
+trabajando en la unidad en la que estábamos.
+\end{peligro}
+
+\begin{ejercicio}
+Partiendo de tu directorio personal:
+
+\begin{enumerate}
+    \item Entra en \texttt{Documentos}.
+    \item Comprueba dónde estás con \texttt{cd}.
+    \item Vuelve al directorio anterior con \texttt{cd ..}.
+    \item Entra de nuevo en \texttt{Documentos}.
+    \item Vuelve a tu directorio personal utilizando \verb|cd %USERPROFILE%|.
+\end{enumerate}
+\end{ejercicio}
+
+% =========================================================
+\section{Crear directorios}
+% =========================================================
+
+Para crear una directorio (carpeta) utilizamos:
+
+\begin{lstlisting}
+mkdir nombre_carpeta
+\end{lstlisting}
+
+\noindent \texttt{mkdir} significa \textit{make directory}. También
+podemos escribir su forma abreviada \texttt{md}. Por ejemplo, si
+queremos crear el directorio \texttt{practica}:
+
+\begin{lstlisting}
+mkdir practica
+\end{lstlisting}
+
+\noindent Podemos comprobar que se ha creado:
+
+\begin{lstlisting}
+dir
+\end{lstlisting}
+
+\subsection{Crear varias carpetas}
+
+También podemos crear varias carpetas en un único comando:
+
+\begin{lstlisting}
+mkdir documentos imagenes programas
+\end{lstlisting}
+
+\subsection{Crear una estructura completa}
+
+En Windows, \texttt{mkdir} crea automáticamente todos los directorios
+intermedios que hagan falta:
+
+\begin{lstlisting}
+mkdir windows\documentos\apuntes
+\end{lstlisting}
+
+\begin{ejercicio}
+Dentro de tu directorio personal crea la siguiente estructura:
+
+\begin{lstlisting}
+windows\
+├── documentos\
+├── imagenes\
+├── programas\
+└── ejercicios\
+\end{lstlisting}
+
+Puedes hacerlo mediante:
+
+\begin{lstlisting}
+mkdir windows
+cd windows
+mkdir documentos imagenes programas ejercicios
+\end{lstlisting}
+\end{ejercicio}
+
+% =========================================================
+\section{Crear ficheros}
+% =========================================================
+
+Una forma sencilla de crear un fichero vacío con el nombre
+\texttt{nombre\_fichero} es mediante:
+
+\begin{lstlisting}
+type nul > nombre_fichero
+\end{lstlisting}
+
+\noindent Por ejemplo:
+
+\begin{lstlisting}
+type nul > notas.txt
+\end{lstlisting}
+
+\noindent Comprobamos que existe:
+
+\begin{lstlisting}
+dir
+\end{lstlisting}
+
+\noindent Si queremos crear el fichero con algún contenido, podemos
+utilizar \texttt{echo}:
+
+\begin{lstlisting}
+echo Mis apuntes de Windows > notas.txt
+\end{lstlisting}
+
+\begin{importante}
+El símbolo \texttt{>} redirige la salida de un comando hacia un
+fichero. Si el fichero ya existía, \textbf{su contenido se
+sobrescribe}. Para añadir texto al final sin borrar lo anterior se
+utiliza \texttt{>}\texttt{>}.
+\end{importante}
+
+\noindent Para crear varios ficheros necesitamos un comando por
+fichero:
+
+\begin{lstlisting}
+type nul > uno.txt
+type nul > dos.txt
+type nul > tres.txt
+\end{lstlisting}
+
+\begin{ejercicio}
+Dentro del directorio \texttt{documentos}, crea estos ficheros:
+
+\begin{lstlisting}
+apuntes.txt
+tareas.txt
+examen.txt
+\end{lstlisting}
+
+Comprueba que se han creado utilizando:
+
+\begin{lstlisting}
+dir
+\end{lstlisting}
+\end{ejercicio}
+
+% =========================================================
+\section{Copiar ficheros}
+% =========================================================
+
+Para copiar un fichero utilizamos:
+
+\begin{lstlisting}
+copy origen destino
+\end{lstlisting}
+
+\noindent Por ejemplo:
+
+\begin{lstlisting}
+copy apuntes.txt copia_apuntes.txt
+\end{lstlisting}
+
+\noindent Ahora tendremos:
+
+\begin{lstlisting}
+apuntes.txt
+copia_apuntes.txt
+\end{lstlisting}
+
+\noindent También podemos copiar un fichero a otro directorio:
+
+\begin{lstlisting}
+copy apuntes.txt ..\
+\end{lstlisting}
+
+\noindent En este caso, \texttt{..\textbackslash} representa el
+directorio padre.
+
+\subsection{Copiar un directorio}
+
+El comando \texttt{copy} no puede copiar directorios. Para ello, utilizamos \texttt{xcopy}:
+
+\begin{lstlisting}
+xcopy documentos documentos_copia /e /i
+\end{lstlisting}
+
+\noindent Aquí:
+
+\begin{itemize}
+    \item \texttt{/e} copia el directorio de forma
+          \textbf{recursiva}, incluyendo subdirectorios (también los
+          vacíos).
+    \item \texttt{/i} indica que el destino es un directorio, aunque
+          todavía no exista.
+\end{itemize}
+
+\noindent Una alternativa más moderna y potente es \texttt{robocopy}:
+
+\begin{lstlisting}
+robocopy documentos documentos_copia /e
+\end{lstlisting}
+
+% =========================================================
+\section{Mover y renombrar}
+% =========================================================
+
+Para mover un fichero utilizamos:
+
+\begin{lstlisting}
+move origen destino
+\end{lstlisting}
+
+\noindent Por ejemplo, si queremos mover el fichero \texttt{apuntes.txt} del directorio actual al directorio padre, emplearemos el comando:
+\begin{lstlisting}
+move apuntes.txt ..\
+\end{lstlisting}
+
+
+
+\subsection{Mover un fichero a otra carpeta}
+
+Por ejemplo:
+
+\begin{lstlisting}
+move examen.txt ..\examenes\
+\end{lstlisting}
+
+\subsection{Mover un directorio}
+
+El comando \texttt{move} también sirve para mover directorios
+completos, sin necesidad de ninguna opción adicional. Por ejemplo, si queremos mover el directorio \texttt{imagenes} dentro del directorio \texttt{documentos}, utilizaremos el comando:
+
+\begin{lstlisting}
+move imagenes documentos\
+\end{lstlisting}
+
+\subsection{Renombrar un fichero}
+
+Para cambiar el nombre utilizamos \texttt{ren} (o \texttt{rename}):
+
+\begin{lstlisting}
+ren tareas.txt tareas_windows.txt
+\end{lstlisting}
+
+\noindent No estamos creando un fichero nuevo: simplemente estamos
+cambiando su nombre.
+
+\subsection{Renombrar un directorio}
+
+También podemos hacer:
+
+\begin{lstlisting}
+ren imagenes fotos
+\end{lstlisting}
+
+\begin{importante}
+A diferencia de Linux, en Windows mover y renombrar son dos comandos
+distintos: \texttt{move} para mover y \texttt{ren} para renombrar.
+Aun así, \texttt{move} también puede renombrar si el destino está en
+el mismo directorio.
+\end{importante}
+
+% =========================================================
+\section{Borrar ficheros}
+% =========================================================
+
+Para borrar un fichero utilizamos:
+
+\begin{lstlisting}
+del nombre_fichero
+\end{lstlisting}
+
+\noindent Por ejemplo:
+
+\begin{lstlisting}
+del tres.txt
+\end{lstlisting}
+
+\noindent El fichero se eliminará. También podemos utilizar
+\texttt{erase}, que hace exactamente lo mismo.
+
+\begin{peligro}
+\texttt{del} no envía el fichero a la Papelera de reciclaje. La
+eliminación es permanente.
+\end{peligro}
+
+\noindent Podemos pedir confirmación antes de borrar:
+
+\begin{lstlisting}
+del /p tres.txt
+\end{lstlisting}
+
+\noindent Para borrar varios ficheros a la vez podemos utilizar
+comodines. Por ejemplo, todos los ficheros con extensión
+\texttt{.txt}:
+
+\begin{lstlisting}
+del *.txt
+\end{lstlisting}
+
+\begin{peligro}
+El comodín \texttt{*} puede afectar a muchos más ficheros de los que
+esperamos. Antes de borrar con comodines, comprueba primero qué
+ficheros coinciden utilizando \texttt{dir}. Por ejemplo:
+\texttt{dir *.txt}.
+\end{peligro}
+
+% =========================================================
+\section{Borrar directorios}
+% =========================================================
+
+Para borrar un directorio vacío podemos utilizar:
+
+\begin{lstlisting}
+rmdir nombre_directorio
+\end{lstlisting}
+
+\noindent Por ejemplo:
+
+\begin{lstlisting}
+rmdir carpeta_vacia
+\end{lstlisting}
+
+\noindent \texttt{rmdir} (o su forma abreviada \texttt{rd})
+solamente puede eliminar directorios vacíos.
+
+\subsection{Borrar un directorio y todo su contenido}
+
+Para eliminar un directorio que contiene ficheros u otros
+directorios utilizamos la opción \texttt{/s}:
+
+\begin{lstlisting}
+rmdir /s nombre_directorio
+\end{lstlisting}
+
+\noindent Por ejemplo, si ejecutamos:
+
+\begin{lstlisting}
+rmdir /s ejercicios
+\end{lstlisting}
+
+\noindent se eliminará el directorio \texttt{ejercicios} y su contenido. Windows nos pedirá confirmación:
+
+\begin{lstlisting}
+ejercicios, ¿Está seguro (S/N)?
+\end{lstlisting}
+
+\noindent Si añadimos la opción \texttt{/q} (\textit{quiet}), no se
+pedirá confirmación:
+
+\begin{lstlisting}
+rmdir /s /q ejercicios
+\end{lstlisting}
+
+\begin{peligro}
+\texttt{rmdir /s /q} puede eliminar muchos archivos de una sola vez y
+sin avisar. Antes de utilizarlo, comprueba siempre el contenido y
+asegúrate de que estás en el directorio correcto.
+\end{peligro}
+
+% =========================================================
+\section{Visualizar la estructura con \texttt{tree}}
+% =========================================================
+
+El comando \texttt{tree} permite visualizar los directorios formando
+una estructura de árbol. Por ejemplo, tras escribir:
+
+\begin{lstlisting}
+tree
+\end{lstlisting}
+
+\noindent Podríamos obtener:
+
+\begin{lstlisting}
+Listado de rutas de carpetas
+C:.
+├───documentos
+├───ejercicios
+├───imagenes
+└───programas
+\end{lstlisting}
+
+\subsection{Mostrar también los ficheros}
+
+Por defecto \texttt{tree} muestra solamente los directorios. Para que
+muestre también los ficheros utilizamos la opción \texttt{/f}:
+
+\begin{lstlisting}
+tree /f
+\end{lstlisting}
+
+\noindent Por ejemplo:
+
+\begin{lstlisting}
+C:.
+├───documentos
+│       apuntes.txt
+│       examen.txt
+│       tareas.txt
+│
+├───ejercicios
+├───imagenes
+└───programas
+\end{lstlisting}
+
+\subsection{Utilizar caracteres ASCII}
+
+Si los caracteres del árbol no se muestran correctamente, podemos
+utilizar la opción \texttt{/a}, que dibuja el árbol con caracteres
+ASCII sencillos:
+
+\begin{lstlisting}
+tree /a
+\end{lstlisting}
+
+\noindent Por ejemplo:
+
+\begin{lstlisting}
+C:.
++---documentos
++---ejercicios
++---imagenes
+\---programas
+\end{lstlisting}
+
+\begin{importante}
+A diferencia de Linux, \texttt{tree} viene siempre incluido en
+Windows, por lo que no hace falta instalar nada. Eso sí, ten en
+cuenta que \texttt{tree} muestra solamente directorios y
+\texttt{tree /f} muestra directorios y ficheros.
+\end{importante}
+
+
+
+
+\section{Limpiar la terminal}
+
+Si queremos limpiar la terminal, podemos utilizar el comando:
+
+\begin{lstlisting}
+cls
+\end{lstlisting}
+
+
+
+
+\section{Autocompletado}
+
+La mejor forma de escribir el nombre de un directorio o fichero es dejando que sea la propia terminal la que lo escriba. La terminal tiene la función de autocompletado con la tecla \texttt{tab} \keys{\tab}. Por ejemplo, supongamos que nuestro directorio actual tiene la forma:
+
+\begin{lstlisting}
+windows\
+├── documentos\
+├── imagenes\
+├── programas\
+└── ejercicios\
+\end{lstlisting}
+
+Si escribimos 
+
+\begin{lstlisting}
+cd do
+\end{lstlisting}
+
+\noindent y presionamos la tecla \texttt{tab} \keys{\tab}, entonces se autocompletará como
+
+\begin{lstlisting}
+cd documentos
+\end{lstlisting}
+
+
+\newpage
+\appendix
+% =========================================================
+\section{Resumen de comandos}
+% =========================================================
+
+\begin{longtable}{p{0.20\textwidth}p{0.36\textwidth}p{0.34\textwidth}}
+\toprule
+\textbf{Comando} & \textbf{Función} & \textbf{Ejemplo} \\
+\midrule
+\endhead
+
+\texttt{cd} &
+Muestra el directorio actual &
+\texttt{cd} \\
+
+\texttt{dir} &
+Lista el contenido &
+\texttt{dir} \\
+
+\texttt{dir /b} &
+Lista en una sola columna &
+\texttt{dir /b} \\
+
+\texttt{dir /a} &
+Incluye archivos ocultos &
+\texttt{dir /a} \\
+
+\texttt{cd} &
+Cambia de directorio &
+\texttt{cd documentos} \\
+
+\texttt{cd ..} &
+Sube al directorio padre &
+\texttt{cd ..} \\
+
+\texttt{cd \textbackslash} &
+Va a la raíz de la unidad &
+\texttt{cd \textbackslash} \\
+
+\texttt{cd /d} &
+Cambia de unidad y directorio &
+\texttt{cd /d D:\textbackslash datos} \\
+
+\texttt{mkdir} &
+Crea un directorio &
+\texttt{mkdir fotos} \\
+
+\texttt{type nul >} &
+Crea un fichero vacío &
+\texttt{type nul > notas.txt} \\
+
+\texttt{copy} &
+Copia un fichero &
+\texttt{copy a.txt b.txt} \\
+
+\texttt{xcopy /e /i} &
+Copia un directorio &
+\texttt{xcopy fotos fotos2 /e /i} \\
+
+\texttt{move} &
+Mueve un fichero/directorio &
+\texttt{move a.txt documentos\textbackslash} \\
+
+\texttt{ren} &
+Renombra &
+\texttt{ren a.txt notas.txt} \\
+
+\texttt{del} &
+Borra un fichero &
+\texttt{del notas.txt} \\
+
+\texttt{rmdir} &
+Borra un directorio vacío &
+\texttt{rmdir temporal} \\
+
+\texttt{rmdir /s} &
+Borra un directorio y su contenido &
+\texttt{rmdir /s temporal} \\
+
+\texttt{tree} &
+Muestra los directorios en árbol &
+\texttt{tree} \\
+
+\texttt{tree /f} &
+Incluye también los ficheros &
+\texttt{tree /f} \\
+
+\texttt{cls} &
+Limpia la pantalla &
+\texttt{cls} \\
+
+\bottomrule
+\end{longtable}
+
+% =========================================================
+
+
+
+
+
+
+\newpage
+\section{Equivalencias entre Linux, CMD y PowerShell}
+% =========================================================
+
+PowerShell es la otra terminal disponible en Windows. Para abrirla, pulsamos la tecla \texttt{Windows}, escribimos \texttt{powershell} y pulsamos \texttt{Intro}.
+
+Una de sus ventajas es que incorpora \textit{alias} con los nombres habituales de Linux, por lo que muchos comandos de esta guía funcionan igual que allí.
+
+\begin{longtable}{p{0.2\textwidth}p{0.32\textwidth}p{0.40\textwidth}}
+\toprule
+\textbf{Linux} & \textbf{CMD} & \textbf{PowerShell} \\
+\midrule
+\endhead
+
+\texttt{pwd} &
+\texttt{cd} &
+\texttt{pwd} o \texttt{Get-Location} \\
+
+\texttt{ls} &
+\texttt{dir} &
+\texttt{ls} o \texttt{Get-ChildItem} \\
+
+\texttt{ls -la} &
+\texttt{dir /a} &
+\texttt{ls -Force} \\
+
+\texttt{cd} &
+\texttt{cd} &
+\texttt{cd} o \texttt{Set-Location} \\
+
+\texttt{cd \textasciitilde} &
+\texttt{cd\,\,\%USERPROFILE\%} &
+\texttt{cd \textasciitilde} \\
+
+\texttt{mkdir} &
+\texttt{mkdir} &
+\texttt{mkdir} o \texttt{New-Item -Type Directory} \\
+
+\texttt{touch} &
+\texttt{type nul >} &
+\texttt{New-Item notas.txt} \\
+
+\texttt{cp} &
+\texttt{copy} &
+\texttt{cp} o \texttt{Copy-Item} \\
+
+\texttt{cp -r} &
+\texttt{xcopy /e /i} &
+\texttt{cp -Recurse} \\
+
+\texttt{mv} &
+\texttt{move} / \texttt{ren} &
+\texttt{mv} o \texttt{Move-Item} \\
+
+\texttt{rm} &
+\texttt{del} &
+\texttt{rm} o \texttt{Remove-Item} \\
+
+\texttt{rm -r} &
+\texttt{rmdir /s} &
+\texttt{rm -Recurse} \\
+
+\texttt{clear} &
+\texttt{cls} &
+\texttt{clear} o \texttt{cls} \\
+
+\bottomrule
+\end{longtable}
+
+\begin{importante}
+En PowerShell se pueden utilizar tanto la barra invertida
+(\texttt{\textbackslash}) como la barra normal (\texttt{/}) para
+separar directorios, lo que facilita el paso de un sistema a otro.
+\end{importante}
+
+\end{document}

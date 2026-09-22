@@ -1,0 +1,1003 @@
+% =========================================================
+% GUÍA BÁSICA DE UNIX: LINUX Y macOS
+% Compilación: pdfLaTeX
+% =========================================================
+
+\documentclass[11pt,a4paper]{article}
+
+% ---------------------------------------------------------
+% PAQUETES
+% ---------------------------------------------------------
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[spanish,es-nodecimaldot]{babel}
+\usepackage{lmodern}
+\usepackage[a4paper,margin=2.5cm]{geometry}
+\usepackage{xcolor}
+\usepackage{listings}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
+\usepackage{tcolorbox}
+\usepackage{pmboxdraw}
+\usepackage{menukeys}
+
+% ---------------------------------------------------------
+% CONFIGURACIÓN DE HYPERREF
+% ---------------------------------------------------------
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue!60!black,
+    urlcolor=blue!60!black
+}
+
+% ---------------------------------------------------------
+% CONFIGURACIÓN DE LISTINGS
+% ---------------------------------------------------------
+\definecolor{codebg}{RGB}{245,245,245}
+\definecolor{codecomment}{RGB}{90,90,90}
+
+% pdfLaTeX + listings necesita declarar explícitamente algunos
+% caracteres Unicode que pueden aparecer en ejemplos.
+\lstdefinestyle{terminal}{
+    backgroundcolor=\color{codebg},
+    basicstyle=\ttfamily\small,
+    frame=single,
+    framerule=0.4pt,
+    rulecolor=\color{gray!40},
+    columns=fullflexible,
+    keepspaces=true,
+    showstringspaces=false,
+    breaklines=true,
+    commentstyle=\color{codecomment},
+    language=bash,
+    extendedchars=true,
+    literate=
+        {¿}{{\textquestiondown}}1
+        {¡}{{\textexclamdown}}1
+        {á}{{\'a}}1
+        {é}{{\'e}}1
+        {í}{{\'\i}}1
+        {ó}{{\'o}}1
+        {ú}{{\'u}}1
+        {Á}{{\'A}}1
+        {É}{{\'E}}1
+        {Í}{{\'I}}1
+        {Ó}{{\'O}}1
+        {Ú}{{\'U}}1
+        {ñ}{{\~n}}1
+        {Ñ}{{\~N}}1
+        {├}{{\pmboxdrawuni{251C}}}1
+        {└}{{\pmboxdrawuni{2514}}}1
+        {─}{{\pmboxdrawuni{2500}}}1
+        {│}{{\pmboxdrawuni{2502}}}1
+        {┬}{{\pmboxdrawuni{252C}}}1
+        {┤}{{\pmboxdrawuni{2524}}}1
+        {┼}{{\pmboxdrawuni{253C}}}1
+}
+\lstset{style=terminal}
+
+% ---------------------------------------------------------
+% CAJAS
+% ---------------------------------------------------------
+\newtcolorbox{importante}{
+    colback=yellow!10,
+    colframe=orange!70!black,
+    title=\textbf{Importante},
+    fonttitle=\bfseries
+}
+
+\newtcolorbox{peligro}{
+    colback=red!5,
+    colframe=red!70!black,
+    title=\textbf{¡Cuidado!},
+    fonttitle=\bfseries
+}
+
+\newtcolorbox{ejercicio}{
+    colback=blue!5,
+    colframe=blue!60!black,
+    title=\textbf{Ejercicio},
+    fonttitle=\bfseries
+}
+
+% Nota específica para diferencias entre sistemas.
+\newtcolorbox{macos}{
+    colback=green!5,
+    colframe=green!45!black,
+    title=\textbf{En macOS},
+    fonttitle=\bfseries
+}
+
+% ---------------------------------------------------------
+% ENCABEZADO Y PIE
+% ---------------------------------------------------------
+\pagestyle{fancy}
+\fancyhf{}
+\lhead{Terminal de Unix}
+\rhead{Linux y macOS}
+\cfoot{\thepage}
+
+% ---------------------------------------------------------
+% DOCUMENTO
+% ---------------------------------------------------------
+\begin{document}
+
+
+% ---------------------------------------------------------
+% PORTADA
+% ---------------------------------------------------------
+\begin{titlepage}
+    \centering
+
+
+    \vspace*{2cm}
+
+
+    {\Huge\bfseries Guía básica de la terminal de Linux y macOS (Unix)\par}
+
+
+    \vspace{1cm}
+
+
+    {\Large Gestión de directorios y ficheros\par}
+
+
+    \vspace{1cm}
+    
+    {\Large Laboratorio de Matemáticas\par}
+
+
+    \vspace{1cm}
+
+
+	{Grado en Ingeniería Matemática - Doble Grado en Física e Ingeniería Matemática\par}
+
+
+    \vspace{1cm}
+
+
+    {\Large Miguel Beltrá Vidal\par}
+
+
+    \vfill
+
+
+    \begin{tcolorbox}[width=0.8\textwidth]
+    En esta guía aprenderemos a utilizar los principales comandos
+    de la terminal de Linux y macOS para movernos por el sistema de archivos
+    y gestionar directorios y ficheros.
+    \end{tcolorbox}
+
+
+    \vfill
+
+
+    {\large Material práctico para estudiantes\par}
+
+
+    \vspace{0.5cm}
+
+
+    {\large \today\par}
+
+
+\end{titlepage}
+
+
+\tableofcontents
+\newpage
+
+
+% =========================================================
+\section{Introducción}
+\noindent Esta guía está pensada para trabajar indistintamente con
+\textbf{Linux y macOS}. Ambos sistemas proporcionan una terminal con
+comandos de estilo Unix, por lo que la mayoría de las órdenes que veremos
+son las mismas en ambos sistemas.
+
+\begin{macos}
+En macOS puedes abrir la aplicación \textbf{Terminal} desde
+\textit{Aplicaciones $\rightarrow$ Utilidades $\rightarrow$ Terminal}.
+También puedes utilizar otra aplicación de terminal, como iTerm2. Los
+comandos explicados en esta guía se ejecutan de la misma forma.
+\end{macos}
+
+
+% =========================================================
+
+
+La \textbf{terminal} es una herramienta que permite comunicarnos con el sistema operativo mediante comandos de texto. En esta guía aprenderemos a:
+
+
+\begin{itemize}
+    \item Saber en qué directorio estamos.
+    \item Listar el contenido de un directorio.
+    \item Cambiar de directorio.
+    \item Crear directorios (carpetas).
+    \item Crear ficheros.
+    \item Copiar ficheros y directorios.
+    \item Mover y renombrar ficheros y directorios.
+    \item Borrar ficheros y directorios.
+    \item Visualizar la estructura de directorios mediante
+          \texttt{tree}.
+\end{itemize}
+
+
+\begin{peligro}
+Algunos comandos, especialmente \texttt{rm}, pueden borrar
+información de forma permanente. Antes de ejecutar un comando
+de borrado, comprueba siempre dónde estás y qué vas a borrar.
+\end{peligro}
+
+
+% =========================================================
+\section{¿Dónde estoy?}
+% =========================================================
+
+
+Para saber en qué directorio nos encontramos utilizamos:
+
+
+\begin{lstlisting}
+pwd
+\end{lstlisting}
+
+
+\noindent \texttt{pwd} significa \textit{print working directory}. Por ejemplo:
+
+
+\begin{lstlisting}
+$ pwd
+/home/alumno
+\end{lstlisting}
+
+
+\noindent Esto indica que estamos dentro del directorio
+\texttt{/home/alumno}.
+
+
+% =========================================================
+\section{Listar el contenido de un directorio}
+% =========================================================
+
+
+Para ver qué hay dentro del directorio actual utilizamos:
+
+
+\begin{lstlisting}
+ls
+\end{lstlisting}
+
+
+\noindent Por ejemplo:
+
+
+\begin{lstlisting}
+$ ls
+Documents  Downloads  Music  Images
+\end{lstlisting}
+
+
+\subsection{Algunas opciones interesantes}
+
+
+Para obtener información más detallada:
+
+
+\begin{lstlisting}
+ls -l
+\end{lstlisting}
+
+
+\noindent Para mostrar también los archivos ocultos:
+
+
+\begin{lstlisting}
+ls -a
+\end{lstlisting}
+
+
+\noindent Podemos combinar ambas opciones:
+
+
+\begin{lstlisting}
+ls -la
+\end{lstlisting}
+
+
+\begin{ejercicio}
+\begin{enumerate}
+    \item Abre una terminal.
+    \item Comprueba en qué directorio estás con \texttt{pwd}.
+    \item Lista su contenido con \texttt{ls}.
+    \item Utiliza \texttt{ls -l}.
+    \item Utiliza \texttt{ls -la}.
+\end{enumerate}
+\end{ejercicio}
+
+
+% =========================================================
+\section{Cambiar de directorio}
+% =========================================================
+
+
+Para desplazarnos entre directorios utilizamos:
+
+
+\begin{lstlisting}
+cd
+\end{lstlisting}
+
+
+\noindent \texttt{cd} significa \textit{change directory}. Por ejemplo, si tenemos un directorio llamado
+\texttt{Documentos}:
+
+
+\begin{lstlisting}
+cd Documentos
+\end{lstlisting}
+
+
+\noindent Podemos comprobar que hemos cambiado de directorio:
+
+
+\begin{lstlisting}
+pwd
+\end{lstlisting}
+
+
+\subsection{Volver al directorio anterior}
+
+
+Para subir un nivel en la estructura de directorios:
+
+
+\begin{lstlisting}
+cd ..
+\end{lstlisting}
+
+
+\noindent Por ejemplo, si estamos en:
+
+
+\begin{lstlisting}
+/home/alumno/Documentos
+\end{lstlisting}
+
+
+\noindent Después de ejecutar:
+
+
+\begin{lstlisting}
+cd ..
+\end{lstlisting}
+
+
+\noindent estaremos en:
+
+
+\begin{lstlisting}
+/home/alumno
+\end{lstlisting}
+
+
+\subsection{Ir al directorio personal}
+
+
+Si queremos ir al directorio personal, podemos utilizar:
+
+\begin{lstlisting}
+cd ~
+\end{lstlisting}
+
+
+\noindent También podemos utilizar simplemente:
+
+
+\begin{lstlisting}
+cd
+\end{lstlisting}
+
+
+\subsection{Ir al directorio raíz}
+
+
+El directorio raíz de Linux se representa mediante \texttt{/}.
+
+
+\begin{lstlisting}
+cd /
+\end{lstlisting}
+
+
+\begin{ejercicio}
+Partiendo de tu directorio personal:
+
+
+\begin{enumerate}
+    \item Entra en \texttt{Documentos}.
+    \item Comprueba dónde estás con \texttt{pwd}.
+    \item Vuelve al directorio anterior con \texttt{cd ..}.
+    \item Entra de nuevo en \texttt{Documentos}.
+    \item Vuelve a tu directorio personal utilizando
+          \texttt{cd \textasciitilde}.
+\end{enumerate}
+\end{ejercicio}
+
+
+% =========================================================
+\section{Crear directorios}
+% =========================================================
+
+
+Para crear una carpeta utilizamos:
+
+
+\begin{lstlisting}
+mkdir nombre_carpeta
+\end{lstlisting}
+
+
+\noindent \texttt{mkdir} significa \textit{make directory}. Por ejemplo, si queremos crear:
+
+
+\begin{lstlisting}
+mkdir practica
+\end{lstlisting}
+
+
+Podemos comprobar que se ha creado:
+
+
+\begin{lstlisting}
+ls
+\end{lstlisting}
+
+
+\subsection{Crear varias carpetas}
+
+
+También podemos crear varias carpetas en un único comando:
+
+
+\begin{lstlisting}
+mkdir documentos imagenes programas
+\end{lstlisting}
+
+
+\begin{ejercicio}
+Dentro de tu directorio personal crea la siguiente estructura:
+
+
+
+
+\begin{lstlisting}
+linux/
+├── documentos/
+├── imagenes/
+├── programas/
+└── ejercicios/
+\end{lstlisting}
+
+
+
+
+Puedes hacerlo mediante:
+
+
+\begin{lstlisting}
+mkdir linux
+cd linux
+mkdir documentos imagenes programas ejercicios
+\end{lstlisting}
+\end{ejercicio}
+
+
+% =========================================================
+\section{Crear ficheros}
+% =========================================================
+
+
+Una forma sencilla de crear un fichero vacío con el nombre \texttt{nombre\_fichero} es mediante:
+
+
+\begin{lstlisting}
+touch nombre_fichero
+\end{lstlisting}
+
+
+\noindent Por ejemplo:
+
+
+\begin{lstlisting}
+touch notas.txt
+\end{lstlisting}
+
+
+\noindent Comprobamos que existe:
+
+
+\begin{lstlisting}
+ls
+\end{lstlisting}
+
+
+\noindent Podemos crear varios ficheros:
+
+
+\begin{lstlisting}
+touch uno.txt dos.txt tres.txt
+\end{lstlisting}
+
+
+\begin{ejercicio}
+Dentro del directorio \texttt{documentos}, crea estos ficheros:
+
+
+\begin{lstlisting}
+apuntes.txt
+tareas.txt
+examen.txt
+\end{lstlisting}
+
+
+Comprueba que se han creado utilizando:
+
+
+\begin{lstlisting}
+ls
+\end{lstlisting}
+\end{ejercicio}
+
+
+% =========================================================
+\section{Copiar ficheros}
+% =========================================================
+
+
+Para copiar un fichero utilizamos:
+
+
+\begin{lstlisting}
+cp origen destino
+\end{lstlisting}
+
+
+\noindent Por ejemplo:
+
+
+\begin{lstlisting}
+cp apuntes.txt copia_apuntes.txt
+\end{lstlisting}
+
+
+\noindent Ahora tendremos:
+
+
+\begin{lstlisting}
+apuntes.txt
+copia_apuntes.txt
+\end{lstlisting}
+
+
+\noindent También podemos copiar un fichero a otro directorio:
+
+
+\begin{lstlisting}
+cp apuntes.txt ../
+\end{lstlisting}
+
+
+\noindent En este caso, \texttt{../} representa el directorio padre.
+
+
+\subsection{Copiar un directorio}
+
+
+Para copiar un directorio completo necesitamos utilizar la opción \texttt{-r}:
+
+
+\begin{lstlisting}
+cp -r documentos documentos_copia
+\end{lstlisting}
+
+
+\noindent La opción \texttt{-r} significa que se copiará el directorio de forma \textbf{recursiva}, incluyendo su contenido.
+
+
+% =========================================================
+\section{Mover y renombrar}
+% =========================================================
+
+
+Para mover un fichero utilizamos:
+
+
+\begin{lstlisting}
+mv origen destino
+\end{lstlisting}
+
+
+\noindent Por ejemplo:
+
+
+\begin{lstlisting}
+mv apuntes.txt ../
+\end{lstlisting}
+
+
+\noindent El fichero \texttt{apuntes.txt} dejará de estar en el directorio actual y aparecerá en el directorio padre.
+
+
+\subsection{Mover un fichero a otra carpeta}
+
+
+Por ejemplo:
+
+
+\begin{lstlisting}
+mv examen.txt ../examenes/
+\end{lstlisting}
+
+
+\subsection{Renombrar un fichero}
+
+
+El comando \texttt{mv} también sirve para cambiar el nombre:
+
+
+\begin{lstlisting}
+mv tareas.txt tareas_linux.txt
+\end{lstlisting}
+
+
+\noindent No estamos creando un fichero nuevo: simplemente estamos cambiando su nombre.
+
+
+\subsection{Renombrar un directorio}
+
+
+También podemos hacer:
+
+
+\begin{lstlisting}
+mv imagenes fotos
+\end{lstlisting}
+
+
+% =========================================================
+\section{Borrar ficheros}
+% =========================================================
+
+
+Para borrar un fichero utilizamos:
+
+
+\begin{lstlisting}
+rm nombre_fichero
+\end{lstlisting}
+
+
+\noindent Por ejemplo:
+
+
+\begin{lstlisting}
+rm tres.txt
+\end{lstlisting}
+
+
+\noindent El fichero se eliminará.
+
+
+\begin{peligro}
+\texttt{rm} normalmente no envía el fichero a una papelera. La eliminación puede ser permanente.
+\end{peligro}
+
+
+\noindent Podemos pedir confirmación antes de borrar:
+
+
+\begin{lstlisting}
+rm -i tres.txt
+\end{lstlisting}
+
+
+% =========================================================
+\section{Borrar directorios}
+% =========================================================
+
+
+Para borrar un directorio vacío podemos utilizar:
+
+
+\begin{lstlisting}
+rmdir nombre_directorio
+\end{lstlisting}
+
+
+\noindent Por ejemplo:
+
+
+\begin{lstlisting}
+rmdir carpeta_vacia
+\end{lstlisting}
+
+
+\noindent \texttt{rmdir} solamente puede eliminar directorios vacíos.
+
+
+\subsection{Borrar un directorio y todo su contenido}
+
+
+Para eliminar un directorio que contiene ficheros u otros directorios:
+
+
+\begin{lstlisting}
+rm -r nombre_directorio
+\end{lstlisting}
+
+
+\noindent Por ejemplo:
+
+
+\begin{lstlisting}
+rm -r ejercicios
+\end{lstlisting}
+
+
+\noindent Esto eliminará el directorio \texttt{ejercicios} y todo lo que
+contenga.
+
+
+\begin{peligro}
+\texttt{rm -r} puede eliminar muchos archivos de una sola vez. Antes de utilizarlo, comprueba siempre el contenido y asegúrate de que estás en el directorio correcto.
+\end{peligro}
+
+
+% =========================================================
+\section{Visualizar la estructura con \texttt{tree}}
+% =========================================================
+
+
+El comando \texttt{tree} permite visualizar los directorios y ficheros formando una estructura de árbol. Por ejemplo, tras escribir:
+
+
+\begin{lstlisting}
+tree
+\end{lstlisting}
+
+
+\noindent Podríamos obtener:
+
+
+\begin{lstlisting}
+.
+├── documentos
+│   ├── apuntes.txt
+│   ├── examen.txt
+│   └── tareas.txt
+├── ejercicios
+├── imagenes
+└── programas
+\end{lstlisting}
+
+
+\noindent Aquí, el símbolo \texttt{.} representa el directorio actual.
+
+
+\subsection{Mostrar solamente directorios}
+
+
+Podemos utilizar:
+
+
+\begin{lstlisting}
+tree -d
+\end{lstlisting}
+
+
+\noindent Por ejemplo:
+
+
+\begin{lstlisting}
+.
+├── documentos
+├── ejercicios
+├── imagenes
+└── programas
+\end{lstlisting}
+
+
+\begin{importante}
+El comando \texttt{tree} no forma parte de la instalación mínima de todos los sistemas. En Linux puede instalarse mediante el gestor de paquetes de la distribución; por ejemplo, en Ubuntu se puede utilizar \texttt{sudo apt install tree}. En macOS, una opción habitual es instalarlo mediante Homebrew con \texttt{brew install tree}.
+\end{importante}
+
+
+
+
+
+
+
+
+\section{Limpiar la terminal}
+
+
+Si queremos limpiar la terminal, podemos utilizar el comando:
+
+
+\begin{lstlisting}
+clear
+\end{lstlisting}
+
+
+
+
+
+
+
+
+\section{Autocompletado}
+
+
+La mejor forma de escribir el nombre de un directorio o fichero es dejando que sea la propia terminal la que lo escriba. La terminal tiene la función de autocompletado con la tecla \texttt{tab} \keys{\tab}. Por ejemplo, supongamos que nuestro directorio actual tiene la forma:
+
+
+\begin{lstlisting}
+.
+├── documentos
+├── ejercicios
+├── imagenes
+└── programas
+\end{lstlisting}
+
+
+Si escribimos 
+
+
+\begin{lstlisting}
+cd do
+\end{lstlisting}
+
+
+\noindent y presionamos la tecla \texttt{tab} \keys{\tab}, entonces se autocompletará como
+
+
+\begin{lstlisting}
+cd documentos
+\end{lstlisting}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\newpage
+\appendix
+% =========================================================
+\section{Resumen de comandos}
+% =========================================================
+
+
+\begin{longtable}{p{0.16\textwidth}p{0.37\textwidth}p{0.35\textwidth}}
+\toprule
+\textbf{Comando} & \textbf{Función} & \textbf{Ejemplo} \\
+\midrule
+\endhead
+
+
+\texttt{pwd} &
+Muestra el directorio actual &
+\texttt{pwd} \\
+
+
+\texttt{ls} &
+Lista el contenido &
+\texttt{ls} \\
+
+
+\texttt{ls -l} &
+Lista con información detallada &
+\texttt{ls -l} \\
+
+
+\texttt{ls -a} &
+Incluye archivos ocultos &
+\texttt{ls -a} \\
+
+
+\texttt{cd} &
+Cambia de directorio &
+\texttt{cd documentos} \\
+
+
+\texttt{cd ..} &
+Sube al directorio padre &
+\texttt{cd ..} \\
+
+
+\texttt{cd \textasciitilde} &
+Va al directorio personal &
+\texttt{cd \textasciitilde} \\
+
+
+\texttt{mkdir} &
+Crea un directorio &
+\texttt{mkdir fotos} \\
+
+
+\texttt{touch} &
+Crea un fichero vacío &
+\texttt{touch notas.txt} \\
+
+
+\texttt{cp} &
+Copia un fichero &
+\texttt{cp a.txt b.txt} \\
+
+
+\texttt{cp -r} &
+Copia un directorio &
+\texttt{cp -r fotos fotos2} \\
+
+
+\texttt{mv} &
+Mueve un fichero/directorio &
+\texttt{mv a.txt documentos/} \\
+
+
+\texttt{mv} &
+Renombra &
+\texttt{mv a.txt notas.txt} \\
+
+
+\texttt{rm} &
+Borra un fichero &
+\texttt{rm notas.txt} \\
+
+
+\texttt{rmdir} &
+Borra un directorio vacío &
+\texttt{rmdir temporal} \\
+
+
+\texttt{rm -r} &
+Borra un directorio y su contenido &
+\texttt{rm -r temporal} \\
+
+
+\texttt{tree} &
+Muestra la estructura en árbol &
+\texttt{tree} \\
+
+
+\texttt{tree -d} &
+Muestra solamente directorios &
+\texttt{tree -d} \\
+
+
+\bottomrule
+\end{longtable}
+
+
+
+
+\end{document}
