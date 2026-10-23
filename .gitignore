@@ -4,7 +4,8 @@
 *.out
 *.toc
 *.dvi
+*.nav
+*.snm
+*.synctex.gz
 
 .DS_Store
-
-*.synctex.gz
