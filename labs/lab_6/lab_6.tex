@@ -1,0 +1,1071 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin={2.6cm,2.6cm}]{geometry}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amsthm, amsfonts}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{fontawesome5}
+\usepackage{dirtree}
+
+\spanishdecimal{.}
+
+
+\definecolor{azuluc}{HTML}{1F4E79}
+\definecolor{grisclaro}{HTML}{F4F6F8}
+\definecolor{gris}{HTML}{586069}
+\definecolor{verde}{HTML}{2E7D32}
+\definecolor{rojo}{HTML}{A94442}
+\definecolor{git}{HTML}{F1502F}
+
+\definecolor{morado_ubuntu}{RGB}{48, 10, 36}       % Fondo morado oscuro de Ubuntu GNOME
+\definecolor{verde_ubuntu}{RGB}{78, 154, 6}        % Verde para comentarios
+\definecolor{cyan_ubuntu}{RGB}{52, 226, 226}       % Cian para comandos
+\definecolor{amarillo_ubuntu}{RGB}{250, 240, 190}  % Amarillo para cadenas
+\definecolor{rojo_ubuntu}{RGB}{220, 50, 47}        % Rojo para errores
+\definecolor{verde_claro_ubuntu}{RGB}{138, 226, 52} % Verde claro para el prompt
+\definecolor{azul_ubuntu}{RGB}{114, 159, 207}      % Azul para símbolos y rutas
+\definecolor{gris_ubuntu}{RGB}{128, 128, 128}      % Gris para el borde del frame
+
+
+\definecolor{fondo_mac}{RGB}{255, 255, 250}       % Fondo beige claro típico de macOS
+\definecolor{negro}{RGB}{0, 0, 0}                 % Texto en negro
+\definecolor{verde_mac}{RGB}{63, 127, 95}         % Verde para comentarios
+\definecolor{azul_mac}{RGB}{0, 0, 255}            % Azul para comandos y prompt
+\definecolor{rojo_mac}{RGB}{196, 26, 22}          % Rojo para errores y cadenas
+\definecolor{morado_mac}{RGB}{147, 39, 143}       % Morado para emphasis (opcional)
+\definecolor{gris_mac}{RGB}{200, 200, 200}        % Gris para el borde del frame
+
+
+
+\lstdefinestyle{rstyle}{
+  language=R,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{azuluc}\bfseries,
+  commentstyle=\color{gris},
+  stringstyle=\color{verde!70!black},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris!30},
+  backgroundcolor=\color{grisclaro},
+  breaklines=true,
+  showspaces=false,
+  tabsize=2,
+    literate=
+    {á}{{\'a}}1
+    {é}{{\'e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {ú}{{\'u}}1
+    {Á}{{\'A}}1
+    {É}{{\'E}}1
+    {Í}{{\'I}}1
+    {Ó}{{\'O}}1
+    {Ú}{{\'U}}1
+    {ñ}{{\~n}}1
+    {Ñ}{{\~N}}1
+    {ü}{{\"u}}1
+    {Ü}{{\"U}}1
+    {¡}{{\textexclamdown}}1
+	{`}{\textasciigrave}1 
+    {´}{\textquotesingle}1,
+}
+
+\lstdefinestyle{rconsole}{
+  language=R,
+  basicstyle=\color{rojo}\ttfamily\small,
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris!30},
+  breaklines=true,
+  tabsize=2,
+  literate=
+    {á}{{\'a}}1
+    {é}{{\'e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {ú}{{\'u}}1
+    {Á}{{\'A}}1
+    {É}{{\'E}}1
+    {Í}{{\'I}}1
+    {Ó}{{\'O}}1
+    {Ú}{{\'U}}1
+    {ñ}{{\~n}}1
+    {Ñ}{{\~N}}1
+    {ü}{{\"u}}1
+    {Ü}{{\"U}}1
+    {¡}{{\textexclamdown}}1
+	{`}{\textasciigrave}1 
+    {´}{\textquotesingle}1,
+}
+
+\lstdefinestyle{routput}{
+  language=R,
+  basicstyle=\color{azuluc}\ttfamily\small,
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris!30},
+  breaklines=true,
+  tabsize=2,
+  literate=
+    {á}{{\'a}}1
+    {é}{{\'e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {ú}{{\'u}}1
+    {Á}{{\'A}}1
+    {É}{{\'E}}1
+    {Í}{{\'I}}1
+    {Ó}{{\'O}}1
+    {Ú}{{\'U}}1
+    {ñ}{{\~n}}1
+    {Ñ}{{\~N}}1
+    {ü}{{\"u}}1
+    {Ü}{{\"U}}1
+    {¡}{{\textexclamdown}}1
+	{`}{\textasciigrave}1 
+    {´}{\textquotesingle}1,
+}
+
+\lstdefinestyle{mdstyle}{
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{azuluc}\bfseries,
+  commentstyle=\color{gris},
+  showstringspaces=false,
+  showspaces=false,
+  tabsize=2,
+  frame=single,
+  rulecolor=\color{gris!30},
+  backgroundcolor=\color{grisclaro},
+  breaklines=true,
+  breakatwhitespace=false,
+  % Títulos Markdown
+  morecomment=[l][\color{azuluc}\bfseries]{\#},
+  % Enlaces y referencias
+  morecomment=[s][\color{verde}]{(}{)},
+  % Cadenas
+  morestring=[b][\color{naranja}]{"},
+  morestring=[b][\color{naranja}]{'},
+  % Lenguajes utilizados en bloques de código
+  classoffset=1,
+    keywordstyle=\color{morado}\bfseries,
+    morekeywords={python,bash,R,latex,json,yaml},
+  classoffset=0,
+  % Protocolos y enlaces
+  emph={http,https,ftp},
+  escapeinside={-@}{@-},
+  emphstyle=\color{azuluc}\underbar,   
+   literate=
+    {á}{{\'a}}1
+    {é}{{\'e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {ú}{{\'u}}1
+    {Á}{{\'A}}1
+    {É}{{\'E}}1
+    {Í}{{\'I}}1
+    {Ó}{{\'O}}1
+    {Ú}{{\'U}}1
+    {ñ}{{\~n}}1
+    {Ñ}{{\~N}}1
+    {ü}{{\"u}}1
+    {Ü}{{\"U}}1
+    {¡}{{\textexclamdown}}1
+	{`}{\textasciigrave}1 
+    {´}{\textquotesingle}1,
+}
+
+\lstdefinestyle{ubuntugnome}{
+  basicstyle=\ttfamily\small\color{white},
+  backgroundcolor=\color{morado_ubuntu},
+  commentstyle=\color{verde_ubuntu},
+  keywordstyle=\color{cyan_ubuntu},
+  stringstyle=\color{amarillo_ubuntu},
+  emphstyle=\color{rojo_ubuntu},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris_ubuntu},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{white}{$\hookrightarrow$}\space},
+  % Configuración para simular el prompt de Ubuntu
+  upquote=true,
+  % Resaltar el prompt de usuario
+  emph={user@ubuntu:~\$},
+  emphstyle={\color{verde_claro_ubuntu}\bfseries},
+  % Resaltar errores (ej: "command not found")
+  classoffset=1,
+  emph={command not found,No such file or directory,Permission denied},
+  emphstyle={\color{rojo_ubuntu}},
+  classoffset=0,
+}
+
+\lstdefinestyle{macterminal}{
+  basicstyle=\ttfamily\small\color{negro},
+  backgroundcolor=\color{fondo_mac},
+  commentstyle=\color{verde_mac},
+  keywordstyle=\color{azul_mac},
+  stringstyle=\color{rojo_mac},
+  emphstyle=\color{morado_mac},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris_mac},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{negro}{$\hookrightarrow$}\space},
+  % Configuración para simular el prompt de macOS
+  upquote=true,
+  % Resaltar el prompt de usuario
+  emphstyle={\color{azul_mac}\bfseries},
+  % Resaltar errores (ej: "command not found")
+  classoffset=1,
+  emph={command not found,No such file or directory,Permission denied},
+  emphstyle={\color{rojo_mac}},
+  classoffset=0
+}
+
+\lstdefinestyle{windowscmd}{
+  basicstyle=\ttfamily\small\color{white},
+  backgroundcolor=\color{black},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris_mac},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{negro}{$\hookrightarrow$}\space},
+  % Configuración para simular el prompt de macOS
+  upquote=true,
+  % Resaltar el prompt de usuario
+  emphstyle={\color{azul_mac}\bfseries},
+  % Resaltar errores (ej: "command not found")
+  classoffset=1,
+  emph={command not found,No such file or directory,Permission denied},
+  emphstyle={\color{rojo_mac}},
+  classoffset=0
+}
+
+
+
+\newcommand*{\vsp}{\texttt{\textvisiblespace}} % visible space
+
+\newcommand*{\strC}{\begingroup
+  \obeyspaces
+  \begingroup\lccode`~=`\ %
+  \lowercase{\endgroup\let~}\vsp
+  \dostrC}
+\newcommand{\dostrC}[1]{\textnormal{{\slshape\ttfamily#1}}\endgroup} % string constant
+
+
+\newcommand{\R}{\textcolor{azuluc}{\faIcon{r-project}}}
+\newcommand{\Git}{\textcolor{git}{\faIcon{git-alt}}~\!Git}
+\newcommand{\GitHub}{\faIcon{github}~\!GitHub}
+\newcommand{\Markdown}{Markdown~\faIcon{markdown}}
+
+
+
+\newcommand{\checkicon}{\textcolor{verde}{\faIcon{check}}}
+\newcommand{\crossicon}{\textcolor{rojo}{\faIcon{times}}}
+
+\newtheoremstyle{exercise}
+  {0.8em}{0.8em}{\normalfont}{}{\bfseries\color{azuluc}}{.}{0.5em}{}
+\theoremstyle{exercise}
+\newtheorem{exercise}{Ejercicio}
+
+\title{\LARGE\textbf{Práctica 6: Estructuras de datos en \R}\\[0.5em]
+\Large Laboratorio de Matemáticas\\
+\small\ \\
+\Large Grado en Ingeniería Matemática - Doble Grado en Física e Ingeniería Matemática}
+\author{Miguel Beltra Vidal}
+\date{Curso 2026/27}
+
+\begin{document}
+\maketitle
+
+
+
+\section{Objetivos}
+
+El objetivo de esta práctica es aprender a utilizar las principales estructuras de datos disponibles en \R. Al finalizarla, el estudiante será capaz de crear, consultar y modificar vectores, matrices y \texttt{data.frame}.
+
+
+
+
+
+
+\section{Secuencias}
+
+Una herramienta fundamental al trabajar con estructuras de datos es la generación de secuencias. La expresión
+\begin{lstlisting}[style=rstyle]
+m:n
+\end{lstlisting}
+genera todos los enteros entre $m$ y $n$. Esto es, $m,m+1,m+2,\ldots,n$. Por ejemplo:
+\begin{lstlisting}[style=rconsole]
+> 3:10
+\end{lstlisting}
+genera:
+\begin{lstlisting}[style=routput]
+[1]  3  4  5  6  7  8  9 10
+\end{lstlisting}
+
+También podemos utilizar \texttt{seq()}. Las siguientes instrucciones:
+\begin{lstlisting}[style=rconsole]
+> seq(0, 1, by = 0.1)
+> seq(2, 20, by = 2)
+> seq(10, 1, by = -1)
+\end{lstlisting}
+tienen como resultado las siguientes secuencias:
+\begin{lstlisting}[style=routput]
+[1] 0.0 0.1 0.2 0.3 0.4 0.5 0.6 0.7 0.8 0.9 1.0
+[1]  2  4  6  8 10 12 14 16 18 20
+[1] 10  9  8  7  6  5  4  3  2  1
+\end{lstlisting}
+
+
+
+\begin{exercise}
+Utiliza secuencias para generar:
+\begin{itemize}
+	\item los enteros del 1 al 20;
+	\item los pares del 2 al 40;
+	\item los múltiplos de 5 entre 5 y 100;
+	\item los enteros del 20 al 1 en orden decreciente;
+	\item los números $0,\,0.25,\,0.5,\,0.75,\,\ldots,\,5$.
+\end{itemize}
+\end{exercise}
+
+
+
+
+
+\section{Vectores}
+
+Un vector es una colección ordenada de elementos del mismo tipo. Una forma habitual de crearlo es mediante la función \texttt{c()}:
+\begin{lstlisting}[style=rstyle]
+notas <- c(7, 8.5, 6, 9, 5.5)
+\end{lstlisting}
+Si queremos ver su contenido por pantalla, entonces:
+\begin{lstlisting}[style=rconsole]
+> notas
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] 7.0 8.5 6.0 9.0 5.5
+\end{lstlisting}
+
+
+Un vector no está formado necesariamente de números. Podemos definir vectores como los siguientes:
+\begin{lstlisting}[style=rstyle]
+saludo <- c("Buenos días", "Buenas tardes", "Buenas noches")
+\end{lstlisting}
+Si queremos ver su contenido por pantalla, entonces:
+\begin{lstlisting}[style=rconsole]
+> saludo
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] "Buenos días"   "Buenas tardes" "Buenas noches"
+\end{lstlisting}
+
+Que los elementos de un vector sean del mismo tipo tiene ciertas implicaciones. Por ejemplo, en el vector:
+\begin{lstlisting}[style=rstyle]
+perfil <- c("Juan", 45, 83, 1.73)
+\end{lstlisting}
+que contiene información sobre Juan, como su edad (45~años), su peso (83~kg) o su altura (1.73~m), en realidad contiene cuatro cadenas de texto:
+\begin{lstlisting}[style=rconsole]
+> perfil
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] "Juan" "45"   "83"   "1.73"
+\end{lstlisting}
+
+
+Podemos usar secuencias para generar vectores:
+\begin{lstlisting}[style=rconsole]
+> x <- c(seq(1,10,3))
+> x
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1]  1  4  7 10
+\end{lstlisting}
+
+
+
+
+
+\begin{exercise}
+Crea los siguientes vectores:
+\begin{enumerate}
+	\item[a)] El vector que contiene todos los enteros del 1 al 100.
+	\item[b)] El vector que contiene todos los pares entre 2 y 200.
+	\item[c)] El vector que contiene los números 0.00, 0.01, 0.02, 0.03, 0.04, \ldots, 1.
+	\item[d)] Los números de 1 al 100 en orden descendente.
+\end{enumerate}
+\end{exercise}
+
+\subsection{Funciones sobre vectores}
+
+\R\ implementa muchas funciones sobre vectores. Algunas de las más importantes son las siguientes:
+
+\begin{center}
+	\begin{tabular}{|l|l|}
+		\hline
+		Función & Descripción \\		
+		\hline
+		\verb|length| & Devuelve la longitud de un vector. \\
+		\verb|min| & Devuelve el mínimo de un vector. \\
+		\verb|max| & Devuelve el máximo de un vector. \\
+		\verb|range| & Devuelve el rango (mínimo y máximo) de un vector. \\
+		\verb|which.min| & Devuelve la posición del valor mínimo en el vector. \\
+		\verb|which.max| & Devuelve la posición del valor máximo en el vector. \\
+		\verb|sum| & Devuelve la suma de los elementos del vector. \\
+		\verb|prod| & Devuelve el producto de los elementos del vector. \\
+		\verb|mean| & Devuelve la media de los elementos del vector. \\
+		\verb|rev| & Invierte el orden de los elementos de un vector. \\
+		\verb|sort| & Ordena los elementos de un vector. \\ \hline
+	\end{tabular}
+\end{center}
+
+
+\begin{exercise} Durante una semana, a las 12:00, se midió la temperatura en la calle. Los valores obtenidos fueron:
+\[ 18,\ 21,\ 19,\ 23,\ 25,\ 22,\ 20. \]
+Crea un vector llamado \texttt{temperaturas} que contenga dichas temperaturas y muestra:
+\begin{enumerate}
+	\item[a)] el número de temperaturas;
+	\item[b)] la temperatura máxima y mínima;
+	\item[c)] la temperatura media;
+	\item[d)] las temperaturas ordenadas de menor a mayor;
+	\item[e)] las temperaturas ordenadas de mayor a menor.
+\end{enumerate}
+\end{exercise}
+
+
+
+
+
+
+\subsection{Accediendo y modificando elementos de un vector}
+
+
+Podemos acceder a sus elementos mediante índices: para acceder al elemento de la posición $i$-ésima, utilizamos  corchetes \verb|[i]|. \textbf{En \R, el índice del primer elemento del vector es el 1}, a diferencia de muchos otros lenguajes de programación donde el índice del primer elemento es el 0. Por ejemplo,
+\begin{lstlisting}[style=rconsole]
+> notas <- c(7, 8.5, 6, 9, 5.5)
+> notas[3]
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] 6
+\end{lstlisting}
+También podemos seleccionar varios elementos utilizando un vector de índices:
+\begin{lstlisting}[style=rconsole]
+> notas[c(1,3,5)]
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] 7.0 6.0 5.5
+\end{lstlisting}
+Con índices negativos, accedemos a todos los elementos excepto a aquellos indicados:
+\begin{lstlisting}[style=rconsole]
+> notas[c(-1,-4)]
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] 8.5 6.0 5.5
+\end{lstlisting}
+Podemos modificar los elementos del vector:
+\begin{lstlisting}[style=rconsole]
+> notas[3] <- 2.3
+> notas
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] 7.0 8.5 2.3 9.0 5.5
+\end{lstlisting}
+
+
+
+
+
+\begin{exercise}
+Dado el vector
+\begin{lstlisting}[style=rstyle]
+x <- c(4, 7, 2, 9, 12, 5, 8, 3)
+\end{lstlisting}
+obtén:
+\begin{enumerate}
+\item[a)] El segundo elemento.
+\item[b)] Los elementos tercero, cuarto y quinto, todos al mismo tiempo.
+\item[c)] Todos los elementos del vector menos el segundo y el último.
+\item[d)] Los tres últimos elementos del vector.
+\end{enumerate}
+\end{exercise}
+
+
+
+\subsection{Funciones y vectores}
+
+
+Los vectores pueden pasarse como argumento de funciones y ser devueltos por funciones. Podemos usar también bucles para recorrer los vectores. La función \texttt{seq\_along()} genera una secuencia con tantos elementos como tenga un vector. Por ejemplo,
+\begin{lstlisting}[style=rconsole]
+> x <- c(4, 7, 2, 9, 5, 3)
+> seq_along(x)
+\end{lstlisting}
+genera la secuencia:
+\begin{lstlisting}[style=routput]
+[1] 1 2 3 4 5 6
+\end{lstlisting}
+
+\noindent La siguiente función recorre un vector e imprime sus cuadrados:
+
+\begin{lstlisting}[style=rstyle]
+imprime_cuadrados <- function(vector) {
+	cuadrados <- "Los cuadrados de los elementos son:"
+	for (i in seq_along(vector)) {
+		cuadrados <- paste(cuadrados, vector[i]^2)
+	}
+	print(cuadrados)
+}
+\end{lstlisting}
+Por ejemplo:
+\begin{lstlisting}[style=rconsole]
+> x <- c(2,1,3,5,6)
+> imprime_cuadrados(x)
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] "Los cuadrados de los elementos son: 4 1 9 25 36"
+\end{lstlisting}
+
+
+\begin{exercise} Define las funciones \texttt{minimo} y \texttt{maximo}, que devuelvan respectivamente el mínimo y el máximo. No puedes utilizar las funciones \texttt{min} y \texttt{max} ya implementadas en \R. Compara los resultados con los obtenidos por dichas funciones. Pruébalo con el vector:
+\begin{lstlisting}[style=rstyle]
+x <- c(4, 7, 2, 9, 12, 5, 8, 3)
+\end{lstlisting}
+\end{exercise}
+
+
+\begin{exercise} Escribe tres funciones llamadas \texttt{capicua\_1}, \texttt{capicua\_2} y \texttt{capicua\_3} que, dado un vector, devuelvan \texttt{TRUE} si el vector es capicúa o \texttt{FALSE} en caso contrario. Deberán estar programadas de la siguiente forma:
+\begin{enumerate}
+	\item Usando un bucle \texttt{for} y la función \texttt{rev} de \R.
+	\item Usando un bucle \texttt{for}, pero sin usar la función \texttt{rev} de \R.
+	\item Usando recursividad.
+\end{enumerate}
+Comprueba que las tres dan la misma respuesta para los siguientes vectores:
+\begin{lstlisting}[style=rstyle]
+x <- c(4, 4)
+x <- c(4, 7)
+x <- c(1, 7, 1, 5, 8, 3)
+x <- c(1, 7, 5, 5, 7, 1)
+\end{lstlisting}
+\end{exercise}
+
+
+
+
+\subsection{Operaciones elemento a elemento sobre un vector}
+
+
+Muchas operaciones se realizan elemento a elemento. Por ejemplo, las instrucciones:
+\begin{lstlisting}[style=rconsole]
+> notas <- c(7, 8.5, 6, 9, 5.5)
+> notas + 1
+> notas * 2
+> notas^2
+> notas >= 8
+\end{lstlisting}
+Tendrían como salidas:
+
+\begin{lstlisting}[style=routput]
+[1]  8.0  9.5  7.0 10.0  6.5
+[1] 14 17 12 18 11
+[1] 49.00 72.25 36.00 81.00 30.25
+[1] FALSE  TRUE FALSE  TRUE FALSE
+\end{lstlisting}
+
+
+
+\begin{exercise} Crea una función que se llame \verb|aprobados|, que reciba un vector de notas del 0 al 10, y devuelva un vector de valores booleanos, donde \texttt{TRUE} significa que la nota en esa posición es mayor o igual que 5, y \texttt{FALSE} en caso contrario. Pruébalo con los siguientes valores (haciendo una única llamada a la función):
+\[ 8,\ 2,\ 9,\ 3,\ 5,\ 2,\ 0. \]
+\end{exercise}
+
+
+\begin{exercise} Dado un vector $\textbf{x} = (x_1,x_2,\ldots,x_n)$ de $\mathbb{R}^n$, se define su \textbf{norma euclídea} como:
+\[ \lVert \textbf{x} \rVert_2 = \sqrt{x_1^2+x_2^2+\cdots+x_n^2}. \]
+Crea una función que se llame \verb|norma_euclidea| que devuelva el valor de dicha norma. Calcula la norma del vector $\textbf{x} = (1.0,\, 2.5,\, -1.2,\, -4.8,\, 5.7,\, 3.0)$.
+\end{exercise}
+
+
+
+\section{Matrices}
+
+Una matriz es una estructura de datos bidimensional cuyos elementos son del mismo tipo. Está organizada en filas y columnas. En \R\ podemos crear matrices mediante la función \texttt{matrix()}. Por ejemplo, la siguiente instrucción crea una matriz con dos filas y tres columnas:
+
+\begin{lstlisting}[style=rstyle]
+m <- matrix(c(1, 2, 3, 4, 5, 6), nrow = 2, ncol = 3)
+\end{lstlisting}
+
+Por defecto, \R\ rellena las matrices por columnas. Por tanto, la matriz generada con la instrucción anterior es:
+
+\begin{lstlisting}[style=routput]
+     [,1] [,2] [,3]
+[1,]    1    3    5
+[2,]    2    4    6
+\end{lstlisting}
+
+\noindent Si queremos rellenar la matriz por filas, podemos utilizar el argumento \texttt{byrow = TRUE}:
+
+\begin{lstlisting}[style=rstyle]
+m <- matrix(c(1, 2, 3, 4, 5, 6), nrow = 2, ncol = 3, byrow = TRUE)
+\end{lstlisting}
+
+\noindent En este caso, la matriz obtenida es:
+
+\begin{lstlisting}[style=routput]
+     [,1] [,2] [,3]
+[1,]    1    2    3
+[2,]    4    5    6
+\end{lstlisting}
+
+\subsection{Acceso a los elementos}
+
+Para acceder a un elemento de una matriz se utilizan dos índices entre corchetes: el primero indica la fila y el segundo, la columna. Por ejemplo, \texttt{m[2,3]} accede al elemento de la segunda fila y la tercera columna. Si se omite uno de los índices, \R\ selecciona toda la fila o columna correspondiente. Por ejemplo, las instrucciones:
+
+\begin{lstlisting}[style=rconsole]
+> m <- matrix(c(1, 2, 3, 4, 5, 6), nrow = 2, byrow = TRUE)
+> m[2, 3]  # Elemento de la fila 2 y columna 3
+> m[1, ]   # Primera fila
+> m[, 2]   # Segunda columna
+\end{lstlisting}
+
+\noindent tiene como resultado, respectivamente:
+
+\begin{lstlisting}[style=routput]
+[1] 6
+[1] 1 2 3
+[1] 2 5
+\end{lstlisting}
+
+Podemos modificar un elemento indicando su fila y columna, del mismo modo que hacemos con los vectores:
+
+\begin{lstlisting}[style=rstyle]
+> m[1, 2] <- 20
+> m
+\end{lstlisting}
+
+\begin{lstlisting}[style=routput]
+     [,1] [,2] [,3]
+[1,]    1   20    3
+[2,]    4    5    6
+\end{lstlisting}
+
+\begin{exercise}
+Crea una matriz de 4 filas y 3 columnas que contenga los enteros del 1 al 12, rellenándola por filas. A continuación, realiza las siguientes operaciones:
+\begin{enumerate}
+    \item muestra el elemento de la tercera fila y segunda columna;
+    \item muestra la primera fila;
+    \item muestra la tercera columna;
+    \item cambia el elemento de la fila 4, columna 1 por el número -8 y muestra la matriz resultante.
+\end{enumerate}
+\end{exercise}
+
+\subsection{Modificar y operar con matrices}
+
+
+Las operaciones aritméticas habituales sobre una matriz se aplican elemento a elemento. Por ejemplo, \texttt{m * 2} multiplica cada elemento por dos, mientras que \texttt{m + 1} suma uno a cada elemento.
+
+\begin{lstlisting}[style=rstyle]
+m * 2
+m + 1
+m^2
+\end{lstlisting}
+
+Es importante distinguir estas operaciones de la multiplicación matricial, que se realiza con el operador \texttt{\%*\%} y requiere dimensiones compatibles.
+
+\subsection{Funciones sobre matrices}
+
+\R\ implementa muchas funciones sobre matrices. Algunas de las más importantes son las siguientes:
+
+\begin{center}
+	\begin{tabular}{|l|l|}
+		\hline
+		Función & Descripción \\		
+		\hline
+		\verb|nrow| & Devuelve el número de filas \\
+		\verb|ncol| & Devuelve el número de columnas \\
+		\verb|dim| & Devuelve las dimensiones de la matriz \\
+   		\verb|rowSums| & Calcula la suma de cada fila \\
+		\verb|colSums| & Calcula la suma de cada columna \\
+		\verb|rowMeans| & Calcula la media de cada fila \\
+		\verb|colMeans| & Calcula la media de cada columna \\
+		\verb|sum| & Suma todos los elementos de la matriz \\
+		\verb|diag| & Devuelve un vector con los elementos de la diagonal \\
+		\verb|t| & Devuelve la matriz traspuesta \\
+		\verb|det| & Devuelve el determinante de la matriz \\
+		\hline
+	\end{tabular}
+\end{center}
+
+
+\begin{exercise}
+Crea la siguiente matriz:
+
+\begin{lstlisting}[style=rstyle]
+m <- matrix(1:12, nrow = 3, ncol = 4, byrow = TRUE)
+\end{lstlisting}
+Calcula:
+\begin{enumerate}
+    \item[a)] la suma de todos sus elementos;
+    \item[b)] la suma de cada fila;
+    \item[c)] la suma de cada columna;
+    \item[d)] la media de cada fila;
+    \item[e)] la media de cada columna;
+    \item[f)] su matriz traspuesta;
+    \item[g)] el vector que contiene su diagonal.
+\end{enumerate}
+\end{exercise}
+
+\subsection{Recorrer una matriz}
+
+Podemos recorrer una matriz mediante dos bucles \texttt{for} anidados, uno para las filas y otro para las columnas. Las funciones \texttt{nrow()} y \texttt{ncol()} permiten adaptar los bucles a matrices de distintas dimensiones. El siguiente código imprime todos los elementos de una matriz. Fíjate en cómo recorre la matriz.
+
+\begin{lstlisting}[style=rstyle]
+for (i in 1:nrow(m)) {
+    for (j in 1:ncol(m)) {
+        print(m[i, j])
+    }
+}
+\end{lstlisting}
+
+Este ejemplo presupone que la matriz tiene al menos una fila y una columna. Para escribir código que también funcione con dimensiones vacías, se pueden usar secuencias como \texttt{seq\_len(nrow(m))} y \texttt{seq\_len(ncol(m))}.
+
+\begin{exercise}
+Escribe una función \texttt{suma\_matriz(m)} que reciba una matriz y devuelva la suma de todos sus elementos. No puedes utilizar \texttt{sum()} ni \texttt{rowSums()} o \texttt{colSums()}; debes recorrer la matriz mediante dos bucles anidados. Pruébalo con la matriz:
+\[
+M = 
+\left( 
+	\begin{array}{rrrr}
+		 1 &  6 &  2 & 8 \\
+		 1 & -2 & -6 & 7 \\
+		-1 & -3 &  6 & 1 \\
+		-8 & -2 &  3 & 1
+	\end{array}
+\right)
+\]
+Compara el resultado con el que devuelve la función que implementa \R\ para este propósito.
+\end{exercise}
+
+\begin{exercise}
+Escribe una función \texttt{diagonal(m)} que devuelva un vector con los elementos de la diagonal principal de una matriz cuadrada. No puedes utilizar la función \texttt{diag()}.
+\[
+M = 
+\left( 
+	\begin{array}{rrrr}
+		-2 &  5 & -1 &  9 \\
+		 3 & -2 &  4 & -2 \\
+		 1 & -6 &  6 &  1 \\
+		-5 &  6 & -7 & -3
+	\end{array}
+\right)
+\]
+Compara el resultado con el que devuelve la función que implementa \R\ para este propósito.
+\end{exercise}
+
+\begin{exercise}
+Crea una función \texttt{es\_simetrica(m)} que devuelva \texttt{TRUE} si la matriz cuadrada \texttt{m} es simétrica y \texttt{FALSE} en caso contrario. Una matriz es simétrica si el elemento de la fila $i$ y columna $j$ coincide con el de la fila $j$ y columna $i$, para todas las parejas de índices. No utilices la función \texttt{t()} para resolver el ejercicio. Si la matriz no es cuadrada, debes mostrar un mensaje por pantalla que advierta de ello y finalizar la función sin devolver nada. A continuación, señala cuáles de las siguientes matrices son simétricas:
+\begin{enumerate}
+	\item[a)] $M_1 = 
+		\left( 
+			\begin{array}{rrrr}
+				-2 &  3 &  9 \\
+				 3 & -2 & -2 \\
+				 1 & -6 &  1 
+			\end{array}
+		\right)$.
+	\item[b)] $M_2 = 
+		\left( 
+			\begin{array}{rrr}
+				-1 &  5 & -1 \\
+				 5 & -2 & -6 \\
+				-1 & -6 &  9 
+			\end{array}
+		\right)$.
+	\item[c)] $M_3 = 
+		\left( 
+			\begin{array}{rrrr}
+			-1 &  5 & -3 &  9 \\
+			 3 & -2 &  4 & -8 \\
+			 1 & -6 &  3 &  1 \\
+			 4 &  5 & -3 & -8
+		\end{array}
+		\right)$.
+	\item[d)] $M_4 = 
+		\left( 
+			\begin{array}{rrrr}
+			 6 &  3 &  9 & -1 \\
+			 3 & -2 & -6 &  6 \\
+			 9 & -6 &  5 & -7 \\
+			-1 &  6 & -7 &  6
+		\end{array}
+		\right)$.
+\end{enumerate}
+¿Cómo podrías comprobarlo con la función \texttt{t()}? ¿Obtienes los mismos resultados que con tu función?
+\end{exercise}
+
+
+
+
+
+
+
+
+\section{Data frames}
+
+Un \texttt{data.frame} es una estructura tabular que permite almacenar datos organizados en filas y columnas. Cada columna puede contener un tipo de dato distinto, pero todas las columnas deben tener la misma longitud. Por ejemplo, podemos guardar el nombre, la edad y la nota de varios alumnos en un mismo \texttt{data.frame}.
+
+\begin{lstlisting}[style=rstyle]
+alumnos <- data.frame(
+  nombre = c("Ana", "Luis", "Marta", "Pablo"),
+  edad = c(19, 21, 20, 22),
+  nota = c(7.5, 5.0, 8.5, 6.0)
+)
+\end{lstlisting}
+
+Para mostrar el contenido, basta con escribir el nombre del objeto:
+
+\begin{lstlisting}[style=rconsole]
+> alumnos
+\end{lstlisting}
+
+\begin{lstlisting}[style=routput]
+  nombre edad nota
+1    Ana   19  7.5
+2   Luis   21  5.0
+3  Marta   20  8.5
+4  Pablo   22  6.0
+\end{lstlisting}
+
+Cada fila representa una observación, esto es, un alumno, y cada columna una variable.
+
+\subsection{Acceder a filas y columnas}
+
+Podemos acceder a una columna mediante el operador \texttt{\$} o mediante índices. Para seleccionar una fila y una columna concretas, usamos dos índices entre corchetes: el primero corresponde a la fila y el segundo a la columna.
+
+\begin{lstlisting}[style=rstyle]
+alumnos$nota       # Columna de notas
+alumnos[2, ]       # Segunda fila
+alumnos[, 3]       # Tercera columna
+alumnos[2, 3]      # Fila 2, columna 3
+alumnos[, "edad"]  # Columna llamada edad
+\end{lstlisting}
+
+\noindent Por ejemplo:
+
+\begin{lstlisting}[style=rconsole]
+> alumnos$nombre
+\end{lstlisting}
+
+\begin{lstlisting}[style=routput]
+[1] "Ana"   "Luis"  "Marta" "Pablo"
+\end{lstlisting}
+
+
+Las funciones \texttt{nrow()} y \texttt{ncol()} devuelven el número de filas y columnas, respectivamente. La función \texttt{names()} devuelve los nombres de las columnas. En nuestro ejemplo:
+
+\begin{lstlisting}[style=rconsole]
+> nrow(alumnos)
+\end{lstlisting}
+
+\begin{lstlisting}[style=routput]
+[1] 4
+\end{lstlisting}
+
+\begin{lstlisting}[style=rconsole]
+> ncol(alumnos)
+\end{lstlisting}
+
+\begin{lstlisting}[style=routput]
+[1] 3
+\end{lstlisting}
+
+\begin{lstlisting}[style=rconsole]
+> names(alumnos)
+\end{lstlisting}
+
+\begin{lstlisting}[style=routput]
+[1] "nombre" "edad"   "nota" 
+\end{lstlisting}
+
+
+
+\begin{exercise}\label{ej:libros}
+Crea un \texttt{data.frame} llamado \texttt{libros} con información de los siguientes libros:
+\begin{enumerate}
+	\item G. H. Hardy \emph{A Course of Pure Mathematics} (1908), 446 páginas.
+	\item T. M. Apostol, \emph{Mathematical Analysis} (1957), 492 páginas.
+	\item M. Spivak, \emph{Calculus} (1967), 680 páginas.
+	\item S. Lang, \emph{Introduction to Linear Algebra} (1970), 293 páginas.
+	\item J. R. Munkres, \emph{Topology} (1975), 537 páginas. 
+\end{enumerate}
+Para cada libro, guarda el título, el autor, el año de publicación y el número de páginas. Muestra:
+\begin{enumerate}
+    \item[a)] el número de libros;
+    \item[b)] el número de columnas (variables);
+    \item[c)] el título del tercer libro;
+    \item[d)] la información completa del segundo libro;
+    \item[e)] los títulos de todos los libros.
+\end{enumerate}
+\end{exercise}
+
+\subsection{Añadir y modificar columnas}
+
+Podemos crear una nueva columna asignándole un vector de la misma longitud que el número de filas. También podemos modificar los valores de una columna existente.
+
+\begin{lstlisting}[style=rstyle]
+> alumnos$nota[1] <- 8
+> alumnos$aprobado <- alumnos$nota >= 5
+> alumnos
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+  nombre edad nota aprobado
+1    Ana   19  8.0     TRUE
+2   Luis   21  5.0     TRUE
+3  Marta   20  8.5     TRUE
+4  Pablo   22  6.0     TRUE
+\end{lstlisting}
+
+En la primera instrucción se añade una columna lógica llamada \texttt{aprobado}. Sus valores son \texttt{TRUE} o \texttt{FALSE}, según se cumpla o no la condición.
+
+\begin{exercise}
+Sobre el \texttt{data.frame} \texttt{alumnos} del ejemplo, realiza las siguientes tareas:
+\begin{enumerate}
+    \item Los alumnos han realizado un examen. Ana ha sacado un $9.5$, Luis ha sacado un $2$, Marta ha sacado un $3.5$ y Pablo ha sacado un $4$. Añade una columna \texttt{nota2} con una segunda nota para cada alumno;
+    \item una columna \texttt{media} con la media de las dos notas;
+    \item una columna lógica \texttt{aprobado} que indique si la media es mayor o igual que 5.
+\end{enumerate}
+Muestra el \texttt{data.frame} completo y comprueba que los valores calculados son correctos.
+\end{exercise}
+
+\subsection{Seleccionar filas mediante condiciones}
+
+Podemos seleccionar las filas que cumplen una condición utilizando un vector lógico. Por ejemplo:
+
+\begin{lstlisting}[style=rconsole]
+> notables_y_sobresalientes <- alumnos[alumnos$media >= 7, ]
+> notables_y_sobresalientes
+\end{lstlisting}
+
+\begin{lstlisting}[style=routput]
+  nombre edad nota aprobado nota2 media
+1    Ana   19    8     TRUE   9.5  8.75
+\end{lstlisting}
+
+\begin{lstlisting}[style=rconsole]
+> mayores <- alumnos[alumnos$edad > 20, ]
+> mayores
+\end{lstlisting}
+
+\begin{lstlisting}[style=routput]
+  nombre edad nota aprobado nota2 media
+2   Luis   21  5.0    FALSE   2.0  3.50
+4  Pablo   22  6.0     TRUE   4.0  5.00
+\end{lstlisting}
+
+La expresión situada antes de la coma determina qué filas se seleccionan. Al dejar vacía la parte posterior a la coma, se conservan todas las columnas.
+
+\begin{exercise}
+Utilizando el \texttt{data.frame} \texttt{libros} del ejercicio~\ref{ej:libros}, crea y muestra:
+\begin{enumerate}
+    \item[a)] un \texttt{data.frame} con los libros posteriores a 1960;
+    \item[b)] un \texttt{data.frame} con los libros de más de 500 páginas;
+    \item[c)] un \texttt{data.frame} con los libros posteriores a 1960 que además tengan más de 500 páginas.
+\end{enumerate}
+\end{exercise}
+
+\subsection{Funciones sobre data frames}
+
+Podemos utilizar las funciones vistas en el apartado de vectores sobre las columnas de un \texttt{data.frame}. Por ejemplo:
+
+\begin{lstlisting}[style=rconsole]
+> sort(alumnos$nota)
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] 5.0 6.0 8.0 8.5
+\end{lstlisting}
+\begin{lstlisting}[style=rconsole]
+> mean(alumnos$nota)
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] 6.875
+\end{lstlisting}
+\begin{lstlisting}[style=rconsole]
+> max(alumnos$nota)
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+[1] 8.5
+\end{lstlisting}
+
+Podemos utilizar la función \texttt{which.max()}, que devuelve la posición del primer valor máximo, para obtener la información de la fila correspondiente.
+
+\begin{lstlisting}[style=rconsole]
+> posicion <- which.max(alumnos$nota)
+> alumnos[posicion, ]
+\end{lstlisting}
+
+\begin{lstlisting}[style=routput]
+  nombre edad nota aprobado nota2 media
+3  Marta   20  8.5     TRUE   3.5     6
+\end{lstlisting}
+
+
+
+
+\begin{exercise}
+Pensando en el \texttt{data.frame} \texttt{libros} del ejercicio~\ref{ej:libros}, escribe las siguientes funciones:
+\begin{enumerate}
+    \item \texttt{mas\_reciente(datos)}, que reciba un \texttt{data.frame} con una columna llamada \texttt{año} y devuelva la fila completa correspondiente al elemento más reciente de ese conjunto de datos;
+
+    \item \texttt{mas\_antiguo(datos)}, que reciba un \texttt{data.frame} con una columna llamada \texttt{año} y devuelva la fila completa correspondiente al elemento más antiguo de ese conjunto de datos;
+    
+    \item \texttt{mas\_paginas(datos)}, que reciba un \texttt{data.frame} con una columna llamada \texttt{paginas} y devuelva la fila completa correspondiente al elemento con mayor número de páginas en ese conjunto de datos;
+    
+    \item \texttt{menos\_paginas(datos)}, que reciba un \texttt{data.frame} con una columna llamada \texttt{paginas} y devuelva la fila completa correspondiente al elemento con menor número de páginas de ese conjunto de datos;
+    
+    \item \texttt{total\_paginas(datos)}, que reciba un \texttt{data.frame} con una columna llamada \texttt{paginas} y devuelva el total de páginas que suman todos los elementos de ese conjunto de datos;
+    
+    \item \texttt{media\_paginas(datos)}, que reciba un \texttt{data.frame} con una columna llamada \texttt{paginas} y devuelva la media de páginas de todos los elementos de ese conjunto de datos,
+\end{enumerate}
+Prueba las funciones con el \texttt{data.frame} \texttt{libros}.
+\end{exercise}
+
+
+
+
+
+
+
+
+
+
+
+
+\section{Un último ejercicio}
+
+
+Recuerda documentar tu práctica.
+
+\begin{exercise} Escribe un fichero \texttt{README.md} para tu directorio donde guardarás la práctica 6. El aspecto debe ser similar al de los ficheros \texttt{README.md} que hiciste para las prácticas 1, 3 y 5. 
+\end{exercise}
+
+
+\section{Entrega y consejos}
+
+Sube los ficheros con los ejercicios a tu \GitHub\ en la fecha acordada con el profesor. Para esta práctica:
+\begin{enumerate}
+\item guarda tus scripts en la carpeta correspondiente;
+\item utiliza nombres de fichero claros y consistentes;
+\item comenta el código para facilitar su comprensión;
+\item comprueba que puedes ejecutar de nuevo cada script desde el principio;
+\item evita depender de instrucciones que hayan quedado solamente en la consola.
+\end{enumerate}
+
+\begin{center}
+\textbf{\color{azuluc}Idea clave:} los vectores permiten trabajar con colecciones de valores, las matrices organizan datos en filas y columnas y los \texttt{data.frame} permiten representar datos tabulares formados por distintas variables. Las secuencias permiten generar de forma sencilla conjuntos de valores que podemos recorrer, seleccionar y transformar.
+\end{center}
+
+\end{document}
