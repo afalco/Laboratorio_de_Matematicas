@@ -1,0 +1,700 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin={2.6cm,2.6cm}]{geometry}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amsthm}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{fontawesome5}
+\usepackage{dirtree}
+
+
+\definecolor{azuluc}{HTML}{1F4E79}
+\definecolor{grisclaro}{HTML}{F4F6F8}
+\definecolor{gris}{HTML}{586069}
+\definecolor{verde}{HTML}{2E7D32}
+\definecolor{rojo}{HTML}{A94442}
+\definecolor{git}{HTML}{F1502F}
+
+\definecolor{morado_ubuntu}{RGB}{48, 10, 36}       % Fondo morado oscuro de Ubuntu GNOME
+\definecolor{verde_ubuntu}{RGB}{78, 154, 6}        % Verde para comentarios
+\definecolor{cyan_ubuntu}{RGB}{52, 226, 226}       % Cian para comandos
+\definecolor{amarillo_ubuntu}{RGB}{250, 240, 190}  % Amarillo para cadenas
+\definecolor{rojo_ubuntu}{RGB}{220, 50, 47}        % Rojo para errores
+\definecolor{verde_claro_ubuntu}{RGB}{138, 226, 52} % Verde claro para el prompt
+\definecolor{azul_ubuntu}{RGB}{114, 159, 207}      % Azul para símbolos y rutas
+\definecolor{gris_ubuntu}{RGB}{128, 128, 128}      % Gris para el borde del frame
+
+
+\definecolor{fondo_mac}{RGB}{255, 255, 250}       % Fondo beige claro típico de macOS
+\definecolor{negro}{RGB}{0, 0, 0}                 % Texto en negro
+\definecolor{verde_mac}{RGB}{63, 127, 95}         % Verde para comentarios
+\definecolor{azul_mac}{RGB}{0, 0, 255}            % Azul para comandos y prompt
+\definecolor{rojo_mac}{RGB}{196, 26, 22}          % Rojo para errores y cadenas
+\definecolor{morado_mac}{RGB}{147, 39, 143}       % Morado para emphasis (opcional)
+\definecolor{gris_mac}{RGB}{200, 200, 200}        % Gris para el borde del frame
+
+
+
+\lstdefinestyle{rstyle}{
+  language=R,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{azuluc}\bfseries,
+  commentstyle=\color{gris},
+  stringstyle=\color{verde!70!black},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris!30},
+  backgroundcolor=\color{grisclaro},
+  breaklines=true,
+  showspaces=false,
+  tabsize=2
+}
+
+\lstdefinestyle{rconsole}{
+  language=R,
+  basicstyle=\color{rojo}\ttfamily\small,
+  showstringspaces=false,
+  columns=fullflexible,
+  frame=single,
+  rulecolor=\color{gris!30},
+  breaklines=true,
+  tabsize=2
+}
+
+\lstdefinestyle{routput}{
+  language=R,
+  basicstyle=\color{azuluc}\ttfamily\small,
+  showstringspaces=false,
+  columns=fullflexible,
+  frame=single,
+  rulecolor=\color{gris!30},
+  breaklines=true,
+  tabsize=2,
+  literate=
+    {á}{{\'a}}1
+    {é}{{\'e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {ú}{{\'u}}1
+    {Á}{{\'A}}1
+    {É}{{\'E}}1
+    {Í}{{\'I}}1
+    {Ó}{{\'O}}1
+    {Ú}{{\'U}}1
+    {ñ}{{\~n}}1
+    {Ñ}{{\~N}}1
+    {ü}{{\"u}}1
+    {Ü}{{\"U}}1
+    {¡}{{\textexclamdown}}1
+	{`}{\textasciigrave}1 
+    {´}{\textquotesingle}1,
+}
+
+\lstdefinestyle{mdstyle}{
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{azuluc}\bfseries,
+  commentstyle=\color{gris},
+  showstringspaces=false,
+  showspaces=false,
+  tabsize=2,
+  frame=single,
+  rulecolor=\color{gris!30},
+  backgroundcolor=\color{grisclaro},
+  breaklines=true,
+  breakatwhitespace=false,
+  % Títulos Markdown
+  morecomment=[l][\color{azuluc}\bfseries]{\#},
+  % Enlaces y referencias
+  morecomment=[s][\color{verde}]{(}{)},
+  % Cadenas
+  morestring=[b][\color{naranja}]{"},
+  morestring=[b][\color{naranja}]{'},
+  % Lenguajes utilizados en bloques de código
+  classoffset=1,
+    keywordstyle=\color{morado}\bfseries,
+    morekeywords={python,bash,R,latex,json,yaml},
+  classoffset=0,
+  % Protocolos y enlaces
+  emph={http,https,ftp},
+  escapeinside={-@}{@-},
+  emphstyle=\color{azuluc}\underbar,   
+   literate=
+    {á}{{\'a}}1
+    {é}{{\'e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {ú}{{\'u}}1
+    {Á}{{\'A}}1
+    {É}{{\'E}}1
+    {Í}{{\'I}}1
+    {Ó}{{\'O}}1
+    {Ú}{{\'U}}1
+    {ñ}{{\~n}}1
+    {Ñ}{{\~N}}1
+    {ü}{{\"u}}1
+    {Ü}{{\"U}}1
+    {¡}{{\textexclamdown}}1
+	{`}{\textasciigrave}1 
+    {´}{\textquotesingle}1,
+}
+
+\lstdefinestyle{ubuntugnome}{
+  basicstyle=\ttfamily\small\color{white},
+  backgroundcolor=\color{morado_ubuntu},
+  commentstyle=\color{verde_ubuntu},
+  keywordstyle=\color{cyan_ubuntu},
+  stringstyle=\color{amarillo_ubuntu},
+  emphstyle=\color{rojo_ubuntu},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris_ubuntu},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{white}{$\hookrightarrow$}\space},
+  % Configuración para simular el prompt de Ubuntu
+  upquote=true,
+  % Resaltar el prompt de usuario
+  emph={user@ubuntu:~\$},
+  emphstyle={\color{verde_claro_ubuntu}\bfseries},
+  % Resaltar errores (ej: "command not found")
+  classoffset=1,
+  emph={command not found,No such file or directory,Permission denied},
+  emphstyle={\color{rojo_ubuntu}},
+  classoffset=0,
+}
+
+\lstdefinestyle{macterminal}{
+  basicstyle=\ttfamily\small\color{negro},
+  backgroundcolor=\color{fondo_mac},
+  commentstyle=\color{verde_mac},
+  keywordstyle=\color{azul_mac},
+  stringstyle=\color{rojo_mac},
+  emphstyle=\color{morado_mac},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris_mac},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{negro}{$\hookrightarrow$}\space},
+  % Configuración para simular el prompt de macOS
+  upquote=true,
+  % Resaltar el prompt de usuario
+  emphstyle={\color{azul_mac}\bfseries},
+  % Resaltar errores (ej: "command not found")
+  classoffset=1,
+  emph={command not found,No such file or directory,Permission denied},
+  emphstyle={\color{rojo_mac}},
+  classoffset=0
+}
+
+\lstdefinestyle{windowscmd}{
+  basicstyle=\ttfamily\small\color{white},
+  backgroundcolor=\color{black},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris_mac},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{negro}{$\hookrightarrow$}\space},
+  % Configuración para simular el prompt de macOS
+  upquote=true,
+  % Resaltar el prompt de usuario
+  emphstyle={\color{azul_mac}\bfseries},
+  % Resaltar errores (ej: "command not found")
+  classoffset=1,
+  emph={command not found,No such file or directory,Permission denied},
+  emphstyle={\color{rojo_mac}},
+  classoffset=0
+}
+
+
+
+\newcommand*{\vsp}{\texttt{\textvisiblespace}} % visible space
+
+\newcommand*{\strC}{\begingroup
+  \obeyspaces
+  \begingroup\lccode`~=`\ %
+  \lowercase{\endgroup\let~}\vsp
+  \dostrC}
+\newcommand{\dostrC}[1]{\textnormal{{\slshape\ttfamily#1}}\endgroup} % string constant
+
+
+\newcommand{\R}{\textcolor{azuluc}{\faIcon{r-project}}}
+\newcommand{\Git}{\textcolor{git}{\faIcon{git-alt}}~\!Git}
+\newcommand{\GitHub}{\faIcon{github}~\!GitHub}
+\newcommand{\Markdown}{Markdown~\faIcon{markdown}}
+
+
+
+\newcommand{\checkicon}{\textcolor{verde}{\faIcon{check}}}
+\newcommand{\crossicon}{\textcolor{rojo}{\faIcon{times}}}
+
+\newtheoremstyle{exercise}
+  {0.8em}{0.8em}{\normalfont}{}{\bfseries\color{azuluc}}{.}{0.5em}{}
+\theoremstyle{exercise}
+\newtheorem{exercise}{Ejercicio}
+
+% ------------------------------------------------------------
+
+% Metadatos
+
+% ------------------------------------------------------------
+
+\title{\LARGE \textbf{Práctica 5: Funciones recursivas y programación modular en \R} \\[0.5em]
+\Large Laboratorio de Matemáticas \\
+\small \ \\
+Grado en Ingeniería Matemática - Doble Grado en Física e Ingeniería Matemática}
+\author{Miguel Beltra Vidal}
+\date{Curso 2026/27}
+
+% ------------------------------------------------------------
+% Documento
+% ------------------------------------------------------------
+
+\begin{document}
+
+\maketitle
+
+% ============================================================
+\section{Objetivos}
+% ============================================================
+
+El objetivo de esta práctica es aprender el concepto de función recursiva y manejar la programación modular en \R. Al finalizarla, el estudiante será capaz de definir funciones recursivas y escribir programas que estén compuestos de varias funciones, cada una de ellas con un propósito único.
+
+
+% ============================================================ 
+\section{Funciones recursivas} 
+% ============================================================
+
+Una función recursiva es una función que se llama a sí misma para resolver un problema. Siempre tiene dos elementos fundamentales:
+
+\begin{itemize}
+	\item \textbf{Caso base}: situación sencilla que puede resolverse directamente y que detiene la recursión.
+	\item \textbf{Caso recursivo}: situación en la que la función se vuelve a llamar a sí misma con un problema más pequeño o más sencillo. 
+\end{itemize}
+Por ejemplo, el factorial de un número natural puede definirse como $0! = 1$ y 
+\[ n! = n \cdot (n-1)! \qquad \text{si } n>0. \]
+Esta definición se puede traducir directamente a una función recursiva:
+\begin{lstlisting}[style=rstyle] 
+factorial <- function(n) { 
+	if (n == 0) { 
+		1 
+	} else { 
+		n * factorial(n - 1) 
+	} 
+} 
+\end{lstlisting}
+
+El caso $n=0$ representa el caso base, mientras que el caso $n>0$ es el caso recursivo. Cuando ejecutamos \texttt{factorial(4)}, las llamadas se pueden interpretar como: 
+\[ 
+4\cdot 3! 
+\quad 
+\rightarrow
+\quad 
+4 \cdot 3 \cdot 2!
+\quad
+\rightarrow
+\quad
+4 \cdot 3 \cdot 2 \cdot 1!
+\quad
+\rightarrow
+\quad
+4 \cdot 3 \cdot 2 \cdot 1 \cdot 0! 
+\quad
+\rightarrow
+\quad
+4 \cdot 3 \cdot 2 \cdot 1 \cdot 1. 
+\]
+Al final, se alcanza el caso base $0!=1$ y las llamadas pendientes pueden resolverse:
+\[ 
+4 \cdot 3 \cdot 2 \cdot 1 \cdot 1
+\quad 
+\rightarrow
+\quad 
+4 \cdot 3 \cdot 2 \cdot 1
+\quad 
+\rightarrow
+\quad 
+4 \cdot 3 \cdot 2
+\quad 
+\rightarrow
+\quad 
+4 \cdot 6
+\quad 
+\rightarrow
+\quad 
+24.
+\]
+\medskip
+
+La recursividad no es simplemente una forma diferente de escribir un bucle. Es especialmente útil cuando un problema puede expresarse naturalmente en términos de una versión más pequeña del mismo problema.
+
+
+
+\begin{exercise} Define una función recursiva \texttt{suma\_hasta\_rec(n)} que calcule: 
+\[ 1+2+3+\cdots+n. \]
+Por ejemplo:
+\begin{lstlisting}[style=rconsole]
+> suma_hasta_rec(5)
+\end{lstlisting}	
+deberá mostrar:
+\begin{lstlisting}[style=routput]
+[1] 15
+\end{lstlisting}
+En tu script indica cuál es el caso base y cuál el caso recursivo. Calcula las sumas siguientes:
+\begin{itemize}
+	\item $\sum_{i=1}^{10} i$.
+	\item $\sum_{i=1}^{20} i$.
+	\item $\sum_{i=1}^{30} i$.
+\end{itemize}
+\end{exercise}
+
+
+
+\begin{exercise} Define una función recursiva \texttt{potencia\_rec(a,n)} que calcule $a^n$ para $n \geq 0$. Para ello, utiliza la relación recursiva: 
+\[ a^0=1,\qquad a^n=a\cdot a^{n-1}. \]
+Por ejemplo:
+\begin{lstlisting}[style=rconsole]
+> potencia_rec(2,8)
+\end{lstlisting}	
+deberá mostrar:
+\begin{lstlisting}[style=routput]
+[1] 256
+\end{lstlisting}
+En tu script indica cuál es el caso base y cuál el caso recursivo. Calcula las potencias siguientes:
+\begin{itemize}
+	\item $2^{16}$,
+	\item $3^{14}$,
+	\item $(-4)^{15}$.
+\end{itemize}
+\noindent \textbf{Nota:} No utilices el operador \texttt{\^}. 
+\end{exercise}
+
+
+
+\begin{exercise} Define una función recursiva \texttt{suma\_digitos\_rec(n)} que calcule la suma de los dígitos de un número positivo. Utiliza la identidad
+\[ 
+\texttt{suma\_digitos\_rec}(n) = (n \bmod 10) + \texttt{suma\_digitos\_rec}\left(\left\lfloor\frac{n}{10}\right\rfloor\right). 
+\]
+Aquí, $n \bmod 10$ indica el resto de la división entera, mientras que $\left\lfloor\frac{n}{10}\right\rfloor$ representa el cociente de la división. El caso base debe aparecer cuando el número tenga un único dígito. En tu script indica cuál es el caso base y cuál el caso recursivo. Por ejemplo,
+\begin{lstlisting}[style=rconsole]
+> suma_digitos_rec(14525)
+\end{lstlisting}	
+deberá mostrar:
+\begin{lstlisting}[style=routput]
+[1] 17
+\end{lstlisting}
+ya que $1+4+5+2+5=17$. Calcula la suma de los dígitos de los siguientes números:
+\begin{itemize}
+	\item $1234567890$,
+	\item $122333444455555666666$,
+	\item $2^{32}$ (aquí sí que puedes utilizar el operador  \texttt{\^}).
+\end{itemize}
+\end{exercise}
+
+
+
+
+\begin{exercise} La sucesión de Fibonacci $\{F_n\}_{n \geq 0}$ se define como: $F_0=0$, $F_1=1$ y 
+\[ F_n = F_{n-1} + F_{n-2} \qquad \text{si } n \geq 2. \]
+Define una función recursiva \texttt{fibonacci(n)} que calcule $F_n$. Comprueba que los primeros términos de la sucesión son:
+\[
+0,\ 1,\ 1,\ 2,\ 3,\ 5,\ 8,\ 13,\ 21,\ 34.
+\]
+En tu script indica cuál es el caso base y cuál el caso recursivo. 
+\end{exercise}
+
+
+
+
+\begin{exercise} \textbf{Algoritmo de Euclides}: Define una función recursiva \texttt{mcd\_rec(a,b)} que calcule el máximo común divisor utilizando la relación de Euclides: 
+\[ \operatorname{mcd}(a,b) = \operatorname{mcd}(b, a \bmod b). \]
+Aquí, $a \bmod b$ indica el resto de la división entera al dividir $a$ entre $b$. El caso base aparece cuando el segundo argumento es cero.  En tu script indica cuál es el caso base y cuál el caso recursivo. Calcula:
+\begin{itemize}
+	\item $\text{mcd}(48,18)$,
+	\item $\text{mcd}(105,35)$,
+	\item $\text{mcd}(17,5)$.
+\end{itemize} 
+\end{exercise}
+
+
+
+\begin{exercise} \textbf{Conjetura de Collatz:} Consideremos la sucesión definida por $a_0=n$, y
+\[
+a_{k+1}=
+\begin{cases}
+	a_k/2, & \text{si } a_k \text{ es par}, \\
+	3a_k+1, & \text{si } a_k \text{ es impar}.
+\end{cases}
+\]
+Por ejemplo, comenzando en $a_0=6$, obtenemos:
+\[
+6,\ 3,\ 10,\ 5,\ 16,\ 8,\ 4,\ 2,\ 1.
+\]
+Escribe un programa en \R\ que, dado un número entero positivo \texttt{n}, imprima por pantalla los términos de la sucesión hasta alcanzar el valor 1. En tu script indica cuál es el caso base y cuál el caso recursivo. Por ejemplo, para \texttt{n = 6} debería obtenerse:
+\[
+6,\ 3,\ 10,\ 5,\ 16,\ 8,\ 4,\ 2,\ 1.
+\]
+Por tanto, se necesitan 8 pasos. A continuación, modifícalo para contar cuántos pasos son necesarios hasta llegar a 1, y haz que sea este el valor de retorno. ¿Cuántos pasos necesitamos en los siguientes casos?
+\begin{itemize}
+	\item Empezando en $n=20$.
+	\item Empezando en $n=43$.
+	\item Empezando en $n=1500$.
+\end{itemize}
+
+
+\noindent \textbf{Nota:} Una pregunta surge cuando reflexionamos sobre este ejercicio. ¿Existe algún número $n$ que genera una sucesión que nunca alcanza el 1? Si tienes la tarde libre, trata de demostrar que, independientemente del número del que partamos, la sucesión siempre alcanza el 1, o por el contrario, que existe un número $n$ que genera una sucesión que nunca llega al 1.
+\end{exercise}
+
+
+
+% ============================================================ 
+\section{Programación modular} 
+% ============================================================
+
+Una de las ideas fundamentales de la programación es dividir un problema grande en problemas más pequeños. Cada uno de estos problemas puede resolverse mediante una función. Una función puede utilizar otras funciones que hayamos definido anteriormente. De esta forma, podemos construir programas más complejos a partir de piezas sencillas y reutilizables.
+
+\medskip
+
+Por ejemplo, podemos definir una función que determine si un número es par y utilizarla posteriormente dentro de otra función:
+\begin{lstlisting}[style=rstyle]
+es_par <- function(n) {
+	n %% 2 == 0
+}
+
+siguiente_par <- function(n) {
+	if (es_par(n)) { 
+		n + 2 
+	} else { 
+		n + 1 
+	} 
+} 
+\end{lstlisting}
+
+\noindent La función \texttt{siguiente\_par()} no necesita volver a comprobar qué significa que un número sea par: utiliza la función \texttt{es\_par()} que ya hemos definido. Algunas de las ideas fundamentales de la programación modular son que \textbf{las funciones deben ser sencillas y cumplir un único propósito}, y que \textbf{las funciones ayudan a evitar repetir código que ya está escrito}, otorgando una mayor solidez y capacidad de mantenimiento a nuestro código.
+
+
+
+\begin{exercise} Define una función \texttt{es\_multiplo(a,b)} que devuelva \texttt{TRUE} si $a$ es múltiplo de $b$ y \texttt{FALSE} en caso contrario. Después, define una función \texttt{es\_divisor(a,b)} que utilice \texttt{es\_multiplo()} para determinar si $a$ es divisor de $b$. Contesta a las siguientes preguntas:
+\begin{itemize}
+	\item ¿Cuáles de los siguientes números son múltiplos de $17$? 
+	\[
+		255,\ 1156,\ 1397,\ 11645,\ 12617.
+	\]
+
+	\item ¿Cuáles de los siguientes números son divisores de $1522508$? 
+	\[
+		11,\ 19,\ 23,\ 37,\ 52,\ 67,\ 97.
+	\]	
+\end{itemize} 
+\end{exercise}
+
+
+
+%\begin{exercise} Define las siguientes funciones:
+%
+%\begin{lstlisting}[style=rstyle]
+%valor_absoluto <- function(x) {
+%	...
+%}
+%
+%distancia <- function(a, b) {
+%	...
+%} 
+%\end{lstlisting}
+%La función \texttt{distancia(a,b)} deberá calcular la distancia entre los números $a$ y $b$, utilizando la función \texttt{valor\_absoluto()}.
+%
+%Comprueba el resultado para varios pares de números. 
+%\end{exercise}
+
+
+
+\begin{exercise}  Un número primo es un número natural mayor que 1 que solamente es divisible entre 1 y él mismo. Una posible estrategia consiste en recorrer los números desde 2 hasta $n-1$ y comprobar si alguno divide exactamente a $n$. Por ejemplo, para comprobar si 7 es primo podemos comprobar:
+\begin{lstlisting}[style=rconsole]
+> 7 %% 2
+> 7 %% 3
+> 7 %% 4
+> 7 %% 5
+> 7 %% 6
+\end{lstlisting}
+Si ninguno de estos restos es cero, entonces 7 es primo. Define una función \texttt{es\_primo(n)} que determine si un número entero positivo es primo. La función deberá devolver \texttt{TRUE} si \texttt{n} es primo y \texttt{FALSE} en caso contrario. Comprueba el resultado para:
+\[
+1,\ 2,\ 3,\ 4,\ 5,\ 10,\ 17,\ 25,\ 29,\ 100.
+\]
+¿Qué tratamiento debe recibir el número 1?
+
+\medskip
+
+A continuación, define una función \texttt{cantidad\_primos(a,b)} que cuente cuántos números primos hay entre $a$ y $b$, ambos incluidos. Por último, crea una función llamada \texttt{primos\_hasta} que muestre todos los números primos menores o iguales que \texttt{n} y muestre la cantidad que tenemos. Por ejemplo:
+\begin{lstlisting}[style=rconsole]
+> primos_hasta(20)
+\end{lstlisting}	
+deberá mostrar:
+\begin{lstlisting}[style=routput]
+2 3 5 7 11 13 17 19
+Total: 8
+\end{lstlisting}
+El \textbf{Teorema de los Números Primos} establece que la cantidad de números primos menores o iguales que un cierto $n$ es aproximadamente $\frac{n}{\ln(n)}$. Escribe una función llamada \texttt{error\_teorema\_numeros\_primos(n)} que, dado un número natural \texttt{n}, devuelva el error relativo cometido por el Teorema de los Números Primos, esto es, 
+\[ \text{error} = \frac{|\text{valor exacto}-\text{valor aproximado}|}{\text{valor exacto}}. \]
+Finalmente, escribe una función llamada \texttt{info\_primos(n)} que muestre la siguiente información por pantalla:
+\begin{lstlisting}[style=rconsole]
+> info_primos(20)
+\end{lstlisting}	
+\begin{lstlisting}[style=routput]
+2 3 5 7 11 13 17 19
+Total: 8
+Error relativo del Teorema de los Números Primos: 0.1654795
+\end{lstlisting}
+Observa qué pasa con el error relativo cuando $n=10$, $n=100$, $n=1000$ y $n=10000$.
+\end{exercise}
+
+
+
+%\begin{exercise} Un número perfecto es aquel cuya suma de divisores positivos distintos del propio número coincide con el número. Por ejemplo:
+%\[
+%6=1+2+3.
+%\]
+%Por tanto, 6 es un número perfecto.
+%
+%Define una función \texttt{cantidad\_divisores(n)} que cuente cuántos divisores positivos tiene un número entero positivo. Después, define una función \texttt{es\_perfecto(n)} que determine si un número es perfecto utilizando \texttt{cantidad\_divisores()} y las funciones que hayas definido anteriormente cuando sea conveniente. Finalmente, comprueba el resultado para: 
+%\[ 6,\quad 12,\quad 28,\quad 36,\quad 100. \]
+%\end{exercise}
+
+
+
+
+
+
+
+
+
+
+\iffalse
+
+% ============================================================
+\section{Más ejercicios con condicionales y bucles} 
+% ============================================================
+
+Para acabar esta práctica, incluimos unos ejercicios extra de  El objetivo es practicar la combinación de variables, operadores, estructuras condicionales y bucles.
+
+\begin{exercise} Escribe una función \texttt{suma\_digitos(n)} que calcule la suma de los dígitos de un número entero positivo.
+
+Por ejemplo: \[ 1234 \longrightarrow 1+2+3+4=10. \]
+
+Utiliza un bucle \texttt{while}. No conviertas el número en una cadena. \end{exercise}
+
+\begin{exercise} Define una función \texttt{numero\_digitos(n)} que determine cuántos dígitos tiene un número entero positivo.
+
+Por ejemplo: \[ 7 \longrightarrow 1,\qquad 42 \longrightarrow 2,\qquad 1532 \longrightarrow 4. \]
+
+Utiliza únicamente operaciones aritméticas y un bucle. \end{exercise}
+
+\begin{exercise} Define una función \texttt{invertir\_numero(n)} que devuelva el número obtenido al escribir sus dígitos en orden inverso.
+
+Por ejemplo: \[ 12345 \longrightarrow 54321. \]
+
+Utiliza un bucle \texttt{while} y las operaciones \texttt{\%} y \texttt{\%/\%}. \end{exercise}
+
+\begin{exercise} Define una función \texttt{es\_capicua(n)} que determine si un número entero positivo se lee igual de izquierda a derecha que de derecha a izquierda.
+
+Por ejemplo, 1221 es capicúa, mientras que 1234 no lo es.
+
+La función deberá utilizar \texttt{invertir\_numero()}. \end{exercise}
+
+\begin{exercise} Define una función \texttt{potencia(a,n)} que calcule $a^n$ para un entero $n\geq 0$, sin utilizar el operador \texttt{\^}.
+
+Utiliza un bucle para realizar las multiplicaciones necesarias.
+
+Después, utiliza esta función dentro de otra función que determine si un número es una potencia exacta de 2. \end{exercise}
+
+\begin{exercise} Define una función \texttt{mcd(a,b)} que calcule el máximo común divisor de dos números enteros positivos mediante el algoritmo de Euclides.
+
+Utiliza un bucle \texttt{while}.
+
+Por ejemplo: \[ \operatorname{mcd}(48,18)=6. \]
+
+Después define una función \texttt{son\_coprimos(a,b)} que utilice \texttt{mcd()} para determinar si dos números son coprimos. \end{exercise}
+
+\begin{exercise} Define una función \texttt{es\_numero\_perfecto(n)} que compruebe si un número es perfecto.
+
+A continuación, define una función \texttt{primer\_perfecto(n)} que recorra los números enteros positivos a partir de 2 hasta encontrar el primer número perfecto mayor que $n$.
+
+La función deberá utilizar \texttt{es\_numero\_perfecto()} y un bucle \texttt{while}. \end{exercise}
+
+
+
+% ============================================================ 
+\section{Combinación de programación modular y recursividad} 
+% ============================================================
+
+Los siguientes ejercicios combinan las dos ideas anteriores. El objetivo es que una función pueda apoyarse en otras funciones y que algunas de ellas puedan ser recursivas.
+
+
+\begin{exercise} Define una función \texttt{raiz\_entera(n)} que determine la parte entera de la raíz cuadrada de un número entero positivo, sin utilizar \texttt{sqrt()}.
+
+Puedes buscar mediante un bucle el mayor entero $k$ que cumpla \[ k^2\leq n. \]
+
+Después define una función \texttt{es\_cuadrado\_perfecto(n)} que utilice \texttt{raiz\_entera()} para determinar si $n$ es un cuadrado perfecto.
+
+Por ejemplo, 49 y 100 son cuadrados perfectos, mientras que 50 no lo es. 
+\end{exercise}
+
+\begin{exercise} Diseña un programa modular que estudie los números entre 1 y $n$.
+
+Define las siguientes funciones:
+
+\begin{itemize}
+	\item \texttt{es\_primo(n)};
+	\item \texttt{es\_perfecto(n)};
+	\item \texttt{es\_capicua(n)};
+	\item \texttt{suma\_digitos(n)}.
+\end{itemize}
+
+Finalmente, define \texttt{analizar\_rango(n)} que recorra los números desde 1 hasta $n$ y muestre aquellos que cumplan simultáneamente dos condiciones elegidas por ti.
+
+Por ejemplo, puedes buscar números que sean primos y capicúas.
+
+No utilices vectores ni matrices.
+\end{exercise}
+
+\fi
+
+
+
+\section{Un último ejercicio}
+
+
+Por supuesto, esto debe estar documentado.
+
+\begin{exercise} Escribe un fichero \texttt{README.md} para tu directorio donde guardarás la práctica 5. El aspecto debe ser similar al de los README que hiciste en la práctica 4 para las prácticas 1 y 3. 
+\end{exercise}
+
+
+
+
+
+% ============================================================
+\section{Entrega y consejos}
+% ============================================================
+
+
+Sube los ficheros con los ejercicios a tu \GitHub\ en la fecha acordada con el profesor. Para esta práctica:
+\begin{enumerate}
+	\item guarda tus scripts en la carpeta de la práctica correspondiente;
+	\item utiliza nombres de fichero claros y consistentes;
+	\item comenta el código para facilitar su comprensión;
+	\item comprueba que puedes ejecutar de nuevo cada script desde el principio;
+	\item evita depender de instrucciones que hayan quedado solamente en la consola.
+\end{enumerate}
+
+
+\begin{center} 
+	\textbf{\color{azuluc}Idea clave:} un programa complejo puede construirse a partir de funciones pequeñas y reutilizables. Los bucles permiten repetir procesos, los condicionales permiten tomar decisiones y la recursividad permite resolver un problema a partir de una versión más pequeña del mismo problema. 
+\end{center}
+
+\end{document}
