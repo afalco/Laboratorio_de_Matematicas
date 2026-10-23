@@ -1,0 +1,629 @@
+\documentclass[11pt,a4paper]{article}
+
+% ------------------------------------------------------------
+% Paquetes
+% ------------------------------------------------------------
+\usepackage[margin=2.6cm]{geometry}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amsthm}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{fontawesome5}
+
+% ------------------------------------------------------------
+% Colores
+% ------------------------------------------------------------
+\definecolor{azuluc}{HTML}{1F4E79}
+\definecolor{grisclaro}{HTML}{F4F6F8}
+\definecolor{gris}{HTML}{586069}
+\definecolor{verde}{HTML}{2E7D32}
+\definecolor{rojo}{HTML}{A94442}
+\definecolor{git}{HTML}{F1502F}
+
+% ------------------------------------------------------------
+% Estilos de código R
+% ------------------------------------------------------------
+\lstdefinestyle{rstyle}{
+  language=R,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{azuluc}\bfseries,
+  commentstyle=\color{gris},
+  stringstyle=\color{verde!70!black},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris!30},
+  backgroundcolor=\color{grisclaro},
+  breaklines=true,
+  showspaces=false,
+  tabsize=2,
+  literate=
+    {á}{{\'a}}1
+    {é}{{\'e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {ú}{{\'u}}1
+    {Á}{{\'A}}1
+    {É}{{\'E}}1
+    {Í}{{\'I}}1
+    {Ó}{{\'O}}1
+    {Ú}{{\'U}}1
+    {ñ}{{\~n}}1
+    {Ñ}{{\~N}}1
+    {ü}{{\"u}}1
+    {Ü}{{\"U}}1
+}
+
+\lstdefinestyle{rconsole}{
+  language=R,
+  basicstyle=\color{rojo}\ttfamily\small,
+  showstringspaces=false,
+  columns=fullflexible,
+  frame=single,
+  rulecolor=\color{gris!30},
+  breaklines=true,
+  tabsize=2
+}
+
+\lstdefinestyle{routput}{
+  language=R,
+  basicstyle=\color{azuluc}\ttfamily\small,
+  showstringspaces=false,
+  columns=fullflexible,
+  frame=single,
+  rulecolor=\color{gris!30},
+  breaklines=true,
+  tabsize=2,
+  literate=
+    {á}{{\'a}}1
+    {é}{{\'e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {ú}{{\'u}}1
+    {Á}{{\'A}}1
+    {É}{{\'E}}1
+    {Í}{{\'I}}1
+    {Ó}{{\'O}}1
+    {Ú}{{\'U}}1
+    {ñ}{{\~n}}1
+    {Ñ}{{\~N}}1
+    {ü}{{\"u}}1
+    {Ü}{{\"U}}1
+}
+
+% ------------------------------------------------------------
+% Comandos y entorno de ejercicios
+% ------------------------------------------------------------
+\newcommand{\R}{\textcolor{azuluc}{\faIcon{r-project}}}
+\newcommand{\Git}{\textcolor{git}{\faIcon{git-alt}}~\!Git}
+\newcommand{\GitHub}{\faIcon{github}~\!GitHub}
+
+
+\newtheoremstyle{exercise}
+  {0.8em}{0.8em}{\normalfont}{}{\bfseries\color{azuluc}}{.}{0.5em}{}
+\theoremstyle{exercise}
+\newtheorem{exercise}{Ejercicio}
+
+% ------------------------------------------------------------
+% Metadatos
+% ------------------------------------------------------------
+\title{\LARGE \textbf{Práctica 3: Funciones, condicionales y bucles en \R} \\[0.5em]
+\Large Laboratorio de Matemáticas \\
+\small \ \\
+Grado en Ingeniería Matemática - Doble Grado en Física e Ingeniería Matemática}
+\author{Miguel Beltra Vidal}
+\date{Curso 2026/27}
+
+% ------------------------------------------------------------
+% Documento
+% ------------------------------------------------------------
+\begin{document}
+
+\maketitle
+
+% ============================================================
+\section{Objetivos}
+% ============================================================
+
+El objetivo de esta práctica es introducir algunas de las estructuras fundamentales de programación en \R. Al finalizarla, el estudiante será capaz de definir y utilizar funciones propias, utilizar estructuras condicionales mediante \texttt{if}, \texttt{else if} y \texttt{else}, utilizar bucles \texttt{for} y \texttt{while}, y utilizar \texttt{break} y \texttt{next} para controlar la ejecución de un bucle.
+
+
+\section{Mostrando texto por pantalla}
+
+En \R, los \textbf{strings} o cadenas de texto se representan escribiendo el texto entre comillas simples (\verb|'...'|) o dobles (\verb|"..."|). Se pueden almacenar en variables y combinar con otros textos. Para mostrar información por consola se utiliza principalmente la función \texttt{print()}, que muestra el contenido de un objeto, o \texttt{cat()}, que permite construir mensajes combinando diferentes elementos de forma más flexible. Por ejemplo:
+
+\begin{lstlisting}[style=rstyle]
+nombre <- "Ana"
+edad <- 20
+
+print(nombre)
+print(edad)
+
+cat("Hola", nombre, "tienes", edad, "años.\n")
+\end{lstlisting}
+
+\noindent En este caso, \texttt{print()} muestra cada objeto por separado, mientras que \texttt{cat()} permite crear un mensaje completo. El carácter \texttt{\textbackslash n} representa un \textbf{salto de línea}.
+
+
+
+% ============================================================
+\section{Funciones}
+% ============================================================
+
+Una función es un bloque de código que realiza una determinada tarea. Las funciones permiten organizar el código y reutilizar instrucciones sin tener que escribirlas varias veces. En \R, una función se define mediante la palabra reservada \texttt{function}.
+La estructura básica es:
+
+\begin{lstlisting}[style=rstyle]
+nombre <- function(argumento1, argumento2) {
+	instrucciones
+}
+\end{lstlisting}
+
+\noindent Por ejemplo, podemos definir una función que calcule el cuadrado de un número:
+
+\begin{lstlisting}[style=rstyle]
+cuadrado <- function(x) {
+	x^2
+}
+\end{lstlisting}
+
+\noindent Una vez definida, podemos utilizarla tantas veces como queramos:
+
+\begin{lstlisting}[style=rconsole]
+> cuadrado(3)
+\end{lstlisting}
+
+\noindent La salida será:
+
+\begin{lstlisting}[style=routput]
+[1] 9
+\end{lstlisting}
+
+\noindent También podemos almacenar el resultado en una variable:
+
+\begin{lstlisting}[style=rconsole]
+> resultado <- cuadrado(7)
+> resultado
+\end{lstlisting}
+
+\begin{exercise}
+Define las siguientes funciones:
+
+\begin{enumerate}[label=\alph*)]
+  \item Una función \texttt{doble(x)} que devuelva el doble de un número.
+  \item Una función \texttt{mitad(x)} que devuelva la mitad de un número.
+  \item Una función \texttt{area\_circulo(r)} que calcule el área de un círculo de radio \texttt{r}.
+  \item Una función \texttt{media(a,b,c)} que calcule la media aritmética de tres números.
+  \item Una función \texttt{hipotenusa(b,c)} que calcule la hipotenusa de un triángulo rectángulo cuyos catetos son \texttt{b} y \texttt{c}.
+\end{enumerate}
+
+\noindent Comprueba cada una de las funciones con varios valores diferentes.
+\end{exercise}
+
+% ============================================================
+\subsection{El valor que devuelve una función}
+% ============================================================
+
+En \R, una función devuelve normalmente el resultado de la última expresión evaluada. Por ejemplo:
+
+\begin{lstlisting}[style=rstyle]
+area_rectangulo <- function(base, altura) {
+	area <- base * altura
+	area
+}
+\end{lstlisting}
+
+\noindent Podemos utilizarla de la siguiente manera:
+
+\begin{lstlisting}[style=rconsole]
+> area_rectangulo(4, 7)
+\end{lstlisting}
+
+\noindent obteniendo:
+
+\begin{lstlisting}[style=routput]
+[1] 28
+\end{lstlisting}
+
+\noindent También podemos utilizar explícitamente la instrucción \texttt{return()}:
+
+\begin{lstlisting}[style=rstyle]
+area_rectangulo <- function(base, altura) {
+	area <- base * altura
+	return(area)
+}
+\end{lstlisting}
+
+\noindent Las dos formas son válidas.
+
+\begin{exercise}
+Define una función \texttt{distancia(x1,y1,x2,y2)} que calcule la distancia euclídea entre dos puntos $P=(x_1,y_1)$ y $Q=(x_2,y_2)$. Recuerda que la distancia euclídea se define como:
+\[
+d(P,Q)=\sqrt{(x_2-x_1)^2+(y_2-y_1)^2}.
+\]
+\noindent Calcula la distancia entre los puntos \texttt{(1,2)} y \texttt{(4,6)}.
+\end{exercise}
+
+% ============================================================
+\subsection{Argumentos por defecto}
+% ============================================================
+
+Una función puede tener argumentos con valores por defecto. Por ejemplo:
+
+\begin{lstlisting}[style=rstyle]
+potencia <- function(x, n = 2) {
+	x^n
+}
+\end{lstlisting}
+
+\noindent En este caso, si no especificamos \texttt{n}, se utiliza el valor 2:
+
+\begin{lstlisting}[style=rconsole]
+> potencia(5)
+\end{lstlisting}
+
+\noindent produce:
+
+\begin{lstlisting}[style=routput]
+[1] 25
+\end{lstlisting}
+
+\noindent Pero también podemos indicar otro exponente:
+
+\begin{lstlisting}[style=rconsole]
+> potencia(5, 3)
+\end{lstlisting}
+
+\noindent que produce:
+
+\begin{lstlisting}[style=routput]
+[1] 125
+\end{lstlisting}
+
+\begin{exercise}
+Define una función \texttt{saludo(nombre = ``estudiante'')} que muestre un mensaje de bienvenida. Comprueba el funcionamiento de:
+
+\begin{lstlisting}[style=rconsole]
+> saludo()
+> saludo("Ana")
+\end{lstlisting}
+
+\noindent Debería salir:
+\begin{lstlisting}[style=routput]
+[1] Hola estudiante, te damos la bienvenida
+[1] Hola Ana, te damos la bienvenida
+\end{lstlisting}
+
+
+%A continuación, define una función \texttt{redondear(x,n=2)} que redondee \texttt{x} a \texttt{n} cifras decimales.
+\end{exercise}
+
+% ============================================================
+\section{Estructuras condicionales}
+% ============================================================
+
+En muchas situaciones necesitamos que un programa realice una acción u otra dependiendo de que se cumpla una determinada condición. En \R\ podemos utilizar la estructura:
+
+\begin{lstlisting}[style=rstyle]
+if (condicion) {
+  instrucciones
+}
+\end{lstlisting}
+
+\noindent Por ejemplo:
+
+\begin{lstlisting}[style=rstyle]
+x <- 7
+
+if (x > 0) {
+	print("El número es positivo")
+}
+\end{lstlisting}
+
+\noindent Como $7>0$, el programa mostrará:
+
+\begin{lstlisting}[style=routput]
+[1] "El número es positivo"
+\end{lstlisting}
+
+\noindent Si la condición no se cumple, no se ejecuta el código contenido dentro del \texttt{if}.
+
+% ============================================================
+\subsection{La estructura \texttt{if ... else}}
+% ============================================================
+
+Cuando queremos elegir entre dos posibilidades podemos utilizar \texttt{else}:
+
+\begin{lstlisting}[style=rstyle]
+x <- -3
+
+if (x >= 0) {
+	print("El número es no negativo")
+} else {
+	print("El número es negativo")
+}
+\end{lstlisting}
+
+\begin{exercise} Escribe una función \texttt{signo(x)} que:
+
+\begin{itemize}[leftmargin=*]
+  \item devuelva \texttt{``positivo''} si $x>0$;
+  \item devuelva \texttt{``negativo''} si $x<0$;
+  \item devuelva \texttt{``cero''} si $x=0$.
+\end{itemize}
+
+\noindent Comprueba el funcionamiento de la función para los valores
+\[
+8,\ -3,\ 0,\ 15,\ -12.
+\]
+\end{exercise}
+
+% ============================================================
+\subsection{Varias condiciones}
+% ============================================================
+
+Cuando tenemos más de dos posibilidades podemos utilizar \texttt{else if}. Por ejemplo:
+
+\begin{lstlisting}[style=rstyle]
+nota <- 7.5
+
+if (nota < 5) {
+  	print("Suspenso")
+} else if (nota < 7) {
+  	print("Aprobado")
+} else if (nota < 9) {
+  	print("Notable")
+} else {
+  	print("Sobresaliente")
+}
+\end{lstlisting}
+
+Observa que, aunque \texttt{nota} cumple varias condiciones, únicamente se ejecuta la primera el primer bloque para el que la condición es cierta.
+
+
+\begin{exercise}
+Define una función \texttt{calificacion(nota)} que reciba una nota numérica y muestre:
+
+\begin{itemize}[leftmargin=*]
+	\item \texttt{``Suspenso''} si la nota es menor que 5;
+	\item \texttt{``Aprobado''} si está entre 5 y 7;
+	\item \texttt{``Notable''} si está entre 7 y 9;
+	\item \texttt{``Sobresaliente''} si es mayor o igual que 9.
+\end{itemize}
+
+\noindent Comprueba qué ocurre con los valores 
+\[ 3.5,\ 5,\ 6.9,\ 7,\ 8.5,\ 9,\ 10. \]
+ ¿Qué ocurre si introducimos una nota negativa o una nota mayor que 10? Modifica la función para detectar esos casos.
+\end{exercise}
+
+% ============================================================
+\subsection{Condiciones múltiples}
+% ============================================================
+
+Las condiciones pueden combinarse mediante operadores lógicos. Por ejemplo:
+
+\begin{lstlisting}[style=rstyle]
+x <- 8
+if (x >= 5 && x <= 10) {
+	print("El número está entre 5 y 10")
+}
+\end{lstlisting}
+
+\noindent También podemos utilizar el operador \texttt{||}:
+
+\begin{lstlisting}[style=rstyle]
+x <- -2
+if (x < 0 || x > 100) {
+	print("El número está fuera del intervalo [0,100]")
+}
+\end{lstlisting}
+
+\begin{exercise}
+Escribe una función \texttt{en\_intervalo(x,a,b)} que indique si \texttt{x} pertenece al intervalo cerrado $[a,b]$. Por defecto, la función deberá comprobar que \texttt{x} pertenece a $[0,1]$. Por ejemplo:
+
+\begin{lstlisting}[style=rconsole]
+> en_intervalo(5, 1, 10)
+\end{lstlisting}
+
+\begin{lstlisting}[style=routput]
+[1] TRUE
+\end{lstlisting}
+
+\noindent mientras que
+
+\begin{lstlisting}[style=rconsole]
+> en_intervalo(15, 1, 10)
+\end{lstlisting}
+
+\begin{lstlisting}[style=routput]
+[1] FALSE
+\end{lstlisting}
+\end{exercise}
+
+% ============================================================
+\section{El bucle \texttt{for}}
+% ============================================================
+
+Los bucles permiten repetir un conjunto de instrucciones varias veces. La estructura básica de un bucle \texttt{for} es:
+
+\begin{lstlisting}[style=rstyle]
+for (variable in secuencia) {
+  instrucciones
+}
+\end{lstlisting}
+
+\noindent Por ejemplo:
+
+\begin{lstlisting}[style=rstyle]
+for (i in 1:5) {
+  print(i)
+}
+\end{lstlisting}
+
+\noindent produce:
+
+\begin{lstlisting}[style=routput]
+[1] 1
+[1] 2
+[1] 3
+[1] 4
+[1] 5
+\end{lstlisting}
+
+\noindent También podemos utilizar un bucle para realizar cálculos:
+
+\begin{lstlisting}[style=rstyle]
+for (i in 1:5) {
+  print(i^2)
+}
+\end{lstlisting}
+
+\begin{exercise}
+Escribe funciones que utilicen un bucle \texttt{for} para:
+
+\begin{enumerate}[label=\alph*)]
+  \item Mostrar los números enteros del 1 al 20.
+  \item Mostrar los números pares entre 1 y 50.
+  \item Mostrar los cuadrados de los números del 1 al 10.
+  \item Mostrar las potencias de 2 desde $2^0$ hasta $2^{10}$.
+  \item Mostrar la tabla de multiplicar del 7.
+\end{enumerate}
+\end{exercise}
+
+% ============================================================
+\subsection{Acumuladores}
+% ============================================================
+
+Los bucles son especialmente útiles para calcular sumas y productos. Por ejemplo, podemos calcular la suma de los primeros 10 números naturales mediante:
+
+\begin{lstlisting}[style=rstyle]
+suma <- 0
+
+for (i in 1:10) {
+  suma <- suma + i
+}
+
+suma
+\end{lstlisting}
+
+\noindent El resultado será:
+
+\begin{lstlisting}[style=routput]
+[1] 55
+\end{lstlisting}
+
+\noindent Observa que la variable \texttt{suma} va acumulando los resultados parciales.
+
+\begin{exercise}
+Utiliza bucles \texttt{for} para calcular:
+
+\begin{enumerate}[label=\alph*)]
+  \item La suma de los números del 1 al 100.
+  \item La suma de los números pares del 1 al 100.
+  \item El producto de los números del 1 al 10.
+  \item La suma $1^2+2^2+3^2+\cdots+100^2$.
+  \item La suma $\dfrac11+\dfrac12+\dfrac13+\cdots+\dfrac1{100}$.
+\end{enumerate}
+\end{exercise}
+
+% ============================================================
+\section{El bucle \texttt{while}}
+% ============================================================
+
+Otra estructura repetitiva disponible en \R\ es \texttt{while}. Su estructura es:
+
+\begin{lstlisting}[style=rstyle]
+while (condicion) {
+  instrucciones
+}
+\end{lstlisting}
+
+\noindent Las instrucciones se ejecutan mientras la condición sea verdadera. Por ejemplo:
+
+\begin{lstlisting}[style=rstyle]
+i <- 1
+
+while (i <= 5) {
+  print(i)
+  i <- i + 1
+}
+\end{lstlisting}
+
+\noindent produce los números del 1 al 5.
+
+Es importante modificar alguna variable relacionada con la condición dentro del bucle.
+De lo contrario, podemos crear un \textbf{bucle infinito}, esto es, un bucle que no termine.
+
+\begin{exercise}
+Utiliza un bucle \texttt{while} para:
+
+\begin{enumerate}[label=\alph*)]
+  \item Mostrar los números del 1 al 20.
+  \item Mostrar los números impares menores que 50.
+  \item Calcular la suma de los números del 1 al 100.
+  \item Calcular cuántas veces podemos dividir 1000 entre 2 antes de obtener un número menor que 1.
+\end{enumerate}
+\end{exercise}
+
+% ============================================================
+\section{\texttt{break} y \texttt{next}}
+% ============================================================
+
+La instrucción \texttt{break} permite terminar inmediatamente un bucle. Por ejemplo:
+
+\begin{lstlisting}[style=rstyle]
+for (i in 1:100) {
+  if (i > 10) {
+    break
+  }
+  print(i)
+}
+\end{lstlisting}
+
+\noindent Aunque el bucle está definido hasta 100, termina cuando \texttt{i} supera 10. 
+
+La instrucción \texttt{next} permite saltar a la siguiente iteración:
+
+\begin{lstlisting}[style=rstyle]
+for (i in 1:10) {
+  if (i %% 2 == 0) {
+    next
+  }
+  print(i)
+}
+\end{lstlisting}
+
+\noindent Esta función muestra solamente los números impares.
+
+\begin{exercise}\ 
+\begin{enumerate}[label=\alph*)]
+  \item Utiliza \texttt{break} para recorrer los números del 1 al 100 y detener el bucle cuando aparezca el primer múltiplo de 17 mayor que 50.
+  \item Utiliza \texttt{next} para mostrar los números del 1 al 30 excepto aquellos que sean múltiplos de 3.
+  \item Modifica el ejercicio anterior para mostrar únicamente los números que sean múltiplos de 3 pero no de 5.
+\end{enumerate}
+\end{exercise}
+
+
+%
+% ============================================================
+\section{Entrega y consejos}
+% ============================================================
+
+
+Sube tus ficheros a \GitHub\ antes de la fecha acordada con el profesor. Revisa el flujo habitual de trabajo de \Git\ que se encuentra al final del enunciado de la práctica 2. Acuérdate de seguir una estructura ordenada de directorios y ficheros. Comenta tus scripts para que en un futuro puedas acordarte de qué hace cada uno.
+
+\bigskip
+
+
+\textbf{\color{azuluc}Idea clave:} las funciones permiten reutilizar código, las estructuras condicionales permiten tomar decisiones y los bucles permiten repetir instrucciones.
+
+
+\end{document}
