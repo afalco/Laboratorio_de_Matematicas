@@ -1,0 +1,610 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin={2.6cm,2.6cm}]{geometry}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amsthm, amsfonts}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{graphicx}
+ \usepackage{float}
+\usepackage{listings}
+\usepackage{fontawesome5}
+\usepackage{dirtree}
+
+\spanishdecimal{.}
+
+
+\definecolor{azuluc}{HTML}{1F4E79}
+\definecolor{grisclaro}{HTML}{F4F6F8}
+\definecolor{gris}{HTML}{586069}
+\definecolor{verde}{HTML}{2E7D32}
+\definecolor{rojo}{HTML}{A94442}
+\definecolor{git}{HTML}{F1502F}
+
+\definecolor{morado_ubuntu}{RGB}{48, 10, 36}       % Fondo morado oscuro de Ubuntu GNOME
+\definecolor{verde_ubuntu}{RGB}{78, 154, 6}        % Verde para comentarios
+\definecolor{cyan_ubuntu}{RGB}{52, 226, 226}       % Cian para comandos
+\definecolor{amarillo_ubuntu}{RGB}{250, 240, 190}  % Amarillo para cadenas
+\definecolor{rojo_ubuntu}{RGB}{220, 50, 47}        % Rojo para errores
+\definecolor{verde_claro_ubuntu}{RGB}{138, 226, 52} % Verde claro para el prompt
+\definecolor{azul_ubuntu}{RGB}{114, 159, 207}      % Azul para símbolos y rutas
+\definecolor{gris_ubuntu}{RGB}{128, 128, 128}      % Gris para el borde del frame
+
+
+\definecolor{fondo_mac}{RGB}{255, 255, 250}       % Fondo beige claro típico de macOS
+\definecolor{negro}{RGB}{0, 0, 0}                 % Texto en negro
+\definecolor{verde_mac}{RGB}{63, 127, 95}         % Verde para comentarios
+\definecolor{azul_mac}{RGB}{0, 0, 255}            % Azul para comandos y prompt
+\definecolor{rojo_mac}{RGB}{196, 26, 22}          % Rojo para errores y cadenas
+\definecolor{morado_mac}{RGB}{147, 39, 143}       % Morado para emphasis (opcional)
+\definecolor{gris_mac}{RGB}{200, 200, 200}        % Gris para el borde del frame
+
+\definecolor{DarkGreen}{RGB}{0,102,0}
+\definecolor{DarkYellow}{RGB}{243,220,12}
+
+
+
+\lstdefinestyle{rstyle}{
+  language=R,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{azuluc}\bfseries,
+  commentstyle=\color{gris},
+  stringstyle=\color{verde!70!black},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris!30},
+  backgroundcolor=\color{grisclaro},
+  breaklines=true,
+  showspaces=false,
+  tabsize=2,
+    literate=
+    {á}{{\'a}}1
+    {é}{{\'e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {ú}{{\'u}}1
+    {Á}{{\'A}}1
+    {É}{{\'E}}1
+    {Í}{{\'I}}1
+    {Ó}{{\'O}}1
+    {Ú}{{\'U}}1
+    {ñ}{{\~n}}1
+    {Ñ}{{\~N}}1
+    {ü}{{\"u}}1
+    {Ü}{{\"U}}1
+    {¡}{{\textexclamdown}}1
+	{`}{\textasciigrave}1 
+    {´}{\textquotesingle}1,
+}
+
+\lstdefinestyle{rconsole}{
+  language=R,
+  basicstyle=\color{rojo}\ttfamily\small,
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris!30},
+  breaklines=true,
+  tabsize=2,
+  literate=
+    {á}{{\'a}}1
+    {é}{{\'e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {ú}{{\'u}}1
+    {Á}{{\'A}}1
+    {É}{{\'E}}1
+    {Í}{{\'I}}1
+    {Ó}{{\'O}}1
+    {Ú}{{\'U}}1
+    {ñ}{{\~n}}1
+    {Ñ}{{\~N}}1
+    {ü}{{\"u}}1
+    {Ü}{{\"U}}1
+    {¡}{{\textexclamdown}}1
+	{`}{\textasciigrave}1 
+    {´}{\textquotesingle}1,
+}
+
+\lstdefinestyle{routput}{
+  language=R,
+  basicstyle=\color{azuluc}\ttfamily\small,
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris!30},
+  breaklines=true,
+  tabsize=2,
+  literate=
+    {á}{{\'a}}1
+    {é}{{\'e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {ú}{{\'u}}1
+    {Á}{{\'A}}1
+    {É}{{\'E}}1
+    {Í}{{\'I}}1
+    {Ó}{{\'O}}1
+    {Ú}{{\'U}}1
+    {ñ}{{\~n}}1
+    {Ñ}{{\~N}}1
+    {ü}{{\"u}}1
+    {Ü}{{\"U}}1
+    {¡}{{\textexclamdown}}1
+	{`}{\textasciigrave}1 
+    {´}{\textquotesingle}1,
+}
+
+\lstdefinestyle{mdstyle}{
+  basicstyle=\ttfamily\footnotesize,
+  keywordstyle=\color{azuluc}\bfseries,
+  commentstyle=\color{gris},
+  showstringspaces=false,
+  showspaces=false,
+  tabsize=2,
+  frame=single,
+  rulecolor=\color{gris!30},
+  backgroundcolor=\color{grisclaro},
+  breaklines=true,
+  breakatwhitespace=false,
+  % Títulos Markdown
+  morecomment=[l][\color{azuluc}\bfseries]{\#},
+  % Enlaces y referencias
+  morecomment=[s][\color{verde}]{(}{)},
+  % Cadenas
+  morestring=[b][\color{naranja}]{"},
+  morestring=[b][\color{naranja}]{'},
+  % Lenguajes utilizados en bloques de código
+  classoffset=1,
+    keywordstyle=\color{morado}\bfseries,
+    morekeywords={python,bash,R,latex,json,yaml},
+  classoffset=0,
+  % Protocolos y enlaces
+  emph={http,https,ftp},
+  escapeinside={-@}{@-},
+  emphstyle=\color{azuluc}\underbar,   
+   literate=
+    {á}{{\'a}}1
+    {é}{{\'e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {ú}{{\'u}}1
+    {Á}{{\'A}}1
+    {É}{{\'E}}1
+    {Í}{{\'I}}1
+    {Ó}{{\'O}}1
+    {Ú}{{\'U}}1
+    {ñ}{{\~n}}1
+    {Ñ}{{\~N}}1
+    {ü}{{\"u}}1
+    {Ü}{{\"U}}1
+    {¡}{{\textexclamdown}}1
+	{`}{\textasciigrave}1 
+    {´}{\textquotesingle}1,
+}
+
+\lstdefinestyle{ubuntugnome}{
+  basicstyle=\ttfamily\small\color{white},
+  backgroundcolor=\color{morado_ubuntu},
+  commentstyle=\color{verde_ubuntu},
+  keywordstyle=\color{cyan_ubuntu},
+  stringstyle=\color{amarillo_ubuntu},
+  emphstyle=\color{rojo_ubuntu},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris_ubuntu},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{white}{$\hookrightarrow$}\space},
+  % Configuración para simular el prompt de Ubuntu
+  upquote=true,
+  % Resaltar el prompt de usuario
+  emph={user@ubuntu:~\$},
+  emphstyle={\color{verde_claro_ubuntu}\bfseries},
+  % Resaltar errores (ej: "command not found")
+  classoffset=1,
+  emph={command not found,No such file or directory,Permission denied},
+  emphstyle={\color{rojo_ubuntu}},
+  classoffset=0,
+}
+
+\lstdefinestyle{macterminal}{
+  basicstyle=\ttfamily\small\color{negro},
+  backgroundcolor=\color{fondo_mac},
+  commentstyle=\color{verde_mac},
+  keywordstyle=\color{azul_mac},
+  stringstyle=\color{rojo_mac},
+  emphstyle=\color{morado_mac},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris_mac},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{negro}{$\hookrightarrow$}\space},
+  % Configuración para simular el prompt de macOS
+  upquote=true,
+  % Resaltar el prompt de usuario
+  emphstyle={\color{azul_mac}\bfseries},
+  % Resaltar errores (ej: "command not found")
+  classoffset=1,
+  emph={command not found,No such file or directory,Permission denied},
+  emphstyle={\color{rojo_mac}},
+  classoffset=0
+}
+
+\lstdefinestyle{windowscmd}{
+  basicstyle=\ttfamily\small\color{white},
+  backgroundcolor=\color{black},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris_mac},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{negro}{$\hookrightarrow$}\space},
+  % Configuración para simular el prompt de macOS
+  upquote=true,
+  % Resaltar el prompt de usuario
+  emphstyle={\color{azul_mac}\bfseries},
+  % Resaltar errores (ej: "command not found")
+  classoffset=1,
+  emph={command not found,No such file or directory,Permission denied},
+  emphstyle={\color{rojo_mac}},
+  classoffset=0
+}
+
+
+
+\newcommand*{\vsp}{\texttt{\textvisiblespace}} % visible space
+
+\newcommand*{\strC}{\begingroup
+  \obeyspaces
+  \begingroup\lccode`~=`\ %
+  \lowercase{\endgroup\let~}\vsp
+  \dostrC}
+\newcommand{\dostrC}[1]{\textnormal{{\slshape\ttfamily#1}}\endgroup} % string constant
+
+
+\newcommand{\R}{\textcolor{azuluc}{\faIcon{r-project}}}
+\newcommand{\Git}{\textcolor{git}{\faIcon{git-alt}}~\!Git}
+\newcommand{\GitHub}{\faIcon{github}~\!GitHub}
+\newcommand{\Markdown}{Markdown~\faIcon{markdown}}
+
+
+
+\newcommand{\checkicon}{\textcolor{verde}{\faIcon{check}}}
+\newcommand{\crossicon}{\textcolor{rojo}{\faIcon{times}}}
+
+\newtheoremstyle{exercise}
+  {0.8em}{0.8em}{\normalfont}{}{\bfseries\color{azuluc}}{.}{0.5em}{}
+\theoremstyle{exercise}
+\newtheorem{exercise}{Ejercicio}
+
+\title{\LARGE\textbf{Práctica 8: Introducción al análisis estadístico con \R}\\[0.5em]
+\Large Laboratorio de Matemáticas\\
+\small\ \\
+\Large Grado en Ingeniería Matemática - Doble Grado en Física e Ingeniería Matemática}
+\author{Miguel Beltra Vidal}
+\date{Curso 2026/27}
+
+\begin{document}
+\maketitle
+
+\section{Objetivos}
+
+El objetivo de esta práctica es aprender las funciones básicas de \R\ para realizar cálculos estadísticos. Al acabar la práctica, el estudiante podrá realizar cálculos estadísticos básicos usando \R.
+
+
+\section{Librerías en \R}
+
+Librerías (o paquetes) en \R.
+
+
+
+\begin{lstlisting}[style=rconsole]
+install.packages("faraway")
+\end{lstlisting}
+
+\begin{lstlisting}[style=routput]
+\end{lstlisting}
+
+
+library(faraway)
+
+
+\section{Cargar datos en \R}
+
+
+
+read.csv()
+
+
+
+\begin{lstlisting}[style=rconsole]
+data(Salaries)
+\end{lstlisting}
+
+\begin{lstlisting}[style=routput]
+\end{lstlisting}
+
+
+
+
+
+\section{Variables cualitativas}
+
+Las variables cualitativas (también llamadas categóricas) son aquellas que hacen referencia a las cualidades distintivas de cada uno de los individuos de la muestra.
+
+\subsection{Análisis numérico de variables cualitativas}
+
+\begin{lstlisting}[style=rconsole]
+table()
+\end{lstlisting}
+
+
+
+\subsection{Representación gráfica de variables cualitativas}
+
+\subsubsection{Gráficos de barras}
+
+La función \texttt{barplot()} permite representar cantidades asociadas a diferentes categorías.
+
+\begin{lstlisting}[style=rstyle]
+notas <- c(4, 7, 6, 9, 8)
+nombres <- c("Ana", "Luis", "Marta", "Pablo", "Sara")
+barplot(notas, names.arg = nombres)
+\end{lstlisting}
+
+
+
+\subsubsection{Gráficos de sectores}
+
+La función \texttt{pie()} permite representar proporciones de diferentes categorías.
+
+\begin{lstlisting}[style=rstyle]
+ventas <- c(30, 25, 20, 15, 10)
+productos <- c("A", "B", "C", "D", "E")
+pie(ventas, labels = productos)
+\end{lstlisting}
+
+
+
+
+
+\section{Variables cuantitativas}
+
+\subsection{Análisis numérico de variables cuantitativas}
+
+mean(x)
+
+median(x)
+
+quantile(x, probs=p)
+
+range(x)
+
+quantile(edad,.75)-quantile(edad,.25)
+
+var(edad)
+
+var(edad)*(n-1)/n
+
+sd(edad)
+
+sd(edad)*(n-1)/n
+
+CV<-(sqrt(var(edad)))/(abs(mean(edad)))
+
+library(fBasics)
+> skewness(edad
+
+summary(x)
+
+fivenum()
+
+
+
+\subsection{Representación gráfica de variables cuantitativas}
+
+
+\subsubsection{Histogramas}
+Los histogramas permiten estudiar cómo se distribuyen los valores de una variable numérica.
+
+\begin{lstlisting}[style=rstyle]
+edades <- c(18, 19, 20, 20, 21, 21, 21, 22, 23,
+            24, 24, 25, 26, 27, 28, 30, 31, 35)
+hist(edades)
+\end{lstlisting}
+
+
+
+\section{Análisis bivariante}
+
+\subsection{Dos variables cualitativas}
+
+
+\subsection{Una variable cuantitativa y una variable cualitativa nominal}
+
+
+\subsection{Una variable cuantitativa y una variable cualitativa ordinal}
+
+\section{Gráficos de líneas}
+
+
+Los gráficos de líneas son especialmente útiles para representar la evolución de una variable cuantitativa .
+
+\begin{lstlisting}[style=rstyle]
+temperaturas <- c(12, 14, 15, 18, 21, 23, 25, 24, 20, 17, 14, 12)
+meses <- c("Ene", "Feb", "Mar", "Abr", "May", "Jun",
+           "Jul", "Ago", "Sep", "Oct", "Nov", "Dic")
+\end{lstlisting}
+ç
+
+
+\subsection{Dos variables cuantitativas: regresión lineal}
+
+
+
+
+\section{Ejercicios}
+
+
+\begin{exercise} El fichero \texttt{Datos\_estudiantes.csv}, que puedes encontrar en BalckBoard, contiene un conjunto de datos sintéticos acerca del rendimiento de algunos estudiantes de distintos cursos de secundaria. Realiza un análisis estadístico de estos datos. Sigue los pasos siguientes:
+\begin{enumerate}
+	\item Carga el conjunto de datos en \R.
+	
+	\item Comprueba que el conjunto de datos se ha cargado bien. Utiliza las funciones \texttt{names()}, \texttt{head()}, \texttt{str()} y \texttt{View()} para comprobar que has cargado bien el conjunto de datos.
+	
+	\item Realiza un análisis de frecuencias de cada una de las variables 
+
+	\item Obtén las gráficas adecuadas para cada una de las variables cualitativas. 
+	
+	\item Realiza un análisis númerico de cada una de las variables cuantitativas: media, mediana, cuartiles, varianza, desviación típica, coeficiente de variación, simetría y curtosis. Comprueba que los datos obtenidos coinciden con aquellos dados por \texttt{summary()} o \texttt{fivenum()}.
+	
+	\item Obtén las gráficas adecuadas para cada una de las variables cuantitativas.
+	
+	\item Realiza un análisis bivariante de las variables cualitativas ... y .... Represéntalo gráficamente .
+	
+	\item Realiza un análisis bivariante de la variables cualitativa ... y la variable cuantitativa .... Represéntalo gráficamente. 
+	
+	\item Realiza un análisis bivariante de la variables cuantitativas ... y ... mediante regresión lineal. Represéntalo gráficamente. 
+\end{enumerate}
+\end{exercise}
+
+
+
+\begin{exercise} El fichero \texttt{Datos\_perros.csv}, que puedes encontrar en BalckBoard, contiene un conjunto de datos sintéticos acerca de un estudio sobre perros y el efecto de un nuevo complemento de hierro y vitamina B12 para mejorar los valores de hematocrito. Realiza un análisis estadístico de estos datos. Sigue los pasos siguientes:
+\begin{enumerate}
+	\item Carga el conjunto de datos en \R.
+	
+	\item Comprueba que el conjunto de datos se ha cargado bien. Utiliza las funciones \texttt{names()}, \texttt{head()}, \texttt{str()} y \texttt{View()} para comprobar que has cargado bien el conjunto de datos.
+	
+	\item Realiza un análisis de frecuencias de cada una de las variables 
+
+	\item Obtén las gráficas adecuadas para cada una de las variables cualitativas. 
+	
+	\item Realiza un análisis númerico de cada una de las variables cuantitativas: media, mediana, cuartiles, varianza, desviación típica, coeficiente de variación, simetría y curtosis. Comprueba que los datos obtenidos coinciden con aquellos dados por \texttt{summary()} o \texttt{fivenum()}.
+	
+	\item Obtén las gráficas adecuadas para cada una de las variables cuantitativas.
+	
+	\item Realiza un análisis bivariante de las variables cualitativas ... y .... Represéntalo gráficamente.
+	
+	\item Realiza un análisis bivariante de la variables cualitativa ... y la variable cuantitativa .... Represéntalo gráficamente. 
+	
+	\item Realiza un análisis bivariante de la variables cuantitativas ... y ... mediante regresión lineal. Represéntalo gráficamente. 
+\end{enumerate}
+\end{exercise}
+
+
+
+\begin{exercise} En este ejercicio haremos un análisis estadístico descriptivo del conjunto de datos \texttt{iris}, que se encuentra en la librería \texttt{datasets} y contiene información acerca flores de iris. Puedes encontrar información acerca de estos datos en:
+\begin{center}
+	\url{https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/iris.html}.
+\end{center}
+Sigue los pasos siguientes:
+\begin{enumerate}
+	\item Carga el conjunto de datos en \R.
+	
+	\item Comprueba que el conjunto de datos se ha cargado bien. Utiliza las funciones \texttt{names()}, \texttt{head()}, \texttt{str()} y \texttt{View()} para comprobar que has cargado bien el conjunto de datos.
+	
+	\item Realiza un análisis de frecuencias de cada una de las variables 
+
+	\item Obtén las gráficas adecuadas para cada una de las variables cualitativas. 
+	
+	\item Realiza un análisis númerico de cada una de las variables cuantitativas: media, mediana, cuartiles, varianza, desviación típica, coeficiente de variación, simetría y curtosis. Comprueba que los datos obtenidos coinciden con aquellos dados por \texttt{summary()} o \texttt{fivenum()}.
+	
+	\item Obtén las gráficas adecuadas para cada una de las variables cuantitativas.
+	
+	\item Realiza un análisis bivariante de las variables cualitativas ... y .... Represéntalo gráficamente.
+	
+	\item Realiza un análisis bivariante de la variables cualitativa ... y la variable cuantitativa .... Represéntalo gráficamente. 
+	
+	\item Realiza un análisis bivariante de la variables cuantitativas ... y ... mediante regresión lineal. Represéntalo gráficamente. 
+\end{enumerate}
+\end{exercise}
+
+
+
+\begin{exercise} En este ejercicio haremos un análisis estadístico descriptivo del conjunto de datos \texttt{airquality}, que se encuentra en la librería \texttt{datasets} y contiene información acerca de la calidad del aire en la ciudad de Nueva York entre mayo y septiembre de 1973. Puedes encontrar información acerca de estos datos en:
+\begin{center}
+	\url{https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/airquality.html}.
+\end{center}
+Sigue los pasos siguientes:
+\begin{enumerate}
+	\item Carga el conjunto de datos en \R.
+	
+	\item Comprueba que el conjunto de datos se ha cargado bien. Utiliza las funciones \texttt{names()}, \texttt{head()}, \texttt{str()} y \texttt{View()} para comprobar que has cargado bien el conjunto de datos.
+	
+	\item Realiza un análisis de frecuencias de cada una de las variables 
+
+	\item Obtén las gráficas adecuadas para cada una de las variables cualitativas. 
+	
+	\item Realiza un análisis númerico de cada una de las variables cuantitativas: media, mediana, cuartiles, varianza, desviación típica, coeficiente de variación, simetría y curtosis. Comprueba que los datos obtenidos coinciden con aquellos dados por \texttt{summary()} o \texttt{fivenum()}.
+	
+	\item Obtén las gráficas adecuadas para cada una de las variables cuantitativas.
+	
+	\item Realiza un análisis bivariante de las variables cualitativas ... y .... Represéntalo gráficamente .
+	
+	\item Realiza un análisis bivariante de la variables cualitativa ... y la variable cuantitativa .... Represéntalo gráficamente. 
+	
+	\item Realiza un análisis bivariante de la variables cuantitativas ... y ... mediante regresión lineal. Represéntalo gráficamente. 
+\end{enumerate}
+\end{exercise}
+
+
+
+\begin{exercise} En este ejercicio haremos un análisis estadístico descriptivo del conjunto de datos \texttt{Cars93}, que se encuentra en la librería \texttt{MASS} y contiene información sobre los coches en venta en Estados Unidos en 1993. Puedes encontrar información acerca de estos datos en:
+\begin{center}
+	\url{https://stat.ethz.ch/R-manual/R-devel/library/MASS/html/Cars93.html}
+\end{center}	
+Sigue los pasos siguientes:
+\begin{enumerate}
+	\item Carga el conjunto de datos en \R.
+	
+	\item Comprueba que el conjunto de datos se ha cargado bien. Utiliza las funciones \texttt{names()}, \texttt{head()}, \texttt{str()} y \texttt{View()} para comprobar que has cargado bien el conjunto de datos.
+	
+	\item Realiza un análisis de frecuencias de cada una de las variables 
+
+	\item Obtén las gráficas adecuadas para cada una de las variables cualitativas. 
+	
+	\item Realiza un análisis númerico de cada una de las variables cuantitativas: media, mediana, cuartiles, varianza, desviación típica, coeficiente de variación, simetría y curtosis. Comprueba que los datos obtenidos coinciden con aquellos dados por \texttt{summary()} o \texttt{fivenum()}.
+	
+	\item Obtén las gráficas adecuadas para cada una de las variables cuantitativas.
+	
+	\item Realiza un análisis bivariante de las variables cualitativas ... y .... Represéntalo gráficamente .
+	
+	\item Realiza un análisis bivariante de la variables cualitativa ... y la variable cuantitativa .... Represéntalo gráficamente. 
+	
+	\item Realiza un análisis bivariante de la variables cuantitativas ... y ... mediante regresión lineal. Represéntalo gráficamente. 
+\end{enumerate}
+\end{exercise}
+
+
+
+
+
+\section{README}
+Crea un fichero \texttt{README.md} que explique brevemente:
+\begin{itemize}
+\item el objetivo de la práctica;
+\item los datos utilizados en el ejercicio final;
+\item qué gráficos se han realizado;
+\item qué información proporciona cada gráfico;
+\item las principales conclusiones obtenidas.
+\end{itemize}
+
+Incluye también una breve reflexión sobre qué tipo de gráfico consideras más adecuado para representar diferentes tipos de información y por qué.
+
+\section*{Entrega}
+La práctica deberá entregarse en la fecha acordada con el profesor.
+
+Se deberá entregar:
+\begin{itemize}
+\item el fichero \texttt{.R} con el código de la práctica;
+\item el fichero \texttt{README.md};
+\item los datos utilizados, si se han obtenido de un fichero externo;
+\item cualquier otro fichero necesario para reproducir los resultados.
+\end{itemize}
+
+El código deberá ejecutarse correctamente desde el principio hasta el final.
+
+\end{document}
