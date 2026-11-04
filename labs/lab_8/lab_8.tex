@@ -333,15 +333,15 @@ summary(penguins)
 \medskip
 
 \begin{lstlisting}[style=rstyle]
-install.packages("faraway")  # solo la primera vez
-library(faraway)             # cargar el paquete en la sesión
+install.packages("carData")  # solo la primera vez
+library(carData)             # cargar el paquete en la sesión
 \end{lstlisting}
 
 \medskip
 
-\noindent Si el paquete ya está instalado, no es necesario volver a instalarlo. En cambio, hay que ejecutar \texttt{library(faraway)} cada vez que se inicia una nueva sesión en la que se quiera utilizar. Si queremos utilizar un conjunto de datos de una librería, lo podemos cargar también con \texttt{data()}. Por ejemplo, podemos cargar el conjunto de datos \texttt{Salaries} del paquete \texttt{faraway}.
+\noindent Si el paquete ya está instalado, no es necesario volver a instalarlo. En cambio, hay que ejecutar \texttt{library(carData)} cada vez que se inicia una nueva sesión en la que se quiera utilizar. Si queremos utilizar un conjunto de datos de una librería, lo podemos cargar también con \texttt{data()}. Por ejemplo, podemos cargar el conjunto de datos \texttt{Salaries} del paquete \texttt{carData}.
 \begin{lstlisting}[style=rstyle]
-data(Salaries, package = "faraway")
+data(Salaries, package = "carData")
 \end{lstlisting}
 
 
@@ -931,19 +931,15 @@ Sigue los pasos siguientes:
 \end{exercise}
 
 
-\section{README}
+\section{Un último ejercicio}
 
-Crea un fichero \texttt{README.md} que explique brevemente:
 
-\begin{itemize}
-\item el objetivo de la práctica;
-\item los datos utilizados en el ejercicio final;
-\item qué gráficos se han realizado;
-\item qué información proporciona cada gráfico;
-\item las principales conclusiones obtenidas.
-\end{itemize}
+Por supuesto, esto debe estar documentado.
 
-Incluye también una breve reflexión sobre qué tipo de gráfico consideras más adecuado para representar diferentes tipos de información y por qué.
+\begin{exercise} Escribe un fichero \texttt{README.md} para tu directorio donde guardarás la práctica 8. Incluye una breve descripción de cada ejercicio e incluye las gráficas obtenidas. No hace falta que sea muy extenso, ya que en la próxima práctica introduciremos RMarkdown. 
+\end{exercise}
+
+
 
 \section*{Entrega}
 
