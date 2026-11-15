@@ -1,0 +1,398 @@
+\documentclass[11pt,a4paper]{article}
+
+\usepackage[margin={2.6cm,2.6cm}]{geometry}
+\usepackage{lmodern}
+\usepackage{microtype}
+\usepackage{enumitem}
+\usepackage{array}
+\usepackage[spanish,es-tabla]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath, amsthm}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\usepackage{graphicx}
+\usepackage{listings}
+\usepackage{fontawesome5}
+\usepackage{dirtree}
+
+
+\definecolor{azuluc}{HTML}{1F4E79}
+\definecolor{grisclaro}{HTML}{F4F6F8}
+\definecolor{gris}{HTML}{586069}
+\definecolor{verde}{HTML}{2E7D32}
+\definecolor{rojo}{HTML}{A94442}
+\definecolor{git}{HTML}{F1502F}
+
+
+\definecolor{morado_ubuntu}{RGB}{48, 10, 36}
+\definecolor{verde_ubuntu}{RGB}{78, 154, 6}
+\definecolor{cyan_ubuntu}{RGB}{52, 226, 226}
+\definecolor{amarillo_ubuntu}{RGB}{250, 240, 190}
+\definecolor{rojo_ubuntu}{RGB}{220, 50, 47}
+\definecolor{verde_claro_ubuntu}{RGB}{138, 226, 52}
+\definecolor{azul_ubuntu}{RGB}{114, 159, 207}
+\definecolor{gris_ubuntu}{RGB}{128, 128, 128}
+
+
+\definecolor{fondo_mac}{RGB}{255, 255, 250}
+\definecolor{negro}{RGB}{0, 0, 0}
+\definecolor{verde_mac}{RGB}{63, 127, 95}
+\definecolor{azul_mac}{RGB}{0, 0, 255}
+\definecolor{rojo_mac}{RGB}{196, 26, 22}
+\definecolor{morado_mac}{RGB}{147, 39, 143}
+\definecolor{gris_mac}{RGB}{200, 200, 200}
+
+
+\lstdefinestyle{rstyle}{
+  language=R,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{azuluc}\bfseries,
+  commentstyle=\color{gris},
+  stringstyle=\color{verde!70!black},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris!30},
+  backgroundcolor=\color{grisclaro},
+  breaklines=true,
+  showspaces=false,
+  tabsize=2
+}
+
+
+\lstdefinestyle{rconsole}{
+  language=R,
+  basicstyle=\color{rojo}\ttfamily\small,
+  showstringspaces=false,
+  columns=fullflexible,
+  frame=single,
+  rulecolor=\color{gris!30},
+  breaklines=true,
+  tabsize=2
+}
+
+
+\lstdefinestyle{routput}{
+  language=R,
+  basicstyle=\color{azuluc}\ttfamily\small,
+  showstringspaces=false,
+  columns=fullflexible,
+  frame=single,
+  rulecolor=\color{gris!30},
+  breaklines=true,
+  tabsize=2
+}
+
+
+\lstdefinestyle{mdstyle}{
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{azuluc}\bfseries,
+  commentstyle=\color{gris},
+  stringstyle=\color{verde!70!black},
+  showstringspaces=false,
+  showspaces=false,
+  tabsize=2,
+  frame=single,
+  rulecolor=\color{gris!30},
+  backgroundcolor=\color{grisclaro},
+  breaklines=true,
+  breakatwhitespace=false,
+  morekeywords={*,\#,-,[,],(,),!,`,~,.,=},
+  morecomment=[l][\color{azuluc}\bfseries]{\#},
+  morecomment=[s][\color{rosa}]{[}{]},
+  morecomment=[s][\color{verde}]{(}{)},
+  classoffset=1,
+    morekeywords={python,bash,R,latex,json,yaml},
+  classoffset=0,
+  emph={http,https,ftp},
+  emphstyle=\color{azuluc}\underbar,
+  literate=
+    {á}{{\'a}}1
+    {é}{{\'e}}1
+    {í}{{\'i}}1
+    {ó}{{\'o}}1
+    {ú}{{\'u}}1
+    {Á}{{\'A}}1
+    {É}{{\'E}}1
+    {Í}{{\'I}}1
+    {Ó}{{\'O}}1
+    {Ú}{{\'U}}1
+    {ñ}{{\~n}}1
+    {Ñ}{{\~N}}1
+    {ü}{{\"u}}1
+    {Ü}{{\"U}}1
+}
+
+
+\lstdefinestyle{ubuntugnome}{
+  basicstyle=\ttfamily\small\color{white},
+  backgroundcolor=\color{morado_ubuntu},
+  commentstyle=\color{verde_ubuntu},
+  keywordstyle=\color{cyan_ubuntu},
+  stringstyle=\color{amarillo_ubuntu},
+  emphstyle=\color{rojo_ubuntu},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris_ubuntu},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{white}{$\hookrightarrow$}\space},
+  upquote=true,
+  emph={user@ubuntu:~\$},
+  emphstyle={\color{verde_claro_ubuntu}\bfseries},
+  classoffset=1,
+  emph={command not found,No such file or directory,Permission denied},
+  emphstyle={\color{rojo_ubuntu}},
+  classoffset=0,
+}
+
+
+\lstdefinestyle{macterminal}{
+  basicstyle=\ttfamily\small\color{negro},
+  backgroundcolor=\color{fondo_mac},
+  commentstyle=\color{verde_mac},
+  keywordstyle=\color{azul_mac},
+  stringstyle=\color{rojo_mac},
+  emphstyle=\color{morado_mac},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris_mac},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{negro}{$\hookrightarrow$}\space},
+  upquote=true,
+  emphstyle={\color{azul_mac}\bfseries},
+  classoffset=1,
+  emph={command not found,No such file or directory,Permission denied},
+  emphstyle={\color{rojo_mac}},
+  classoffset=0
+}
+
+
+\lstdefinestyle{windowscmd}{
+  basicstyle=\ttfamily\small\color{white},
+  backgroundcolor=\color{black},
+  showstringspaces=false,
+  frame=single,
+  rulecolor=\color{gris_mac},
+  breaklines=true,
+  postbreak=\mbox{\textcolor{negro}{$\hookrightarrow$}\space},
+  upquote=true,
+  emphstyle={\color{azul_mac}\bfseries},
+  classoffset=1,
+  emph={command not found,No such file or directory,Permission denied},
+  emphstyle={\color{rojo_mac}},
+  classoffset=0
+}
+
+
+\newcommand{\R}{\textcolor{azuluc}{\faIcon{r-project}}}
+\newcommand{\Git}{\textcolor{git}{\faIcon{git-alt}}~\!Git}
+\newcommand{\GitHub}{\faIcon{github}~\!GitHub}
+
+
+\newtheoremstyle{exercise}
+  {0.8em}{0.8em}{\normalfont}{}{\bfseries\color{azuluc}}{.}{0.5em}{}
+\theoremstyle{exercise}
+\newtheorem{exercise}{Ejercicio}
+
+
+\title{\LARGE \textbf{Guía de \texttt{.gitignore}} \\[0.5em]
+\Large Laboratorio de Matemáticas \\
+\small \ \\
+Grado en Ingeniería Matemática - Doble Grado en Física e Ingeniería Matemática}
+\author{Miguel Beltra Vidal}
+\date{Curso 2026/27}
+
+
+\begin{document}
+
+\maketitle
+
+
+\section{¿Qué es \texttt{.gitignore}?}
+
+Cuando trabajamos con \Git, no todos los archivos de nuestro proyecto tienen que formar parte del repositorio. Algunos archivos contienen información que solo es útil en nuestro ordenador, mientras que otros son archivos temporales o generados automáticamente por los programas que utilizamos. 
+
+\medskip
+
+El archivo \texttt{.gitignore} permite indicar a \Git qué archivos o directorios queremos que ignore. De esta forma, cuando ejecutemos comandos como \texttt{git status}, esos archivos no aparecerán como archivos pendientes de añadir al repositorio. Un archivo \texttt{.gitignore} es simplemente un archivo de texto llamado exactamente \texttt{.gitignore}, situado habitualmente en la raíz del repositorio. En él escribimos patrones que indican qué archivos o directorios debe ignorar \Git.
+
+\medskip
+
+Por ejemplo, si nuestro proyecto utiliza \R\ y RStudio, estos programas pueden crear determinados archivos de uso interno. Normalmente no queremos compartirlos ni llevar un seguimiento de sus cambios mediante \Git.
+
+
+\section[Archivos de R y RStudio]{Archivos de \R\ y RStudio}
+
+Cuando usamos \R\ o RStudio se crean algunos archivos de uso interno que normalmente no tienen sentido fuera de nuestro ordenador, como el historial de comandos ejecutados en la consola, los datos almacenados en el espacio de trabajo o información específica de RStudio. Por ese motivo, es conveniente añadir estos archivos al \texttt{.gitignore}.
+
+\medskip
+
+\begin{lstlisting}[style=mdstyle]
+# =========================
+# R
+# =========================
+
+# Workspace y datos temporales de R
+.Rhistory
+.RData
+.RDataTmp
+.Ruserdata
+
+# RStudio
+.Rproj.user/
+\end{lstlisting}
+
+
+\subsubsection{¿Qué significa cada regla?}
+
+\begin{itemize}
+    \item \texttt{.Rhistory}: contiene el historial de comandos introducidos en la consola de R.
+    
+    \item \texttt{.RData}: contiene objetos guardados en el espacio de trabajo de R. No suele ser conveniente versionarlo porque representa el estado de una sesión de trabajo concreta.
+    
+    \item \texttt{.RDataTmp}: archivo temporal utilizado por R durante determinadas operaciones relacionadas con el espacio de trabajo.
+    
+    \item \texttt{.Ruserdata}: contiene información de usuario de R que no suele ser necesario compartir mediante Git.
+    
+    \item \texttt{.Rproj.user/}: directorio utilizado por RStudio para almacenar información específica del proyecto y del entorno local.
+\end{itemize}
+
+\noindent Una barra final indica que estamos ignorando un directorio y su contenido. Por ejemplo:
+\begin{lstlisting}[style=mdstyle]
+.Rproj.user/
+\end{lstlisting}
+
+
+
+
+\section{Un detalle importante: \texttt{.gitignore} no elimina archivos de Git}
+
+Es importante entender que añadir un archivo a \texttt{.gitignore} no hace que desaparezca automáticamente del repositorio. Por ejemplo, supongamos que ya habíamos añadido \texttt{.Rhistory} a Git:
+
+\medskip
+
+\begin{lstlisting}[style=mdstyle]
+git add .Rhistory
+git commit -m "Añadir historial de R"
+\end{lstlisting}
+
+\noindent Si posteriormente añadimos
+
+\begin{lstlisting}[style=mdstyle]
+.Rhistory
+\end{lstlisting}
+
+\noindent a nuestro \texttt{.gitignore}, Git seguirá llevando un seguimiento de \texttt{.Rhistory}. Esto ocurre porque el archivo ya forma parte del índice de Git. Para que Git deje de seguirlo, tenemos que eliminarlo del índice. El archivo, sin embargo, seguirá estando en nuestro ordenador. Por ejemplo:
+
+\begin{lstlisting}[style=mdstyle]
+git rm --cached .Rhistory
+\end{lstlisting}
+
+La opción \texttt{--cached} es importante: indica que queremos eliminar el archivo del índice de Git, pero no borrarlo de nuestro disco.
+
+
+\section{Dejar de seguir los archivos de R y RStudio}
+
+Si los archivos que hemos añadido al \texttt{.gitignore} ya estaban siendo seguidos por Git, podemos eliminarlos del índice con:
+
+\begin{lstlisting}[style=mdstyle]
+git rm --cached .Rhistory .RData .RDataTmp .Ruserdata
+git rm -r --cached .Rproj.user/
+\end{lstlisting}
+
+Después podemos comprobar el estado del repositorio:
+
+\begin{lstlisting}[style=mdstyle]
+git status
+\end{lstlisting}
+
+\noindent Los archivos deberían aparecer como eliminados del repositorio, pero no como eliminados de nuestro ordenador. A continuación, añadimos los cambios y hacemos un commit:
+
+\begin{lstlisting}[style=mdstyle]
+git add .gitignore
+git commit -m "Ignorar archivos de R y RStudio"
+\end{lstlisting}
+
+\noindent Finalmente, si nuestro repositorio está conectado con \GitHub, enviamos el commit al repositorio remoto:
+
+\begin{lstlisting}[style=mdstyle]
+git push
+\end{lstlisting}
+
+De esta manera, los archivos dejan de estar presentes en la versión actual del repositorio de \GitHub, pero siguen existiendo localmente en nuestro ordenador y, gracias al \texttt{.gitignore}, Git no volverá a intentar añadirlos.
+
+\subsection{Importante: eliminar del repositorio no significa borrar del historial}
+
+El procedimiento anterior elimina los archivos de la versión actual del repositorio, pero no los elimina de los commits anteriores.
+
+Por ejemplo, si \texttt{.RData} se incluyó accidentalmente en varios commits y posteriormente dejamos de seguirlo, seguirá siendo posible encontrarlo en el historial de Git.
+
+Esto normalmente no supone un problema para archivos como \texttt{.Rhistory} o \texttt{.Rproj.user/}. Sin embargo, si alguna vez se sube accidentalmente al repositorio información sensible, como contraseñas, claves privadas o tokens, no es suficiente con eliminar el archivo y hacer un nuevo commit. En ese caso hay que limpiar también el historial del repositorio y, además, revocar o cambiar inmediatamente las credenciales expuestas.
+
+
+\subsection{Comprobar que todo funciona correctamente}
+
+Una vez creado o modificado nuestro \texttt{.gitignore}, podemos comprobar qué archivos están siendo seguidos o ignorados mediante:
+
+\begin{lstlisting}[style=mdstyle]
+git status
+\end{lstlisting}
+
+También podemos comprobar específicamente si Git está ignorando un archivo mediante:
+
+\begin{lstlisting}[style=mdstyle]
+git check-ignore -v .Rhistory
+\end{lstlisting}
+
+\noindent Si la regla funciona correctamente, Git nos indicará qué línea de nuestro \texttt{.gitignore} está haciendo que \texttt{.Rhistory} sea ignorado. Por ejemplo, después de trabajar con RStudio, nuestro repositorio puede contener archivos como:
+
+\begin{lstlisting}[style=mdstyle]
+.Rhistory
+.RData
+.RDataTmp
+.Ruserdata
+.Rproj.user/
+\end{lstlisting}
+
+\noindent pero estos archivos no deberían aparecer como cambios pendientes en \texttt{git status}, siempre que nunca hayan sido añadidos previamente al índice de Git.
+
+\section{Archivos del sistema operativo y archivos de editores}
+
+
+Algunas veces nuestro sistema operativo o nuestro editor de código crea ficheros de uso propio que no tienen sentido fuera de nuestro propio ordenador. Por ese motivo, no queremos llevar un seguimiento sobre esos archivos. Algunos ejemplos son:
+
+
+\begin{lstlisting}[style=mdstyle]
+# =========================
+# Sistema operativo / editores
+# =========================
+
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+Desktop.ini
+
+# VS Code
+.vscode/
+\end{lstlisting}
+
+\section{Otros archivos temporales}
+
+También es interesante añadir cualquier otro archivo cuya función sea la de almacenar cierta información de forma temporal. Las extensiones más habituales son:
+
+
+\begin{lstlisting}[style=mdstyle]
+# =========================
+# Archivos temporales
+# =========================
+
+
+*.tmp
+*.temp
+*.swp
+*.swo
+\end{lstlisting}
+
+\end{document}
