@@ -362,7 +362,29 @@ prop.table(frecuencias)
 100 * prop.table(frecuencias)
 \end{lstlisting}
 
-En el ejemplo, sustituye \texttt{sex} por el nombre de la variable cualitativa que quieras estudiar. Si una variable cuantitativa tiene muchos valores diferentes, una tabla simple puede ser poco útil; en ese caso, agrupa los valores en intervalos.
+
+
+Podemos construir una tabla con \texttt{rbind} y \texttt{rownames}:
+
+\begin{lstlisting}[style=rconsole]
+> tabla <- rbind(
+			frecuencias <- table(penguins$species),
+			prop.table(frecuencias),
+			100 * prop.table(frecuencias)
+)			
+> rownames(tabla) <- c("Frec. abs.", "Frec. rel.", "Porcentaje")
+> tabla
+\end{lstlisting}
+
+\begin{lstlisting}[style=routput]
+                Adelie  Chinstrap      Gentoo
+Frec. abs. 152.0000000 68.0000000 124.0000000
+Frec. rel.   0.4418605  0.1976744   0.3604651
+Porcentaje  44.1860465 19.7674419  36.0465116
+\end{lstlisting}
+
+
+En el ejemplo, sustituye \texttt{species} por el nombre de la variable cualitativa que quieras estudiar. Si una variable cuantitativa tiene muchos valores diferentes, una tabla simple puede ser poco útil; en ese caso, agrupa los valores en intervalos.
 
 \subsection{Representación gráfica de variables cualitativas}
 
@@ -381,6 +403,7 @@ barplot(frecuencias,
 \begin{center}
 	\includegraphics[width=0.5\linewidth]{images/barplot}
 \end{center}
+
 
 Puedes ver más detalles acerca de la función \texttt{barplot()} en el manual, ejecutando la siguiente instrucción en la consola de \R.
 
@@ -416,6 +439,57 @@ Puedes ver más detalles acerca de la función \texttt{pie()} en el manual, ejec
 \section{Variables cuantitativas}
 
 \subsection{Análisis numérico de variables cuantitativas}
+
+Si queremos realizar un análisis de frecuencias de una variable cuantitativa discreta con pocos valores distintos, entonces lo hacemos igual que con una variable cualitativa, con las funciones \texttt{table} y \texttt{table.prop}. Si queremos realizar un análisis de frecuencias de una variable cuantitativa continua o una variable cuantitativa discreta con muchos valores distintos, utilizaremos la función \texttt{hist} con el argumento \texttt{plot = TRUE}. Más adelante la utilizaremos para realizar gráficos.
+
+\begin{lstlisting}[style=rconsole]
+> hist(penguins$body_mass, plot=FALSE)
+\end{lstlisting}
+\begin{lstlisting}[style=routput]
+$breaks
+[1] 2500 3000 3500 4000 4500 5000 5500 6000 6500
+
+$counts
+[1] 11 67 92 57 54 33 26  2
+
+$density
+[1] 6.432749e-05 3.918129e-04 5.380117e-04 3.333333e-04 3.157895e-04 1.929825e-04 1.520468e-04
+[8] 1.169591e-05
+
+$mids
+[1] 2750 3250 3750 4250 4750 5250 5750 6250
+
+$xname
+[1] "penguins$body_mass"
+
+$equidist
+[1] TRUE
+
+attr(,"class")
+[1] "histogram"
+\end{lstlisting}
+
+\verb|$breaks| indica los extremos de los intervalos utilizados para agrupar los valores de \verb|penguins$body_mass|. Las frecuencias absolutas en cada intervalo vienen recogidas en \verb|$counts|, mientras que las frecuencias relativas las tendremos a partir de \verb|$density| (mira como hacerlo bien). Podemos construir una tabla de frecuencias con \verb|rbind()| y \verb|rownames()| de la siguiente forma:
+\begin{lstlisting}[style=rconsole]
+> tamaño_int <- hist(penguins$body_mass, plot=FALSE)$breaks[2]
+                   - hist(penguins$body_mass, plot=FALSE)$breaks[1]
+> tabla <- rbind(
+		hist(penguins$body_mass, plot=FALSE)$counts,
+		hist(penguins$body_mass, plot=FALSE)$density * tamaño_int,
+		100 * hist(penguins$body_mass, plot=FALSE)$counts *tamaño_int
+)			
+> rownames(tabla) <- c("Frec. abs.", "Frec. rel.", "Porcentaje")
+> tabla
+\end{lstlisting}
+
+\begin{lstlisting}[style=routput]
+             [,1]   [,2]   [,3]   [,4]   [,5]   [,6]    ,7]    [,8]
+Frec. abs. 1.1e+1 6.7e+1 9.2e+1 5.7e+1 5.4e+1 3.3e+1 2.6e+1 2.0e+0
+Frec. rel. 3.2e-2 1.9e-1 2.6e-1 1.6e-1 1.5e-1 9.6e-2 7.6e-2 5.8e-3
+Porcentaje 5.5e+5 3.3e+6 4.6e+6 2.8e+6 2.7e+6 1.6e+6 1.3e+6 1.0e+5
+\end{lstlisting}
+
+
 
 Las funciones de la siguiente tabla nos permitirán realizar algunos de los cálculos más habituales de estadística descriptiva. El argumento \texttt{na.rm = TRUE} indica que los valores no asignados \texttt{NA} se deben remover a la hora de hacer el cálculo.
 
@@ -556,6 +630,8 @@ Puedes ver más detalles acerca de la función \texttt{hist()} en el manual, eje
 \begin{lstlisting}[style=rstyle]
 > help(hist)
 \end{lstlisting}
+
+
 
 
 \subsubsection{Diagramas de caja}
@@ -766,18 +842,25 @@ axis(1, at = seq_along(meses), labels = seq_along(meses))
 
 \section{Ejercicios}
 
+\textbf{(De los siguientes ejercicios, escoge únicamente 3)}
+
+
+\medskip
+
 En los ejercicios se pide interpretar los resultados, no solo ejecutar instrucciones. Adapta los nombres de las columnas al conjunto utilizado. Para los análisis de frecuencias, utiliza \texttt{table()} y \texttt{prop.table()}; para los resúmenes cuantitativos, utiliza las funciones descritas en los apartados anteriores. Si una variable contiene valores ausentes, indícalo y utiliza \texttt{na.rm = TRUE} cuando proceda. Los gráficos deben incluir un título y etiquetas comprensibles en los ejes.
 
 
 \begin{exercise} El fichero \texttt{Datos\_estudiantes.csv}, que puedes encontrar en Blackboard, contiene un conjunto de datos sintéticos acerca del rendimiento de algunos estudiantes de distintos cursos de secundaria. Realiza un análisis estadístico de estos datos. Sigue los pasos siguientes:
 \begin{enumerate}
-	\item Carga el archivo CSV con \texttt{read.csv(file.choose(), fileEncoding = "UTF-8-BOM")} y guarda el resultado en un objeto llamado \texttt{datos}.
+	\item Carga el archivo CSV con \verb|read.csv(file.choose(), fileEncoding = "UTF-8-BOM")| y guarda el resultado en un objeto llamado \texttt{datos}.
 
 	\item Comprueba que el conjunto de datos se ha cargado bien. Utiliza las funciones \texttt{names()}, \texttt{head()}, \texttt{str()} y \texttt{View()} para comprobar que has cargado bien el conjunto de datos.
 
-	\item Realiza un análisis de frecuencias de las variables cualitativas. Para las variables cuantitativas, calcula una tabla de frecuencias agrupada en intervalos cuando resulte útil. Incluye frecuencias absolutas, relativas y porcentajes.
+	\item Realiza un análisis de frecuencias de las variables cualitativas. Incluye frecuencias absolutas, relativas y porcentajes.
 
 	\item Obtén las gráficas adecuadas para cada una de las variables cualitativas. 
+
+	\item Para las variables cuantitativas, calcula una tabla de frecuencias agrupada en intervalos cuando resulte útil. Incluye frecuencias absolutas, relativas y porcentajes.
 
 	\item Realiza un análisis numérico de cada variable cuantitativa: media, mediana, cuartiles, varianza, desviación típica, coeficiente de variación, asimetría y curtosis. Usa \texttt{na.rm = TRUE} cuando corresponda. Comenta los resultados. Comprueba que los datos obtenidos coinciden con aquellos dados por \texttt{summary()} o \texttt{fivenum(x, na.rm = TRUE)}.
 
@@ -799,13 +882,15 @@ En los ejercicios se pide interpretar los resultados, no solo ejecutar instrucci
 \begin{exercise} El fichero \texttt{Datos\_perros.csv}, que puedes encontrar en Blackboard, contiene un conjunto de datos sintéticos acerca de un estudio sobre perros y el efecto de un nuevo complemento de hierro y vitamina B12 para mejorar los valores de hematocrito. Realiza un análisis estadístico de estos datos. Sigue los pasos siguientes:
 
 \begin{enumerate}
-	\item Carga el archivo CSV con \texttt{read.csv(file.choose(), fileEncoding = "UTF-8-BOM")} y guarda el resultado en \texttt{datos}. Comprueba que el archivo contiene las variables \texttt{raza}, \texttt{esteril}, \texttt{leish}, \texttt{hematopre} y \texttt{hematopost}.
+	\item Carga el archivo CSV con \verb|read.csv(file.choose(), fileEncoding = "UTF-8-BOM")| y guarda el resultado en \texttt{datos}. Comprueba que el archivo contiene las variables \texttt{raza}, \texttt{esteril}, \texttt{leish}, \texttt{hematopre} y \texttt{hematopost}.
 
 	\item Comprueba que el conjunto de datos se ha cargado bien. Utiliza las funciones \texttt{names()}, \texttt{head()}, \texttt{str()} y \texttt{View()} para comprobar que has cargado bien el conjunto de datos.
 
-	\item Realiza un análisis de frecuencias de las variables cualitativas. Para las variables cuantitativas, calcula una tabla de frecuencias agrupada en intervalos cuando resulte útil. Incluye frecuencias absolutas, relativas y porcentajes.
+	\item Realiza un análisis de frecuencias de las variables cualitativas. Incluye frecuencias absolutas, relativas y porcentajes.
 
 	\item Obtén las gráficas adecuadas para cada una de las variables cualitativas. 
+
+	\item Para las variables cuantitativas, calcula una tabla de frecuencias agrupada en intervalos cuando resulte útil. Incluye frecuencias absolutas, relativas y porcentajes. 
 
 	\item Realiza un análisis numérico de cada variable cuantitativa: media, mediana, cuartiles, varianza, desviación típica, coeficiente de variación, asimetría y curtosis. Usa \texttt{na.rm = TRUE} cuando corresponda. Comenta los resultados. Comprueba que los datos obtenidos coinciden con aquellos dados por \texttt{summary()} o \texttt{fivenum(x, na.rm = TRUE)}.
 
@@ -838,9 +923,11 @@ Sigue los pasos siguientes:
 
 	\item Comprueba que el conjunto de datos se ha cargado bien. Utiliza las funciones \texttt{names()}, \texttt{head()}, \texttt{str()} y \texttt{View()} para comprobar que has cargado bien el conjunto de datos.
 
-	\item Realiza un análisis de frecuencias de las variables cualitativas. Para las variables cuantitativas, calcula una tabla de frecuencias agrupada en intervalos cuando resulte útil. Incluye frecuencias absolutas, relativas y porcentajes.
+	\item Realiza un análisis de frecuencias de las variables cualitativas. Incluye frecuencias absolutas, relativas y porcentajes.
 
 	\item Obtén las gráficas adecuadas para cada una de las variables cualitativas. 
+
+	\item Para las variables cuantitativas, calcula una tabla de frecuencias agrupada en intervalos cuando resulte útil. Incluye frecuencias absolutas, relativas y porcentajes.
 
 	\item Realiza un análisis numérico de cada variable cuantitativa: media, mediana, cuartiles, varianza, desviación típica, coeficiente de variación, asimetría y curtosis. Usa \texttt{na.rm = TRUE} cuando corresponda. Comenta los resultados. Comprueba que los datos obtenidos coinciden con aquellos dados por \texttt{summary()} o \texttt{fivenum(x, na.rm = TRUE)}.
 
@@ -875,11 +962,13 @@ Sigue los pasos siguientes:
 	\item Carga el conjunto de datos con \texttt{data(airquality, package = "datasets")} y convierte \texttt{Month} en factor. El conjunto contiene valores ausentes, especialmente en \texttt{Ozone}.
 
 	\item Comprueba que el conjunto de datos se ha cargado bien. Utiliza las funciones \texttt{names()}, \texttt{head()}, \texttt{str()} y \texttt{View()} para comprobar que has cargado bien el conjunto de datos.
-	
-	\item Realiza un análisis de frecuencias de las variables cualitativas. Para las variables cuantitativas, calcula una tabla de frecuencias agrupada en intervalos cuando resulte útil. Incluye frecuencias absolutas, relativas y porcentajes.
-	
+
+	\item Realiza un análisis de frecuencias de las variables cualitativas. Incluye frecuencias absolutas, relativas y porcentajes.
+
 	\item Obtén las gráficas adecuadas para cada una de las variables cualitativas. 
 
+	\item Para las variables cuantitativas, calcula una tabla de frecuencias agrupada en intervalos cuando resulte útil. Incluye frecuencias absolutas, relativas y porcentajes.
+	
 	\item Realiza un análisis numérico de cada variable cuantitativa: media, mediana, cuartiles, varianza, desviación típica, coeficiente de variación, asimetría y curtosis. Usa \texttt{na.rm = TRUE} cuando corresponda. Comenta los resultados. Comprueba que los datos obtenidos coinciden con aquellos dados por \texttt{summary()} o \texttt{fivenum(x, na.rm = TRUE)}.
 
 	\item Obtén las gráficas adecuadas para cada una de las variables cuantitativas.
@@ -914,9 +1003,11 @@ Sigue los pasos siguientes:
 
 	\item Comprueba que el conjunto de datos se ha cargado bien. Utiliza las funciones \texttt{names()}, \texttt{head()}, \texttt{str()} y \texttt{View()} para comprobar que has cargado bien el conjunto de datos.
 
-	\item Realiza un análisis de frecuencias de las variables cualitativas. Para las variables cuantitativas, calcula una tabla de frecuencias agrupada en intervalos cuando resulte útil. Incluye frecuencias absolutas, relativas y porcentajes.
+	\item Realiza un análisis de frecuencias de las variables cualitativas. Incluye frecuencias absolutas, relativas y porcentajes.
 
 	\item Obtén las gráficas adecuadas para cada una de las variables cualitativas. 
+
+	\item Para las variables cuantitativas, calcula una tabla de frecuencias agrupada en intervalos cuando resulte útil. Incluye frecuencias absolutas, relativas y porcentajes.
 
 	\item Realiza un análisis numérico de cada variable cuantitativa: media, mediana, cuartiles, varianza, desviación típica, coeficiente de variación, asimetría y curtosis. Usa \texttt{na.rm = TRUE} cuando corresponda. Comenta los resultados. Comprueba que los datos obtenidos coinciden con aquellos dados por \texttt{summary()} o \texttt{fivenum(x, na.rm = TRUE)}.
 
