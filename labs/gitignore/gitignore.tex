@@ -24,7 +24,6 @@
 \definecolor{rojo}{HTML}{A94442}
 \definecolor{git}{HTML}{F1502F}
 
-
 \definecolor{morado_ubuntu}{RGB}{48, 10, 36}
 \definecolor{verde_ubuntu}{RGB}{78, 154, 6}
 \definecolor{cyan_ubuntu}{RGB}{52, 226, 226}
@@ -33,7 +32,6 @@
 \definecolor{verde_claro_ubuntu}{RGB}{138, 226, 52}
 \definecolor{azul_ubuntu}{RGB}{114, 159, 207}
 \definecolor{gris_ubuntu}{RGB}{128, 128, 128}
-
 
 \definecolor{fondo_mac}{RGB}{255, 255, 250}
 \definecolor{negro}{RGB}{0, 0, 0}
@@ -243,7 +241,7 @@ Cuando usamos \R\ o RStudio se crean algunos archivos de uso interno que normalm
 \end{lstlisting}
 
 
-\subsubsection{¿Qué significa cada regla?}
+\subsection{¿Qué significa cada regla?}
 
 \begin{itemize}
     \item \texttt{.Rhistory}: contiene el historial de comandos introducidos en la consola de R.
@@ -261,7 +259,6 @@ Cuando usamos \R\ o RStudio se crean algunos archivos de uso interno que normalm
 \begin{lstlisting}[style=mdstyle]
 .Rproj.user/
 \end{lstlisting}
-
 
 
 
@@ -289,6 +286,7 @@ git rm --cached .Rhistory
 \end{lstlisting}
 
 La opción \texttt{--cached} es importante: indica que queremos eliminar el archivo del índice de Git, pero no borrarlo de nuestro disco.
+
 
 
 \section{Dejar de seguir los archivos de R y RStudio}
@@ -321,6 +319,8 @@ git push
 
 De esta manera, los archivos dejan de estar presentes en la versión actual del repositorio de \GitHub, pero siguen existiendo localmente en nuestro ordenador y, gracias al \texttt{.gitignore}, Git no volverá a intentar añadirlos.
 
+
+
 \subsection{Importante: eliminar del repositorio no significa borrar del historial}
 
 El procedimiento anterior elimina los archivos de la versión actual del repositorio, pero no los elimina de los commits anteriores.
@@ -328,6 +328,7 @@ El procedimiento anterior elimina los archivos de la versión actual del reposit
 Por ejemplo, si \texttt{.RData} se incluyó accidentalmente en varios commits y posteriormente dejamos de seguirlo, seguirá siendo posible encontrarlo en el historial de Git.
 
 Esto normalmente no supone un problema para archivos como \texttt{.Rhistory} o \texttt{.Rproj.user/}. Sin embargo, si alguna vez se sube accidentalmente al repositorio información sensible, como contraseñas, claves privadas o tokens, no es suficiente con eliminar el archivo y hacer un nuevo commit. En ese caso hay que limpiar también el historial del repositorio y, además, revocar o cambiar inmediatamente las credenciales expuestas.
+
 
 
 \subsection{Comprobar que todo funciona correctamente}
@@ -356,11 +357,43 @@ git check-ignore -v .Rhistory
 
 \noindent pero estos archivos no deberían aparecer como cambios pendientes en \texttt{git status}, siempre que nunca hayan sido añadidos previamente al índice de Git.
 
+
+
+\section{Archivos auxiliares generados al compilar un archivo de \LaTeX}
+
+Al compilar un archivo de \LaTeX\ se generan una serie de archivos auxiliares necesarios para construir el PDF final. Puesto que estos archivos son generables, es recomendable no llevar un seguimiento de estos. Algunos ejemplos son:
+
+
+\begin{lstlisting}[style=mdstyle]
+# =========================
+# LaTeX
+# =========================
+
+*.aux
+*.bbl
+*.dvi
+*.log
+*.nav
+*.out
+*.snm
+*.synctex.gz
+*.toc
+\end{lstlisting}
+
+
+También es recomendable --- aunque en esta asignatura no lo haremos --- no llevar seguimiento de documentos PDF generables, pues se pueden volver a generar a partir del código fuente.
+
+
+\begin{lstlisting}[style=mdstyle]
+*.pdf
+\end{lstlisting}
+
+
+
 \section{Archivos del sistema operativo y archivos de editores}
 
 
-Algunas veces nuestro sistema operativo o nuestro editor de código crea ficheros de uso propio que no tienen sentido fuera de nuestro propio ordenador. Por ese motivo, no queremos llevar un seguimiento sobre esos archivos. Algunos ejemplos son:
-
+Algunas veces nuestro sistema operativo o nuestro editor de código crea archivos de uso propio que no tienen sentido fuera de nuestro propio ordenador. Por ese motivo, no queremos llevar un seguimiento sobre esos archivos. Algunos ejemplos son:
 
 \begin{lstlisting}[style=mdstyle]
 # =========================
@@ -378,6 +411,9 @@ Desktop.ini
 .vscode/
 \end{lstlisting}
 
+
+
+
 \section{Otros archivos temporales}
 
 También es interesante añadir cualquier otro archivo cuya función sea la de almacenar cierta información de forma temporal. Las extensiones más habituales son:
@@ -387,7 +423,6 @@ También es interesante añadir cualquier otro archivo cuya función sea la de a
 # =========================
 # Archivos temporales
 # =========================
-
 
 *.tmp
 *.temp
